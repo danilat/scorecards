@@ -1,12 +1,17 @@
 package com.danilat.scorecards.core.usecases;
 
 import com.danilat.scorecards.core.domain.Fight;
+import com.danilat.scorecards.core.domain.InvalidFightException;
 import java.time.LocalDate;
 
 public class RegisterFight {
 
   public Fight execute(RegisterFightParameters parameters) {
-    return new Fight(parameters.getFirstBoxer(), parameters.getSecondBoxer(), parameters.happenAt);
+    if (!parameters.areValid()) {
+      throw new InvalidFightException();
+    }
+    return new Fight(parameters.getFirstBoxer(), parameters.getSecondBoxer(),
+        parameters.getHappenAt());
   }
 
   public static class RegisterFightParameters {
@@ -31,6 +36,11 @@ public class RegisterFight {
       this.firstBoxer = firstBoxer;
       this.secondBoxer = secondBoxer;
       this.happenAt = happenAt;
+    }
+
+    public boolean areValid() {
+      return this.getHappenAt() != null && this.getFirstBoxer() != null
+          && this.getSecondBoxer() != null;
     }
   }
 }
