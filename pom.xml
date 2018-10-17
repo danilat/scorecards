@@ -14,7 +14,7 @@
   <packaging>pom</packaging>
 
   <name>scorecards</name>
-  <description>Demo project for Spring Boot</description>
+  <description>This is the backend for Fight Scorecards</description>
 
   <parent>
     <groupId>org.springframework.boot</groupId>
