@@ -7,7 +7,11 @@
   <groupId>com.danilat</groupId>
   <artifactId>scorecards</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
+  <modules>
+    <module>core</module>
+    <module>boot</module>
+  </modules>
+  <packaging>pom</packaging>
 
   <name>scorecards</name>
   <description>Demo project for Spring Boot</description>
