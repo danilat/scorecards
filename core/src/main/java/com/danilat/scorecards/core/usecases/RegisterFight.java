@@ -13,11 +13,18 @@ import javax.validation.constraints.NotNull;
 public class RegisterFight {
 
   public Fight execute(RegisterFightParameters parameters) {
-    if (!parameters.areValid()) {
-      throw new InvalidFightException();
-    }
+    validate(parameters);
     return new Fight(parameters.getFirstBoxer(), parameters.getSecondBoxer(),
         parameters.getHappenAt());
+  }
+
+  private void validate(RegisterFightParameters parameters){
+    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    Validator validator = factory.getValidator();
+    Set<ConstraintViolation<RegisterFightParameters>> violations = validator.validate(parameters);
+    if (!violations.isEmpty()) {
+      throw new InvalidFightException();
+    }
   }
 
   public static class RegisterFightParameters {
@@ -45,13 +52,6 @@ public class RegisterFight {
       this.firstBoxer = firstBoxer;
       this.secondBoxer = secondBoxer;
       this.happenAt = happenAt;
-    }
-
-    public boolean areValid() {
-      ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-      Validator validator = factory.getValidator();
-      Set<ConstraintViolation<RegisterFightParameters>> violations = validator.validate(this);
-      return violations.isEmpty();
     }
   }
 }
