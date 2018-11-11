@@ -3,7 +3,6 @@ package com.danilat.scorecards.core.usecases.fights;
 import com.danilat.scorecards.core.domain.Fight;
 import com.danilat.scorecards.core.domain.FightRepository;
 import com.danilat.scorecards.core.usecases.UseCase;
-import java.util.Optional;
 
 public class RetrieveAFight implements UseCase<String> {
 
