@@ -13,6 +13,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -26,10 +27,13 @@ public class RegisterFightTest {
   @Spy
   private FightRepository fightRepository;
 
+  private static final String AN_ID = "irrelevant id";
+
   @Before
   public void setup() {
-    registerFight = new RegisterFight(fightRepository);
     aDate = LocalDate.now();
+    when(fightRepository.nextId()).thenReturn(AN_ID);
+    registerFight = new RegisterFight(fightRepository);
   }
 
   @Test
@@ -41,6 +45,7 @@ public class RegisterFightTest {
     assertEquals(aDate, fight.happenAt());
     assertEquals(ALI, fight.firstBoxer());
     assertEquals(FOREMAN, fight.secondBoxer());
+    assertEquals(AN_ID, fight.id());
   }
 
   @Test

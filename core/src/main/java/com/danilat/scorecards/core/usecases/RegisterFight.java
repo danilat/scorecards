@@ -21,7 +21,7 @@ public class RegisterFight {
 
   public Fight execute(RegisterFightParameters parameters) {
     validate(parameters);
-    Fight fight = new Fight(parameters.getFirstBoxer(), parameters.getSecondBoxer(),
+    Fight fight = new Fight(fightRepository.nextId(), parameters.getFirstBoxer(), parameters.getSecondBoxer(),
         parameters.getHappenAt());
     fightRepository.save(fight);
     return fight;

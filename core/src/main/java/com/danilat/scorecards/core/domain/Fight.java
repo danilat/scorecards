@@ -7,8 +7,10 @@ public class Fight {
   private final String firstBoxer;
   private final String secondBoxer;
   private final LocalDate happenAt;
+  private String id;
 
-  public Fight(String firstBoxer, String secondBoxer, LocalDate happenAt) {
+  public Fight(String id, String firstBoxer, String secondBoxer, LocalDate happenAt) {
+    this.id = id;
     this.firstBoxer = firstBoxer;
     this.secondBoxer = secondBoxer;
     this.happenAt = happenAt;
@@ -24,5 +26,9 @@ public class Fight {
 
   public String secondBoxer() {
     return this.secondBoxer;
+  }
+
+  public String id() {
+    return id;
   }
 }
