@@ -3,6 +3,8 @@ package com.danilat.scorecards.core.usecases.fights;
 import com.danilat.scorecards.core.domain.Fight;
 import com.danilat.scorecards.core.domain.FightRepository;
 import com.danilat.scorecards.core.domain.InvalidFightException;
+import com.danilat.scorecards.core.usecases.UseCase;
+import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import java.time.LocalDate;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
@@ -11,7 +13,7 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import javax.validation.constraints.NotNull;
 
-public class RegisterFight {
+public class RegisterFight implements UseCase<RegisterFightParameters> {
 
   private final FightRepository fightRepository;
 
@@ -19,9 +21,11 @@ public class RegisterFight {
     this.fightRepository = fightRepository;
   }
 
+  @Override
   public Fight execute(RegisterFightParameters parameters) {
     validate(parameters);
-    Fight fight = new Fight(fightRepository.nextId(), parameters.getFirstBoxer(), parameters.getSecondBoxer(),
+    Fight fight = new Fight(fightRepository.nextId(), parameters.getFirstBoxer(),
+        parameters.getSecondBoxer(),
         parameters.getHappenAt());
     fightRepository.save(fight);
     return fight;
