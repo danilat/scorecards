@@ -1,4 +1,4 @@
-package com.danilat.scorecards.core.usecases;
+package com.danilat.scorecards.core.usecases.fights;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -6,14 +6,13 @@ import static org.mockito.Mockito.*;
 import com.danilat.scorecards.core.domain.Fight;
 import com.danilat.scorecards.core.domain.FightRepository;
 import com.danilat.scorecards.core.domain.InvalidFightException;
-import com.danilat.scorecards.core.usecases.RegisterFight.RegisterFightParameters;
+import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import java.time.LocalDate;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 

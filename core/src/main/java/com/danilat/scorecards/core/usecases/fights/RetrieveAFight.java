@@ -1,4 +1,4 @@
-package com.danilat.scorecards.core.usecases;
+package com.danilat.scorecards.core.usecases.fights;
 
 import com.danilat.scorecards.core.domain.Fight;
 import com.danilat.scorecards.core.domain.FightRepository;
