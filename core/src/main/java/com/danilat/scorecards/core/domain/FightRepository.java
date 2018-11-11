@@ -5,4 +5,6 @@ public interface FightRepository {
   void save(Fight fight);
 
   String nextId();
+
+  Fight get(String id);
 }
