@@ -3,6 +3,12 @@ package com.danilat.scorecards.core.usecases;
 import com.danilat.scorecards.core.domain.Fight;
 import com.danilat.scorecards.core.domain.InvalidFightException;
 import java.time.LocalDate;
+import java.util.Set;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import javax.validation.constraints.NotNull;
 
 public class RegisterFight {
 
@@ -16,8 +22,11 @@ public class RegisterFight {
 
   public static class RegisterFightParameters {
 
+    @NotNull
     private final String firstBoxer;
+    @NotNull
     private final String secondBoxer;
+    @NotNull
     private final LocalDate happenAt;
 
     public String getFirstBoxer() {
@@ -39,8 +48,10 @@ public class RegisterFight {
     }
 
     public boolean areValid() {
-      return this.getHappenAt() != null && this.getFirstBoxer() != null
-          && this.getSecondBoxer() != null;
+      ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+      Validator validator = factory.getValidator();
+      Set<ConstraintViolation<RegisterFightParameters>> violations = validator.validate(this);
+      return violations.isEmpty();
     }
   }
 }
