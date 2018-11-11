@@ -1,8 +1,10 @@
 package com.danilat.scorecards.core.usecases;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 import com.danilat.scorecards.core.domain.Fight;
+import com.danilat.scorecards.core.domain.FightRepository;
 import com.danilat.scorecards.core.domain.InvalidFightException;
 import com.danilat.scorecards.core.usecases.RegisterFight.RegisterFightParameters;
 import java.time.LocalDate;
@@ -10,17 +12,23 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+import org.mockito.Spy;
+import org.mockito.junit.MockitoJUnitRunner;
 
+@RunWith(MockitoJUnitRunner.class)
 public class RegisterFightTest {
 
   private static final String ALI = "Ali";
   private static final String FOREMAN = "Foreman";
   private RegisterFight registerFight;
   private LocalDate aDate;
+  @Spy
+  private FightRepository fightRepository;
 
   @Before
   public void setup() {
-    registerFight = new RegisterFight();
+    registerFight = new RegisterFight(fightRepository);
     aDate = LocalDate.now();
   }
 
@@ -35,6 +43,15 @@ public class RegisterFightTest {
     assertEquals(FOREMAN, fight.secondBoxer());
   }
 
+  @Test
+  public void twoBoxersAndADateTheFightIsPersisted() {
+    RegisterFightParameters parameters = new RegisterFightParameters(ALI, FOREMAN, aDate);
+
+    Fight fight = registerFight.execute(parameters);
+
+    verify(fightRepository, times(1)).save(fight);
+  }
+
   @Rule
   public ExpectedException expectedEx = ExpectedException.none();
 
@@ -42,7 +59,7 @@ public class RegisterFightTest {
   public void twoBoxerButNotDateIsInvalid() {
     expectedEx.expect(InvalidFightException.class);
     expectedEx.expectMessage("happenAt is mandatory");
-    
+
     RegisterFightParameters parameters = new RegisterFightParameters(ALI, FOREMAN, null);
 
     registerFight.execute(parameters);

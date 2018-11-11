@@ -1,6 +1,7 @@
 package com.danilat.scorecards.core.usecases;
 
 import com.danilat.scorecards.core.domain.Fight;
+import com.danilat.scorecards.core.domain.FightRepository;
 import com.danilat.scorecards.core.domain.InvalidFightException;
 import java.time.LocalDate;
 import java.util.Set;
@@ -12,13 +13,21 @@ import javax.validation.constraints.NotNull;
 
 public class RegisterFight {
 
-  public Fight execute(RegisterFightParameters parameters) {
-    validate(parameters);
-    return new Fight(parameters.getFirstBoxer(), parameters.getSecondBoxer(),
-        parameters.getHappenAt());
+  private final FightRepository fightRepository;
+
+  public RegisterFight(FightRepository fightRepository) {
+    this.fightRepository = fightRepository;
   }
 
-  private void validate(RegisterFightParameters parameters){
+  public Fight execute(RegisterFightParameters parameters) {
+    validate(parameters);
+    Fight fight = new Fight(parameters.getFirstBoxer(), parameters.getSecondBoxer(),
+        parameters.getHappenAt());
+    fightRepository.save(fight);
+    return fight;
+  }
+
+  private void validate(RegisterFightParameters parameters) {
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     Validator validator = factory.getValidator();
     Set<ConstraintViolation<RegisterFightParameters>> violations = validator.validate(parameters);
