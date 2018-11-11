@@ -23,17 +23,17 @@ public class RegisterFight {
     Validator validator = factory.getValidator();
     Set<ConstraintViolation<RegisterFightParameters>> violations = validator.validate(parameters);
     if (!violations.isEmpty()) {
-      throw new InvalidFightException();
+      throw new InvalidFightException(violations);
     }
   }
 
   public static class RegisterFightParameters {
 
-    @NotNull
+    @NotNull(message = "firstBoxer is mandatory")
     private final String firstBoxer;
-    @NotNull
+    @NotNull(message = "secondBoxer is mandatory")
     private final String secondBoxer;
-    @NotNull
+    @NotNull(message = "happenAt is mandatory")
     private final LocalDate happenAt;
 
     public String getFirstBoxer() {

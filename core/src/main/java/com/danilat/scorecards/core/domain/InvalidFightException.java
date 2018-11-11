@@ -1,5 +1,27 @@
 package com.danilat.scorecards.core.domain;
 
+import com.danilat.scorecards.core.usecases.RegisterFight.RegisterFightParameters;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import static java.util.stream.Collectors.joining;
+
+import javax.validation.ConstraintViolation;
+
 public class InvalidFightException extends RuntimeException {
 
+  private final Set<ConstraintViolation<RegisterFightParameters>> violations;
+
+  public InvalidFightException(Set<ConstraintViolation<RegisterFightParameters>> violations) {
+    this.violations = violations;
+  }
+
+  @Override
+  public String getMessage() {
+    List<String> messages = new ArrayList<>();
+    violations.stream()
+        .forEach(violation -> messages.add(violation.getMessage()));
+    return messages.stream().collect(joining(". "));
+  }
 }

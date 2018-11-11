@@ -7,7 +7,9 @@ import com.danilat.scorecards.core.domain.InvalidFightException;
 import com.danilat.scorecards.core.usecases.RegisterFight.RegisterFightParameters;
 import java.time.LocalDate;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class RegisterFightTest {
 
@@ -33,22 +35,34 @@ public class RegisterFightTest {
     assertEquals(FOREMAN, fight.secondBoxer());
   }
 
-  @Test(expected = InvalidFightException.class)
+  @Rule
+  public ExpectedException expectedEx = ExpectedException.none();
+
+  @Test
   public void twoBoxerButNotDateIsInvalid() {
+    expectedEx.expect(InvalidFightException.class);
+    expectedEx.expectMessage("happenAt is mandatory");
+    
     RegisterFightParameters parameters = new RegisterFightParameters(ALI, FOREMAN, null);
 
     registerFight.execute(parameters);
   }
 
-  @Test(expected = InvalidFightException.class)
+  @Test
   public void firstBoxerIsNotPresentIsInvalid() {
+    expectedEx.expect(InvalidFightException.class);
+    expectedEx.expectMessage("firstBoxer is mandatory");
+
     RegisterFightParameters parameters = new RegisterFightParameters(null, FOREMAN, aDate);
 
     registerFight.execute(parameters);
   }
 
-  @Test(expected = InvalidFightException.class)
+  @Test
   public void secondBoxerIsNotPresentIsInvalid() {
+    expectedEx.expect(InvalidFightException.class);
+    expectedEx.expectMessage("secondBoxer is mandatory");
+
     RegisterFightParameters parameters = new RegisterFightParameters(ALI, null, aDate);
 
     registerFight.execute(parameters);
