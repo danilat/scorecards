@@ -5,7 +5,6 @@ import static org.mockito.Mockito.*;
 
 import com.danilat.scorecards.core.domain.Fight;
 import com.danilat.scorecards.core.domain.FightRepository;
-import com.danilat.scorecards.core.domain.InvalidFightException;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import java.time.LocalDate;
 import org.junit.Before;

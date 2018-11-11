@@ -1,4 +1,4 @@
-package com.danilat.scorecards.core.domain;
+package com.danilat.scorecards.core.usecases.fights;
 
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import java.util.ArrayList;
