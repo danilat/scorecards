@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 
 import com.danilat.scorecards.core.domain.Fight;
 import com.danilat.scorecards.core.domain.FightRepository;
+import com.danilat.scorecards.core.mothers.FightMother;
 import java.time.LocalDate;
 import java.util.Optional;
 import org.junit.Before;
@@ -25,7 +26,7 @@ public class RetrieveAFightTest {
 
   @Before
   public void setup() {
-    existingFight = new Fight(AN_ID, "ali", "foreman", LocalDate.now());
+    existingFight = FightMother.aFightWithId(AN_ID);
     when(fightRepository.get(AN_ID)).thenReturn(Optional.of(existingFight));
 
     retrieveAFight = new RetrieveAFight(fightRepository);
