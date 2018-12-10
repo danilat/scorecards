@@ -3,7 +3,7 @@ package com.danilat.scorecards.acceptation.steps;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import com.danilat.scorecards.acceptation.repositories.InMemoryFightRepository;
+import com.danilat.scorecards.repositories.InMemoryFightRepository;
 import com.danilat.scorecards.core.domain.Fight;
 import com.danilat.scorecards.core.domain.FightRepository;
 import com.danilat.scorecards.core.mothers.FightMother;

@@ -1,4 +1,4 @@
-package com.danilat.scorecards.acceptation.repositories;
+package com.danilat.scorecards.repositories;
 
 import com.danilat.scorecards.core.domain.Fight;
 import com.danilat.scorecards.core.domain.FightRepository;
