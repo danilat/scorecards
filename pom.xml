@@ -10,6 +10,7 @@
   <modules>
     <module>core</module>
     <module>boot</module>
+    <module>infrastructure</module>
   </modules>
   <packaging>pom</packaging>
 
