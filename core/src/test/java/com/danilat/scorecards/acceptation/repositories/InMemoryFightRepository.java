@@ -2,22 +2,30 @@ package com.danilat.scorecards.acceptation.repositories;
 
 import com.danilat.scorecards.core.domain.Fight;
 import com.danilat.scorecards.core.domain.FightRepository;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
-public class InMemoryFightRepository implements FightRepository{
+public class InMemoryFightRepository implements FightRepository {
+
+  private final Map<String, Fight> fights;
+
+  public InMemoryFightRepository() {
+    this.fights = new HashMap<>();
+  }
 
   @Override
   public void save(Fight fight) {
-    
+    fights.put(fight.id(), fight);
   }
 
   @Override
   public String nextId() {
-    return null;
+    return "foo";
   }
 
   @Override
   public Optional<Fight> get(String id) {
-    return null;
+    return Optional.ofNullable(fights.get(id));
   }
 }

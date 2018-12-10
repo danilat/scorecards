@@ -10,23 +10,27 @@ import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import java.util.Optional;
 
 public class FightSteps {
-  Fight existingFight;
+
+  private Fight existingFight;
   private Fight retrievedFight;
+  private FightRepository fightRepository;
+
+  @cucumber.api.java.Before
+  public void setup() {
+    fightRepository = new InMemoryFightRepository();
+  }
 
 
   @Given("an existing fight")
   public void an_existing_fight() {
     existingFight = FightMother.aFightWithId("a fight");
-
-
+    fightRepository.save(existingFight);
   }
 
   @When("I retrieve the existing fight")
   public void i_retrieve_the_existing_fight() {
-    FightRepository fightRepository = new InMemoryFightRepository() ;
     RetrieveAFight retrieveAFight = new RetrieveAFight(fightRepository);
     retrievedFight = retrieveAFight.execute(existingFight.id());
   }
