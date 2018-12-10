@@ -1,14 +1,14 @@
-package com.danilat.scorecards.acceptation.steps;
+package scorecards.acceptation.steps;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import com.danilat.scorecards.repositories.InMemoryFightRepository;
 import com.danilat.scorecards.core.domain.Fight;
 import com.danilat.scorecards.core.domain.FightRepository;
 import com.danilat.scorecards.core.mothers.FightMother;
 import com.danilat.scorecards.core.usecases.fights.FightNotFoundException;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
+import com.danilat.scorecards.repositories.InMemoryFightRepository;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;

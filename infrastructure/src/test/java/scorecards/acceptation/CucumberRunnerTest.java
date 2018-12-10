@@ -1,4 +1,4 @@
-package com.danilat.scorecards.acceptation;
+package scorecards.acceptation;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
