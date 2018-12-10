@@ -1,11 +1,13 @@
 package com.danilat.scorecards.acceptation.steps;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import com.danilat.scorecards.acceptation.repositories.InMemoryFightRepository;
 import com.danilat.scorecards.core.domain.Fight;
 import com.danilat.scorecards.core.domain.FightRepository;
 import com.danilat.scorecards.core.mothers.FightMother;
+import com.danilat.scorecards.core.usecases.fights.FightNotFoundException;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -42,13 +44,15 @@ public class FightSteps {
 
   @When("I retrieve a non-existing fight")
   public void i_retrieve_a_non_existing_fight() {
-    // Write code here that turns the phrase above into concrete actions
-    throw new cucumber.api.PendingException();
+    try {
+      RetrieveAFight retrieveAFight = new RetrieveAFight(fightRepository);
+      retrievedFight = retrieveAFight.execute("some inexistent id");
+    } catch (FightNotFoundException exception) {
+    }
   }
 
   @Then("the fight is not present")
   public void the_fight_is_not_present() {
-    // Write code here that turns the phrase above into concrete actions
-    throw new cucumber.api.PendingException();
+    assertNull(retrievedFight);
   }
 }
