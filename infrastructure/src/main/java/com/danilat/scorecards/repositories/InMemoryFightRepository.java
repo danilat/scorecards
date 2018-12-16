@@ -1,7 +1,7 @@
 package com.danilat.scorecards.repositories;
 
-import com.danilat.scorecards.core.domain.Fight;
-import com.danilat.scorecards.core.domain.FightRepository;
+import com.danilat.scorecards.core.domain.fight.Fight;
+import com.danilat.scorecards.core.domain.fight.FightRepository;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;

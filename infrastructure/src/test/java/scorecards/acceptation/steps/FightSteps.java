@@ -3,8 +3,8 @@ package scorecards.acceptation.steps;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import com.danilat.scorecards.core.domain.Fight;
-import com.danilat.scorecards.core.domain.FightRepository;
+import com.danilat.scorecards.core.domain.fight.Fight;
+import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.mothers.FightMother;
 import com.danilat.scorecards.core.usecases.fights.FightNotFoundException;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;

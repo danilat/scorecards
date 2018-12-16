@@ -1,7 +1,7 @@
 package com.danilat.scorecards.core.usecases.fights;
 
-import com.danilat.scorecards.core.domain.Fight;
-import com.danilat.scorecards.core.domain.FightRepository;
+import com.danilat.scorecards.core.domain.fight.Fight;
+import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.usecases.UseCase;
 
 public class RetrieveAFight implements UseCase<String> {

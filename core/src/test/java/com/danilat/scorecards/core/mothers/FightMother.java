@@ -1,6 +1,6 @@
 package com.danilat.scorecards.core.mothers;
 
-import com.danilat.scorecards.core.domain.Fight;
+import com.danilat.scorecards.core.domain.fight.Fight;
 import java.time.LocalDate;
 
 public class FightMother {
