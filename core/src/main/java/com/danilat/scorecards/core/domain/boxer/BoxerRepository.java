@@ -4,4 +4,6 @@ import java.util.Optional;
 
 public interface BoxerRepository {
   Optional<Boxer> get(BoxerId id);
+
+  void save(Boxer aBoxer);
 }

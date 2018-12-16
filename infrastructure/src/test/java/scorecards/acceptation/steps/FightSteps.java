@@ -1,18 +1,30 @@
 package scorecards.acceptation.steps;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import com.danilat.scorecards.core.domain.boxer.Boxer;
+import com.danilat.scorecards.core.domain.boxer.BoxerId;
+import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
-import com.danilat.scorecards.core.domain.fight.FightRepository;
-import com.danilat.scorecards.core.mothers.FightMother;
 import com.danilat.scorecards.core.domain.fight.FightNotFoundException;
+import com.danilat.scorecards.core.domain.fight.FightRepository;
+import com.danilat.scorecards.core.mothers.BoxerMother;
+import com.danilat.scorecards.core.mothers.FightMother;
+import com.danilat.scorecards.core.usecases.fights.RegisterFight;
+import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
+import com.danilat.scorecards.repositories.InMemoryBoxerRepository;
 import com.danilat.scorecards.repositories.InMemoryFightRepository;
+import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class FightSteps {
 
@@ -20,9 +32,14 @@ public class FightSteps {
   private Fight retrievedFight;
   private FightRepository fightRepository;
 
-  @cucumber.api.java.Before
-  public void setup() {
+  private LocalDate aDate;
+  private BoxerRepository boxerRepository;
+  private Fight createdFight;
+
+  @Before
+  public void setUp() {
     fightRepository = new InMemoryFightRepository();
+    boxerRepository = new InMemoryBoxerRepository();
   }
 
 
@@ -57,28 +74,34 @@ public class FightSteps {
     assertNull(retrievedFight);
   }
 
-
-  @Given("an existing boxer is {string}")
-  public void anExistingBoxerIs(String string) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new cucumber.api.PendingException();
+  @Given("an existing boxer called {string}")
+  public void anExistingBoxerIs(String name) {
+    BoxerId boxerId = new BoxerId(name);
+    Boxer aBoxer = BoxerMother.aBoxerWithIdAndName(boxerId, name);
+    boxerRepository.save(aBoxer);
   }
 
-  @Given("an event in {string} in {string}")
-  public void anEventInIn(String string, String string2) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new cucumber.api.PendingException();
+
+  @Given("an event in {string} at {string}")
+  public void anEventInIn(String place, String date) throws ParseException {
+    aDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("d/MM/yyyy"));
+    //TODO: we need an Event value object?
   }
 
-  @When("I register the fight")
-  public void iRegisterTheFight() {
-    // Write code here that turns the phrase above into concrete actions
-    throw new cucumber.api.PendingException();
+  @When("I register the fight in the event for {string} and {string}")
+  public void iRegisterTheFightInTheEventForAnd(String firstBoxer, String secondBoxer) {
+    RegisterFight registerFight = new RegisterFight(fightRepository, boxerRepository);
+
+    BoxerId firstBoxerId = new BoxerId(firstBoxer);
+    BoxerId secondBoxerId = new BoxerId(firstBoxer);
+
+    RegisterFightParameters parameters = new RegisterFightParameters(firstBoxerId, secondBoxerId, aDate);
+    createdFight = registerFight.execute(parameters);
   }
 
   @Then("the fight is registered")
   public void theFightIsRegistered() {
-    // Write code here that turns the phrase above into concrete actions
-    throw new cucumber.api.PendingException();
+    assertNotNull(createdFight);
+    assertNotNull(createdFight.id());
   }
 }
