@@ -55,10 +55,10 @@ public class RegisterFightTest {
 
     Fight fight = registerFight.execute(parameters);
 
-    assertEquals(aDate, fight.happenAt());
     assertEquals(ALI, fight.firstBoxer());
     assertEquals(FOREMAN, fight.secondBoxer());
     assertEquals(AN_ID, fight.id());
+    assertEquals(aDate, fight.event().happenAt());
     assertEquals(aPlace, fight.event().place());
   }
 

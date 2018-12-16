@@ -34,11 +34,11 @@ public class RegisterFight implements UseCase<RegisterFightParameters> {
         .orElseThrow(() -> new BoxerNotFoundException(parameters.getFirstBoxer()));
     Boxer secondBoxer = this.boxerRepository.get(parameters.getSecondBoxer())
         .orElseThrow(() -> new BoxerNotFoundException(parameters.getSecondBoxer()));
+    Event event = new Event(parameters.getHappenAt(), parameters.getPlace());
 
     Fight fight = new Fight(fightRepository.nextId(), firstBoxer.id(),
         secondBoxer.id(),
-        parameters.getHappenAt(),
-        new Event(parameters.getPlace()));
+        event);
     fightRepository.save(fight);
     return fight;
   }
