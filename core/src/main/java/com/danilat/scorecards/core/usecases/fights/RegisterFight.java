@@ -2,6 +2,7 @@ package com.danilat.scorecards.core.usecases.fights;
 
 import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
+import com.danilat.scorecards.core.domain.boxer.BoxerNotFoundException;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
@@ -28,7 +29,7 @@ public class RegisterFight implements UseCase<RegisterFightParameters> {
   @Override
   public Fight execute(RegisterFightParameters parameters) {
     validate(parameters);
-    Boxer firstBoxer = this.boxerRepository.get(parameters.getFirstBoxer()).get();
+    Boxer firstBoxer = this.boxerRepository.get(parameters.getFirstBoxer()).orElseThrow(() -> new BoxerNotFoundException());
     Boxer secondBoxer = this.boxerRepository.get(parameters.getSecondBoxer()).get();
 
     Fight fight = new Fight(fightRepository.nextId(), firstBoxer.id(),

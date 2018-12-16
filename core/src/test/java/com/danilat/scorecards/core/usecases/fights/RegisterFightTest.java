@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
+import com.danilat.scorecards.core.domain.boxer.BoxerNotFoundException;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
@@ -28,6 +29,7 @@ public class RegisterFightTest {
 
   private static final BoxerId ALI = new BoxerId("Ali");
   private static final BoxerId FOREMAN = new BoxerId("Foreman");
+  private static final BoxerId NON_EXISTING_BOXER = new BoxerId("NON_EXISTING_BOXER");
   private RegisterFight registerFight;
   private LocalDate aDate;
   @Spy
@@ -86,6 +88,15 @@ public class RegisterFightTest {
     expectedEx.expectMessage("firstBoxer is mandatory");
 
     RegisterFightParameters parameters = new RegisterFightParameters(null, FOREMAN, aDate);
+
+    registerFight.execute(parameters);
+  }
+
+  @Test
+  public void firstBoxerIsNotExistingIsInvalid() {
+    expectedEx.expect(BoxerNotFoundException.class);
+
+    RegisterFightParameters parameters = new RegisterFightParameters(NON_EXISTING_BOXER, FOREMAN, aDate);
 
     registerFight.execute(parameters);
   }
