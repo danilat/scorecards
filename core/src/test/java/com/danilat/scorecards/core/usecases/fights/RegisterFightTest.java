@@ -1,12 +1,14 @@
 package com.danilat.scorecards.core.usecases.fights;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.Fight;
+import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
@@ -33,7 +35,7 @@ public class RegisterFightTest {
   @Mock
   private BoxerRepository boxerRepository;
 
-  private static final String AN_ID = "irrelevant id";
+  private static final FightId AN_ID = new FightId("irrelevant id");
 
   @Before
   public void setup() {

@@ -8,9 +8,9 @@ public class Fight {
   private final BoxerId firstBoxer;
   private final BoxerId secondBoxer;
   private final LocalDate happenAt;
-  private String id;
+  private FightId id;
 
-  public Fight(String id, BoxerId firstBoxer, BoxerId secondBoxer, LocalDate happenAt) {
+  public Fight(FightId id, BoxerId firstBoxer, BoxerId secondBoxer, LocalDate happenAt) {
     this.id = id;
     this.firstBoxer = firstBoxer;
     this.secondBoxer = secondBoxer;
@@ -29,7 +29,7 @@ public class Fight {
     return this.secondBoxer;
   }
 
-  public String id() {
+  public FightId id() {
     return id;
   }
 }
