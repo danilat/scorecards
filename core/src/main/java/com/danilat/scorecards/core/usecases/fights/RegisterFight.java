@@ -1,6 +1,7 @@
 package com.danilat.scorecards.core.usecases.fights;
 
 import com.danilat.scorecards.core.domain.boxer.Boxer;
+import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
@@ -49,17 +50,17 @@ public class RegisterFight implements UseCase<RegisterFightParameters> {
   public static class RegisterFightParameters {
 
     @NotNull(message = "firstBoxer is mandatory")
-    private final String firstBoxer;
+    private final BoxerId firstBoxer;
     @NotNull(message = "secondBoxer is mandatory")
-    private final String secondBoxer;
+    private final BoxerId secondBoxer;
     @NotNull(message = "happenAt is mandatory")
     private final LocalDate happenAt;
 
-    public String getFirstBoxer() {
+    public BoxerId getFirstBoxer() {
       return firstBoxer;
     }
 
-    public String getSecondBoxer() {
+    public BoxerId getSecondBoxer() {
       return secondBoxer;
     }
 
@@ -67,7 +68,7 @@ public class RegisterFight implements UseCase<RegisterFightParameters> {
       return happenAt;
     }
 
-    public RegisterFightParameters(String firstBoxer, String secondBoxer, LocalDate happenAt) {
+    public RegisterFightParameters(BoxerId firstBoxer, BoxerId secondBoxer, LocalDate happenAt) {
       this.firstBoxer = firstBoxer;
       this.secondBoxer = secondBoxer;
       this.happenAt = happenAt;

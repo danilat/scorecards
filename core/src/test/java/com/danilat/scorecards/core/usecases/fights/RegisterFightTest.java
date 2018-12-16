@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 import com.danilat.scorecards.core.domain.boxer.Boxer;
+import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
@@ -23,8 +24,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class RegisterFightTest {
 
-  private static final String ALI = "Ali";
-  private static final String FOREMAN = "Foreman";
+  private static final BoxerId ALI = new BoxerId("Ali");
+  private static final BoxerId FOREMAN = new BoxerId("Foreman");
   private RegisterFight registerFight;
   private LocalDate aDate;
   @Spy

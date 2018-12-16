@@ -1,15 +1,18 @@
 package com.danilat.scorecards.core.domain.boxer;
 
-public class Boxer {
-  private String id;
+import com.danilat.scorecards.core.domain.Entity;
+
+public class Boxer extends Entity<BoxerId> {
+
   private String name;
 
-  public Boxer(String id, String name) {
-    this.id = id;
+  public Boxer(BoxerId id, String name) {
+    super(id);
     this.name = name;
   }
 
-  public String getId() {
-    return id;
+  @Override
+  public BoxerId getId() {
+    return this.id;
   }
 }
