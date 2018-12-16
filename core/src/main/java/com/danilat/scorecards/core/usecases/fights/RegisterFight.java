@@ -31,8 +31,8 @@ public class RegisterFight implements UseCase<RegisterFightParameters> {
     Boxer firstBoxer = this.boxerRepository.get(parameters.getFirstBoxer()).get();
     Boxer secondBoxer = this.boxerRepository.get(parameters.getSecondBoxer()).get();
 
-    Fight fight = new Fight(fightRepository.nextId(), firstBoxer.getId(),
-        secondBoxer.getId(),
+    Fight fight = new Fight(fightRepository.nextId(), firstBoxer.id(),
+        secondBoxer.id(),
         parameters.getHappenAt());
     fightRepository.save(fight);
     return fight;

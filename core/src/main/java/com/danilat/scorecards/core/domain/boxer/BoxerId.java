@@ -7,12 +7,6 @@ public class BoxerId implements EntityId {
   private final String id;
 
   public BoxerId(String id) {
-
     this.id = id;
-  }
-
-  @Override
-  public String getId() {
-    return id;
   }
 }

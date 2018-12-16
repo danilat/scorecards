@@ -9,9 +9,4 @@ public class FightId implements EntityId {
   public FightId(String id) {
     this.id = id;
   }
-
-  @Override
-  public String getId() {
-    return id;
-  }
 }

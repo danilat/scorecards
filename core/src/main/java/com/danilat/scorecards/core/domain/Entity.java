@@ -8,5 +8,5 @@ public abstract class Entity<ID extends EntityId> {
     this.id = id;
   }
 
-  abstract public ID getId();
+  abstract public ID id();
 }

@@ -12,7 +12,7 @@ public class Boxer extends Entity<BoxerId> {
   }
 
   @Override
-  public BoxerId getId() {
+  public BoxerId id() {
     return this.id;
   }
 }
