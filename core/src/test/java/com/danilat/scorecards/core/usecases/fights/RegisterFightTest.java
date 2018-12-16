@@ -3,15 +3,19 @@ package com.danilat.scorecards.core.usecases.fights;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
+import com.danilat.scorecards.core.domain.boxer.Boxer;
+import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import java.time.LocalDate;
+import java.util.Optional;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -24,6 +28,8 @@ public class RegisterFightTest {
   private LocalDate aDate;
   @Spy
   private FightRepository fightRepository;
+  @Mock
+  private BoxerRepository boxerRepository;
 
   private static final String AN_ID = "irrelevant id";
 
@@ -31,7 +37,9 @@ public class RegisterFightTest {
   public void setup() {
     aDate = LocalDate.now();
     when(fightRepository.nextId()).thenReturn(AN_ID);
-    registerFight = new RegisterFight(fightRepository);
+    when(boxerRepository.get(ALI)).thenReturn(Optional.of(new Boxer(ALI, ALI)));
+    when(boxerRepository.get(FOREMAN)).thenReturn(Optional.of(new Boxer(FOREMAN, FOREMAN)));
+    registerFight = new RegisterFight(fightRepository, boxerRepository);
   }
 
   @Test
