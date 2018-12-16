@@ -5,11 +5,14 @@ import static org.mockito.Mockito.when;
 
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
+import com.danilat.scorecards.core.domain.fight.FightNotFoundException;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.mothers.FightMother;
 import java.util.Optional;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -39,8 +42,14 @@ public class RetrieveAFightTest {
     assertEquals(existingFight, fight);
   }
 
-  @Test(expected = FightNotFoundException.class)
+  @Rule
+  public ExpectedException expectedException = ExpectedException.none();
+
+  @Test
   public void retrieveAnUnexistingFight() {
+    expectedException.expect(FightNotFoundException.class);
+    expectedException.expectMessage(new FightId("unexisting id") + " not found");
+
     retrieveAFight.execute(new FightId("unexisting id"));
   }
 }
