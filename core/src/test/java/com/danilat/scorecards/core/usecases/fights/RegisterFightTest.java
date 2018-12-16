@@ -111,4 +111,14 @@ public class RegisterFightTest {
 
     registerFight.execute(parameters);
   }
+
+  @Test
+  public void secondBoxerIsNotExistingIsInvalid() {
+    expectedEx.expect(BoxerNotFoundException.class);
+    expectedEx.expectMessage(NON_EXISTING_BOXER.toString() + " not found");
+
+    RegisterFightParameters parameters = new RegisterFightParameters(ALI, NON_EXISTING_BOXER, aDate);
+
+    registerFight.execute(parameters);
+  }
 }

@@ -30,7 +30,7 @@ public class RegisterFight implements UseCase<RegisterFightParameters> {
   public Fight execute(RegisterFightParameters parameters) {
     validate(parameters);
     Boxer firstBoxer = this.boxerRepository.get(parameters.getFirstBoxer()).orElseThrow(() -> new BoxerNotFoundException(parameters.getFirstBoxer()));
-    Boxer secondBoxer = this.boxerRepository.get(parameters.getSecondBoxer()).get();
+    Boxer secondBoxer = this.boxerRepository.get(parameters.getSecondBoxer()).orElseThrow(() -> new BoxerNotFoundException(parameters.getSecondBoxer()));
 
     Fight fight = new Fight(fightRepository.nextId(), firstBoxer.id(),
         secondBoxer.id(),
