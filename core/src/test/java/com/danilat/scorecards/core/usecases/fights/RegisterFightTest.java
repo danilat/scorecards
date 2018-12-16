@@ -95,6 +95,7 @@ public class RegisterFightTest {
   @Test
   public void firstBoxerIsNotExistingIsInvalid() {
     expectedEx.expect(BoxerNotFoundException.class);
+    expectedEx.expectMessage(NON_EXISTING_BOXER.toString() + " not found");
 
     RegisterFightParameters parameters = new RegisterFightParameters(NON_EXISTING_BOXER, FOREMAN, aDate);
 

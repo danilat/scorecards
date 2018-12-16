@@ -6,4 +6,11 @@ public abstract class EntityId {
   public EntityId(String id) {
     this.id = id;
   }
+
+  @Override
+  public String toString() {
+    return "EntityId{" +
+        "id='" + id + '\'' +
+        '}';
+  }
 }
