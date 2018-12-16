@@ -55,4 +55,29 @@ public class FightSteps {
   public void the_fight_is_not_present() {
     assertNull(retrievedFight);
   }
+
+
+  @Given("an existing boxer is {string}")
+  public void anExistingBoxerIs(String string) {
+    // Write code here that turns the phrase above into concrete actions
+    throw new cucumber.api.PendingException();
+  }
+
+  @Given("an event in {string} in {string}")
+  public void anEventInIn(String string, String string2) {
+    // Write code here that turns the phrase above into concrete actions
+    throw new cucumber.api.PendingException();
+  }
+
+  @When("I register the fight")
+  public void iRegisterTheFight() {
+    // Write code here that turns the phrase above into concrete actions
+    throw new cucumber.api.PendingException();
+  }
+
+  @Then("the fight is registered")
+  public void theFightIsRegistered() {
+    // Write code here that turns the phrase above into concrete actions
+    throw new cucumber.api.PendingException();
+  }
 }
