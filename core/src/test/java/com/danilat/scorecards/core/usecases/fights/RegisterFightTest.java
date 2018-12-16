@@ -7,6 +7,7 @@ import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
+import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -37,8 +38,8 @@ public class RegisterFightTest {
   public void setup() {
     aDate = LocalDate.now();
     when(fightRepository.nextId()).thenReturn(AN_ID);
-    when(boxerRepository.get(ALI)).thenReturn(Optional.of(new Boxer(ALI, ALI)));
-    when(boxerRepository.get(FOREMAN)).thenReturn(Optional.of(new Boxer(FOREMAN, FOREMAN)));
+    when(boxerRepository.get(ALI)).thenReturn(Optional.of(BoxerMother.aBoxerWithId(ALI)));
+    when(boxerRepository.get(FOREMAN)).thenReturn(Optional.of(BoxerMother.aBoxerWithId(FOREMAN)));
     registerFight = new RegisterFight(fightRepository, boxerRepository);
   }
 
