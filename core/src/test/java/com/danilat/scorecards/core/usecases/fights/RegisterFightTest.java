@@ -38,6 +38,7 @@ public class RegisterFightTest {
   private BoxerRepository boxerRepository;
 
   private static final FightId AN_ID = new FightId("irrelevant id");
+  private String aPlace = "Kinsasa, Zaire";
 
   @Before
   public void setup() {
@@ -50,7 +51,7 @@ public class RegisterFightTest {
 
   @Test
   public void twoBoxersAndADateTheFightIsRegistered() {
-    RegisterFightParameters parameters = new RegisterFightParameters(ALI, FOREMAN, aDate);
+    RegisterFightParameters parameters = new RegisterFightParameters(ALI, FOREMAN, aDate, aPlace);
 
     Fight fight = registerFight.execute(parameters);
 
@@ -58,11 +59,12 @@ public class RegisterFightTest {
     assertEquals(ALI, fight.firstBoxer());
     assertEquals(FOREMAN, fight.secondBoxer());
     assertEquals(AN_ID, fight.id());
+    assertEquals(aPlace, fight.event().place());
   }
 
   @Test
   public void twoBoxersAndADateTheFightIsPersisted() {
-    RegisterFightParameters parameters = new RegisterFightParameters(ALI, FOREMAN, aDate);
+    RegisterFightParameters parameters = new RegisterFightParameters(ALI, FOREMAN, aDate, aPlace);
 
     Fight fight = registerFight.execute(parameters);
 
@@ -77,7 +79,7 @@ public class RegisterFightTest {
     expectedEx.expect(InvalidFightException.class);
     expectedEx.expectMessage("happenAt is mandatory");
 
-    RegisterFightParameters parameters = new RegisterFightParameters(ALI, FOREMAN, null);
+    RegisterFightParameters parameters = new RegisterFightParameters(ALI, FOREMAN, null, aPlace);
 
     registerFight.execute(parameters);
   }
@@ -87,7 +89,7 @@ public class RegisterFightTest {
     expectedEx.expect(InvalidFightException.class);
     expectedEx.expectMessage("firstBoxer is mandatory");
 
-    RegisterFightParameters parameters = new RegisterFightParameters(null, FOREMAN, aDate);
+    RegisterFightParameters parameters = new RegisterFightParameters(null, FOREMAN, aDate, aPlace);
 
     registerFight.execute(parameters);
   }
@@ -97,7 +99,7 @@ public class RegisterFightTest {
     expectedEx.expect(BoxerNotFoundException.class);
     expectedEx.expectMessage(NON_EXISTING_BOXER.toString() + " not found");
 
-    RegisterFightParameters parameters = new RegisterFightParameters(NON_EXISTING_BOXER, FOREMAN, aDate);
+    RegisterFightParameters parameters = new RegisterFightParameters(NON_EXISTING_BOXER, FOREMAN, aDate, aPlace);
 
     registerFight.execute(parameters);
   }
@@ -107,7 +109,7 @@ public class RegisterFightTest {
     expectedEx.expect(InvalidFightException.class);
     expectedEx.expectMessage("secondBoxer is mandatory");
 
-    RegisterFightParameters parameters = new RegisterFightParameters(ALI, null, aDate);
+    RegisterFightParameters parameters = new RegisterFightParameters(ALI, null, aDate, aPlace);
 
     registerFight.execute(parameters);
   }
@@ -117,7 +119,7 @@ public class RegisterFightTest {
     expectedEx.expect(BoxerNotFoundException.class);
     expectedEx.expectMessage(NON_EXISTING_BOXER.toString() + " not found");
 
-    RegisterFightParameters parameters = new RegisterFightParameters(ALI, NON_EXISTING_BOXER, aDate);
+    RegisterFightParameters parameters = new RegisterFightParameters(ALI, NON_EXISTING_BOXER, aDate, aPlace);
 
     registerFight.execute(parameters);
   }

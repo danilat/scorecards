@@ -35,6 +35,7 @@ public class FightSteps {
   private LocalDate aDate;
   private BoxerRepository boxerRepository;
   private Fight createdFight;
+  private String aPlace;
 
   @Before
   public void setUp() {
@@ -85,7 +86,7 @@ public class FightSteps {
   @Given("an event in {string} at {string}")
   public void anEventInIn(String place, String date) throws ParseException {
     aDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("d/MM/yyyy"));
-    //TODO: we need an Event value object?
+    aPlace = place;
   }
 
   @When("I register the fight in the event for {string} and {string}")
@@ -95,7 +96,7 @@ public class FightSteps {
     BoxerId firstBoxerId = new BoxerId(firstBoxer);
     BoxerId secondBoxerId = new BoxerId(firstBoxer);
 
-    RegisterFightParameters parameters = new RegisterFightParameters(firstBoxerId, secondBoxerId, aDate);
+    RegisterFightParameters parameters = new RegisterFightParameters(firstBoxerId, secondBoxerId, aDate, aPlace);
     createdFight = registerFight.execute(parameters);
   }
 

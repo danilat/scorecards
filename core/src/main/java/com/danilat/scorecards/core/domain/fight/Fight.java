@@ -9,12 +9,14 @@ public class Fight {
   private final BoxerId secondBoxer;
   private final LocalDate happenAt;
   private FightId id;
+  private Event event;
 
-  public Fight(FightId id, BoxerId firstBoxer, BoxerId secondBoxer, LocalDate happenAt) {
+  public Fight(FightId id, BoxerId firstBoxer, BoxerId secondBoxer, LocalDate happenAt, Event event) {
     this.id = id;
     this.firstBoxer = firstBoxer;
     this.secondBoxer = secondBoxer;
     this.happenAt = happenAt;
+    this.event = event;
   }
 
   public LocalDate happenAt() {
@@ -31,5 +33,9 @@ public class Fight {
 
   public FightId id() {
     return id;
+  }
+
+  public Event event() {
+    return this.event;
   }
 }

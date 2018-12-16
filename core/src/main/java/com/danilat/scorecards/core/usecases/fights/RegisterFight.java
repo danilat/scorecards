@@ -4,6 +4,7 @@ import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.boxer.BoxerNotFoundException;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
+import com.danilat.scorecards.core.domain.fight.Event;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.usecases.UseCase;
@@ -29,12 +30,15 @@ public class RegisterFight implements UseCase<RegisterFightParameters> {
   @Override
   public Fight execute(RegisterFightParameters parameters) {
     validate(parameters);
-    Boxer firstBoxer = this.boxerRepository.get(parameters.getFirstBoxer()).orElseThrow(() -> new BoxerNotFoundException(parameters.getFirstBoxer()));
-    Boxer secondBoxer = this.boxerRepository.get(parameters.getSecondBoxer()).orElseThrow(() -> new BoxerNotFoundException(parameters.getSecondBoxer()));
+    Boxer firstBoxer = this.boxerRepository.get(parameters.getFirstBoxer())
+        .orElseThrow(() -> new BoxerNotFoundException(parameters.getFirstBoxer()));
+    Boxer secondBoxer = this.boxerRepository.get(parameters.getSecondBoxer())
+        .orElseThrow(() -> new BoxerNotFoundException(parameters.getSecondBoxer()));
 
     Fight fight = new Fight(fightRepository.nextId(), firstBoxer.id(),
         secondBoxer.id(),
-        parameters.getHappenAt());
+        parameters.getHappenAt(),
+        new Event(parameters.getPlace()));
     fightRepository.save(fight);
     return fight;
   }
@@ -56,6 +60,7 @@ public class RegisterFight implements UseCase<RegisterFightParameters> {
     private final BoxerId secondBoxer;
     @NotNull(message = "happenAt is mandatory")
     private final LocalDate happenAt;
+    private final String place;
 
     public BoxerId getFirstBoxer() {
       return firstBoxer;
@@ -69,10 +74,15 @@ public class RegisterFight implements UseCase<RegisterFightParameters> {
       return happenAt;
     }
 
-    public RegisterFightParameters(BoxerId firstBoxer, BoxerId secondBoxer, LocalDate happenAt) {
+    public String getPlace() {
+      return place;
+    }
+
+    public RegisterFightParameters(BoxerId firstBoxer, BoxerId secondBoxer, LocalDate happenAt, String place) {
       this.firstBoxer = firstBoxer;
       this.secondBoxer = secondBoxer;
       this.happenAt = happenAt;
+      this.place = place;
     }
   }
 }
