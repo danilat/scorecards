@@ -8,5 +8,5 @@ public interface FightRepository {
 
   FightId nextId();
 
-  Optional<Fight> get(String id);
+  Optional<Fight> get(FightId id);
 }

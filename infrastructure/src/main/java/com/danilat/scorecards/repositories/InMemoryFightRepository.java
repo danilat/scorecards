@@ -1,6 +1,7 @@
 package com.danilat.scorecards.repositories;
 
 import com.danilat.scorecards.core.domain.fight.Fight;
+import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +9,7 @@ import java.util.Optional;
 
 public class InMemoryFightRepository implements FightRepository {
 
-  private final Map<String, Fight> fights;
+  private final Map<FightId, Fight> fights;
 
   public InMemoryFightRepository() {
     this.fights = new HashMap<>();
@@ -20,12 +21,12 @@ public class InMemoryFightRepository implements FightRepository {
   }
 
   @Override
-  public String nextId() {
-    return "foo";
+  public FightId nextId() {
+    return new FightId("foo");
   }
 
   @Override
-  public Optional<Fight> get(String id) {
+  public Optional<Fight> get(FightId id) {
     return Optional.ofNullable(fights.get(id));
   }
 }

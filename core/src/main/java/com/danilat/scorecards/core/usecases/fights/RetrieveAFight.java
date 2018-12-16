@@ -1,10 +1,11 @@
 package com.danilat.scorecards.core.usecases.fights;
 
 import com.danilat.scorecards.core.domain.fight.Fight;
+import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.usecases.UseCase;
 
-public class RetrieveAFight implements UseCase<String> {
+public class RetrieveAFight implements UseCase<FightId> {
 
   private final FightRepository fightRepository;
 
@@ -13,7 +14,7 @@ public class RetrieveAFight implements UseCase<String> {
   }
 
   @Override
-  public Fight execute(String id) {
+  public Fight execute(FightId id) {
     return fightRepository.get(id).orElseThrow(() -> new FightNotFoundException());
   }
 }

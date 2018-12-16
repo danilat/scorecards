@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import com.danilat.scorecards.core.domain.fight.Fight;
+import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.mothers.FightMother;
 import com.danilat.scorecards.core.usecases.fights.FightNotFoundException;
@@ -46,7 +47,7 @@ public class FightSteps {
   public void i_retrieve_a_non_existing_fight() {
     try {
       RetrieveAFight retrieveAFight = new RetrieveAFight(fightRepository);
-      retrievedFight = retrieveAFight.execute("some inexistent id");
+      retrievedFight = retrieveAFight.execute(new FightId("some inexistent id"));
     } catch (FightNotFoundException exception) {
     }
   }

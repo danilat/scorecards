@@ -8,6 +8,10 @@ import java.time.LocalDate;
 public class FightMother {
 
   public static Fight aFightWithId(String id) {
-    return new Fight(new FightId(id), new BoxerId("ali"), new BoxerId("foreman"), LocalDate.now());
+    return aFightWithId(new FightId(id));
+  }
+
+  public static Fight aFightWithId(FightId id) {
+    return new Fight(id, new BoxerId("ali"), new BoxerId("foreman"), LocalDate.now());
   }
 }

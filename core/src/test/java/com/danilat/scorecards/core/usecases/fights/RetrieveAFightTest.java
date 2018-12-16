@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 import com.danilat.scorecards.core.domain.fight.Fight;
+import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.mothers.FightMother;
 import java.util.Optional;
@@ -20,7 +21,7 @@ public class RetrieveAFightTest {
   private FightRepository fightRepository;
   private RetrieveAFight retrieveAFight;
 
-  private static final String AN_ID = "irrelevant id";
+  private static final FightId AN_ID = new FightId("irrelevant id");
   private Fight existingFight;
 
   @Before
@@ -40,6 +41,6 @@ public class RetrieveAFightTest {
 
   @Test(expected = FightNotFoundException.class)
   public void retrieveAnUnexistingFight() {
-    retrieveAFight.execute("unexisting id");
+    retrieveAFight.execute(new FightId("unexisting id"));
   }
 }
