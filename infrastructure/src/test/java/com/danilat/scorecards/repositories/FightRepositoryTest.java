@@ -1,5 +1,6 @@
 package com.danilat.scorecards.repositories;
 
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.danilat.scorecards.core.domain.fight.Fight;
@@ -28,5 +29,13 @@ public class FightRepositoryTest {
 
     Optional retrieved = fightRepository.get(fightId);
     assertTrue(retrieved.isPresent());
+  }
+
+  @Test
+  public void saveNextIdGeneratesUniques() {
+    FightId aFightId = fightRepository.nextId();
+    FightId anotherFightId = fightRepository.nextId();
+
+    assertNotEquals(aFightId, anotherFightId);
   }
 }

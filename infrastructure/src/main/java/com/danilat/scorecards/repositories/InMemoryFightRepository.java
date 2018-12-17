@@ -6,6 +6,7 @@ import com.danilat.scorecards.core.domain.fight.FightRepository;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 public class InMemoryFightRepository implements FightRepository {
 
@@ -22,7 +23,8 @@ public class InMemoryFightRepository implements FightRepository {
 
   @Override
   public FightId nextId() {
-    return new FightId("foo");
+    String unique = UUID.randomUUID().toString();
+    return new FightId(unique);
   }
 
   @Override
