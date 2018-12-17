@@ -6,29 +6,12 @@ import com.danilat.scorecards.core.domain.fight.FightRepository;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
-public class InMemoryFightRepository implements FightRepository {
-
-  private final Map<FightId, Fight> fights;
-
-  public InMemoryFightRepository() {
-    this.fights = new HashMap<>();
-  }
-
-  @Override
-  public void save(Fight fight) {
-    fights.put(fight.id(), fight);
-  }
+public class InMemoryFightRepository extends InMemoryRepository<Fight, FightId> implements FightRepository {
 
   @Override
   public FightId nextId() {
     String unique = new UniqueIdentifierGenerator().next();
     return new FightId(unique);
-  }
-
-  @Override
-  public Optional<Fight> get(FightId id) {
-    return Optional.ofNullable(fights.get(id));
   }
 }
