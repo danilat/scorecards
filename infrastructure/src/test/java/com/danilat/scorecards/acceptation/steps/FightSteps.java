@@ -1,4 +1,4 @@
-package scorecards.acceptation.steps;
+package com.danilat.scorecards.acceptation.steps;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
