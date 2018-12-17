@@ -19,7 +19,6 @@ public class HelloServiceImpl extends HelloServiceImplBase {
     HelloResponse response = HelloResponse.newBuilder()
         .setGreeting(greeting)
         .build();
-    System.out.println(greeting);
 
     responseObserver.onNext(response);
     responseObserver.onCompleted();

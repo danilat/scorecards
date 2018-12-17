@@ -1,0 +1,18 @@
+syntax = "proto3";
+option java_multiple_files = true;
+package com.danilat.scorecards.grpc.fights;
+
+message RetrieveAFightRequest {
+  string id = 1;
+}
+message RetrieveAFightResponse {
+  string id = 1;
+  string firstBoxer = 2;
+  string secondBoxer = 3;
+  int64 happenAt = 4;
+  string place = 5;
+}
+
+service RetrieveAFight {
+  rpc execute(RetrieveAFightRequest) returns (RetrieveAFightResponse);
+}
