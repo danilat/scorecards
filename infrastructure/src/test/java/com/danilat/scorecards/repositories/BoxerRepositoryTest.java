@@ -1,5 +1,6 @@
 package com.danilat.scorecards.repositories;
 
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.danilat.scorecards.core.domain.boxer.Boxer;
@@ -30,4 +31,11 @@ public class BoxerRepositoryTest {
     assertTrue(retrieved.isPresent());
   }
 
+  @Test
+  public void saveNextIdGeneratesUniques() {
+    BoxerId aBoxerId = boxerRepository.nextId();
+    BoxerId anotherBoxerId = boxerRepository.nextId();
+
+    assertNotEquals(aBoxerId, anotherBoxerId);
+  }
 }

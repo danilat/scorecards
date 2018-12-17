@@ -1,9 +1,7 @@
 package com.danilat.scorecards.core.domain.boxer;
 
-import java.util.Optional;
+import com.danilat.scorecards.core.domain.Repository;
 
-public interface BoxerRepository {
-  Optional<Boxer> get(BoxerId id);
+public interface BoxerRepository extends Repository<Boxer, BoxerId> {
 
-  void save(Boxer aBoxer);
 }

@@ -6,6 +6,7 @@ import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 public class InMemoryBoxerRepository implements BoxerRepository {
 
@@ -23,5 +24,11 @@ public class InMemoryBoxerRepository implements BoxerRepository {
   @Override
   public void save(Boxer boxer) {
     boxers.put(boxer.id(), boxer);
+  }
+
+  @Override
+  public BoxerId nextId() {
+    String unique = UUID.randomUUID().toString();
+    return new BoxerId(unique);
   }
 }
