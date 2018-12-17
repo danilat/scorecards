@@ -23,7 +23,7 @@ public class InMemoryFightRepository implements FightRepository {
 
   @Override
   public FightId nextId() {
-    String unique = UUID.randomUUID().toString();
+    String unique = new UniqueIdentifierGenerator().next();
     return new FightId(unique);
   }
 

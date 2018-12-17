@@ -28,7 +28,7 @@ public class InMemoryBoxerRepository implements BoxerRepository {
 
   @Override
   public BoxerId nextId() {
-    String unique = UUID.randomUUID().toString();
+    String unique = new UniqueIdentifierGenerator().next();
     return new BoxerId(unique);
   }
 }
