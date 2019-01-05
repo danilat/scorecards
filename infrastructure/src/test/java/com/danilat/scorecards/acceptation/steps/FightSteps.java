@@ -10,7 +10,6 @@ import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
-import com.danilat.scorecards.core.domain.fight.FightNotFoundException;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.mothers.FightMother;
@@ -100,13 +99,29 @@ public class FightSteps {
     aDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("d/MM/yyyy"));
   }
 
+  @When("I register the fight in the event for {string} and {string} for {int} rounds")
+  public void iRegisterTheFightInTheEventForAndForRounds(String firstBoxer, String secondBoxer,
+      Integer numberOfRounds) {
+    RegisterFight registerFight = new RegisterFight(fightRepository, boxerRepository);
+    BoxerId firstBoxerId = new BoxerId(firstBoxer);
+    BoxerId secondBoxerId = new BoxerId(secondBoxer);
+    RegisterFightParameters parameters = new RegisterFightParameters(firstBoxerId, secondBoxerId,
+        aDate, aPlace, numberOfRounds);
+
+    try {
+      createdFight = registerFight.execute(parameters);
+    } catch (ScoreCardsBusinessException businessException) {
+      someException = businessException;
+    }
+  }
+
   @When("I register the fight in the event for {string} and {string}")
   public void iRegisterTheFightInTheEventForAnd(String firstBoxer, String secondBoxer) {
     RegisterFight registerFight = new RegisterFight(fightRepository, boxerRepository);
     BoxerId firstBoxerId = new BoxerId(firstBoxer);
     BoxerId secondBoxerId = new BoxerId(secondBoxer);
     RegisterFightParameters parameters = new RegisterFightParameters(firstBoxerId, secondBoxerId,
-        aDate, aPlace);
+        aDate, aPlace, null);
 
     try {
       createdFight = registerFight.execute(parameters);
