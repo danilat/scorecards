@@ -19,8 +19,16 @@ Feature: Register a fight
     When I register the fight in the event for "Kerman Lejarraga" and ""
     Then the fight is not registered
     
-  Scenario: fails without event date and place
+  Scenario: fails without event date
     Given an existing boxer called "Kerman Lejarraga"
     And an existing boxer called "Bradley Skeete"
+    And an event in "Bilbao Arena"
     When I register the fight in the event for "Kerman Lejarraga" and "Bradley Skeete"
     Then the fight is not registered
+
+  Scenario: successfully if all is ok but place is not present
+    Given an existing boxer called "Kerman Lejarraga"
+    And an existing boxer called "Bradley Skeete"
+    And an event at "28/04/2018"
+    When I register the fight in the event for "Kerman Lejarraga" and "Bradley Skeete"
+    Then the fight is successfully registered

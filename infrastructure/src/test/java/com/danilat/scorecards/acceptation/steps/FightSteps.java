@@ -90,6 +90,16 @@ public class FightSteps {
     aPlace = place;
   }
 
+  @Given("an event in {string}")
+  public void anEventIn(String place) {
+    aPlace = place;
+  }
+
+  @Given("an event at {string}")
+  public void anEventAt(String date) {
+    aDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("d/MM/yyyy"));
+  }
+
   @When("I register the fight in the event for {string} and {string}")
   public void iRegisterTheFightInTheEventForAnd(String firstBoxer, String secondBoxer) {
     RegisterFight registerFight = new RegisterFight(fightRepository, boxerRepository);
