@@ -38,7 +38,7 @@ public class RegisterFight implements UseCase<RegisterFightParameters> {
 
     Fight fight = new Fight(fightRepository.nextId(), firstBoxer.id(),
         secondBoxer.id(),
-        event);
+        event, parameters.getNumberOfRounds());
     fightRepository.save(fight);
     return fight;
   }
@@ -61,6 +61,8 @@ public class RegisterFight implements UseCase<RegisterFightParameters> {
     @NotNull(message = "happenAt is mandatory")
     private final LocalDate happenAt;
     private final String place;
+    @NotNull(message = "numberOfRounds is mandatory")
+    private final Integer numberOfRounds;
 
     public BoxerId getFirstBoxer() {
       return firstBoxer;
@@ -78,11 +80,17 @@ public class RegisterFight implements UseCase<RegisterFightParameters> {
       return place;
     }
 
-    public RegisterFightParameters(BoxerId firstBoxer, BoxerId secondBoxer, LocalDate happenAt, String place) {
+    public Integer getNumberOfRounds() {
+      return numberOfRounds;
+    }
+
+    public RegisterFightParameters(BoxerId firstBoxer, BoxerId secondBoxer, LocalDate happenAt,
+        String place, Integer numberOfRounds) {
       this.firstBoxer = firstBoxer;
       this.secondBoxer = secondBoxer;
       this.happenAt = happenAt;
       this.place = place;
+      this.numberOfRounds = numberOfRounds;
     }
   }
 }

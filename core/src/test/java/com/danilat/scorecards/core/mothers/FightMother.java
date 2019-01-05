@@ -14,6 +14,6 @@ public class FightMother {
 
   public static Fight aFightWithId(FightId id) {
     Event theRumbleInTheJungle = new Event(LocalDate.now(),"Kinsasa, Zaire");
-    return new Fight(id, new BoxerId("ali"), new BoxerId("foreman"), theRumbleInTheJungle);
+    return new Fight(id, new BoxerId("ali"), new BoxerId("foreman"), theRumbleInTheJungle, 12);
   }
 }

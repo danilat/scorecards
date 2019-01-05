@@ -8,12 +8,14 @@ public class Fight extends Entity<FightId> {
   private final BoxerId firstBoxer;
   private final BoxerId secondBoxer;
   private Event event;
+  private Integer numberOfRounds;
 
-  public Fight(FightId id, BoxerId firstBoxer, BoxerId secondBoxer, Event event) {
+  public Fight(FightId id, BoxerId firstBoxer, BoxerId secondBoxer, Event event, Integer numberOfRounds) {
     super(id);
     this.firstBoxer = firstBoxer;
     this.secondBoxer = secondBoxer;
     this.event = event;
+    this.numberOfRounds = numberOfRounds;
   }
 
   public BoxerId firstBoxer() {
@@ -30,5 +32,9 @@ public class Fight extends Entity<FightId> {
 
   public Event event() {
     return this.event;
+  }
+
+  public Integer numberOfRounds() {
+    return this.numberOfRounds;
   }
 }
