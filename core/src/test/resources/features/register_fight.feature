@@ -39,3 +39,17 @@ Feature: Register a fight
     And an event in "Bilbao Arena" at "28/04/2018"
     When I register the fight in the event for "Kerman Lejarraga" and "Bradley Skeete"
     Then the fight is not registered
+
+  Scenario: fails with less than 3 rounds
+    Given an existing boxer called "Kerman Lejarraga"
+    And an existing boxer called "Bradley Skeete"
+    And an event in "Bilbao Arena" at "28/04/2018"
+    When I register the fight in the event for "Kerman Lejarraga" and "Bradley Skeete" for 2 rounds
+    Then the fight is not registered
+
+  Scenario: fails with more than 12 rounds
+    Given an existing boxer called "Kerman Lejarraga"
+    And an existing boxer called "Bradley Skeete"
+    And an event in "Bilbao Arena" at "28/04/2018"
+    When I register the fight in the event for "Kerman Lejarraga" and "Bradley Skeete" for 13 rounds
+    Then the fight is not registered
