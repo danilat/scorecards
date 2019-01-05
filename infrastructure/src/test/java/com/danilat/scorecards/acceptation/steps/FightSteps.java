@@ -4,9 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import com.danilat.scorecards.core.domain.ScoreCardsBusinessException;
 import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
-import com.danilat.scorecards.core.domain.boxer.BoxerNotFoundException;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
@@ -14,7 +14,6 @@ import com.danilat.scorecards.core.domain.fight.FightNotFoundException;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.mothers.FightMother;
-import com.danilat.scorecards.core.usecases.fights.InvalidFightException;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
@@ -45,7 +44,7 @@ public class FightSteps {
     fightRepository = new InMemoryFightRepository();
     boxerRepository = new InMemoryBoxerRepository();
   }
-  
+
   @Given("an existing fight")
   public void an_existing_fight() {
     existingFight = FightMother.aFightWithId("a fight");
@@ -68,7 +67,7 @@ public class FightSteps {
     try {
       RetrieveAFight retrieveAFight = new RetrieveAFight(fightRepository);
       retrievedFight = retrieveAFight.execute(new FightId("some inexistent id"));
-    } catch (FightNotFoundException exception) {
+    } catch (ScoreCardsBusinessException businessException) {
     }
   }
 
@@ -101,10 +100,8 @@ public class FightSteps {
 
     try {
       createdFight = registerFight.execute(parameters);
-    } catch (BoxerNotFoundException boxerNotFound) {
-      someException = boxerNotFound;
-    } catch (InvalidFightException invalidFight) {
-      someException = invalidFight;
+    } catch (ScoreCardsBusinessException businessException) {
+      someException = businessException;
     }
   }
 
