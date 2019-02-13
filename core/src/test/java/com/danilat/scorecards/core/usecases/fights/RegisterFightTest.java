@@ -143,4 +143,26 @@ public class RegisterFightTest {
 
     registerFight.execute(parameters);
   }
+
+  @Test
+  public void withLessThanThreeNumberOfRoundsIsInvalid(){
+    expectedEx.expect(InvalidFightException.class);
+    expectedEx.expectMessage("numberOfRounds is less than three");
+
+    RegisterFightParameters parameters = new RegisterFightParameters(ALI, NON_EXISTING_BOXER, aDate, aPlace,
+        2);
+
+    registerFight.execute(parameters);
+  }
+
+  @Test
+  public void withMoreThanTwelveNumberOfRoundsIsInvalid(){
+    expectedEx.expect(InvalidFightException.class);
+    expectedEx.expectMessage("numberOfRounds is more than twelve");
+
+    RegisterFightParameters parameters = new RegisterFightParameters(ALI, NON_EXISTING_BOXER, aDate, aPlace,
+        13);
+
+    registerFight.execute(parameters);
+  }
 }

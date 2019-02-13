@@ -15,6 +15,8 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 public class RegisterFight implements UseCase<RegisterFightParameters> {
@@ -62,6 +64,8 @@ public class RegisterFight implements UseCase<RegisterFightParameters> {
     private final LocalDate happenAt;
     private final String place;
     @NotNull(message = "numberOfRounds is mandatory")
+    @Min(value = 3, message = "numberOfRounds is less than three")
+    @Max(value = 12, message = "numberOfRounds is more than twelve")
     private final Integer numberOfRounds;
 
     public BoxerId getFirstBoxer() {
