@@ -6,7 +6,7 @@ import cucumber.api.junit.Cucumber;
 import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(features = "classpath:features", snippets = SnippetType.CAMELCASE)
+@CucumberOptions(features = "classpath:features", plugin = {"pretty", "html:target/features"}, snippets = SnippetType.CAMELCASE)
 public class CucumberRunnerTest {
 
 }
