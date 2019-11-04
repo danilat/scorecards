@@ -23,7 +23,7 @@ public class FightRepositoryTest {
   }
 
   @Test
-  public void saveABoxer() {
+  public void saveAFight() {
     Fight aFight = FightMother.aFightWithId(fightId);
 
     fightRepository.save(aFight);
@@ -33,7 +33,7 @@ public class FightRepositoryTest {
   }
 
   @Test
-  public void saveNextIdGeneratesUniques() {
+  public void nextIdGeneratesUniques() {
     FightId aFightId = fightRepository.nextId();
     FightId anotherFightId = fightRepository.nextId();
 

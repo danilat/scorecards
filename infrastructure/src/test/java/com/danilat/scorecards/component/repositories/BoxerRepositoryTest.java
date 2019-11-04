@@ -33,7 +33,7 @@ public class BoxerRepositoryTest {
   }
 
   @Test
-  public void saveNextIdGeneratesUniques() {
+  public void nextIdGeneratesUniques() {
     BoxerId aBoxerId = boxerRepository.nextId();
     BoxerId anotherBoxerId = boxerRepository.nextId();
 
