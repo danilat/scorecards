@@ -5,19 +5,16 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import com.danilat.scorecards.core.domain.ScoreCardsBusinessException;
-import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.mothers.FightMother;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
-import com.danilat.scorecards.repositories.InMemoryBoxerRepository;
 import com.danilat.scorecards.repositories.InMemoryFightRepository;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import java.time.LocalDate;
 
 public class FightSteps {
 
@@ -77,7 +74,8 @@ public class FightSteps {
   }
 
   @When("I register the fight in the event for {string} and {string} for {int} rounds")
-  public void iRegisterTheFightInTheEventForAndForRounds(String string, String string2, Integer int1) {
+  public void iRegisterTheFightInTheEventForAndForRounds(String string, String string2,
+      Integer int1) {
     // Write code here that turns the phrase above into concrete actions
     throw new cucumber.api.PendingException();
   }
