@@ -13,7 +13,7 @@ As boxing aficionado I would like to score fights and share it with my friends a
 - Watch past video fights when is possible
 - Possibility to access to fighters statistics (via boxrec)
 
-This is a backend service to support this features, uses Hexagonal Architecture and DDD tactical artifacts with Spring Boot as infrastructure framework.
+This is a backend service to support this features, uses Hexagonal Architecture and DDD tactical artifacts.
 
 
 You can see the source code [on github](https://github.com/danilat/scorecards)
