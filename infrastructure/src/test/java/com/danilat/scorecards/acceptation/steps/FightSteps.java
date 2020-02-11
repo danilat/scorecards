@@ -86,8 +86,8 @@ public class FightSteps {
   }
 
   @When("I register the fight in the event for {string} and {string} for {int} rounds")
-  public void iRegisterTheFightInTheEventForAndForRounds(String string, String string2,
-      Integer int1) {
+  public void iRegisterTheFightInTheEventForAndForRounds(String firstBoxerName, String secondBoxerName,
+      Integer numberOfRounds) {
     // Write code here that turns the phrase above into concrete actions
     throw new cucumber.api.PendingException();
   }
@@ -100,14 +100,12 @@ public class FightSteps {
 
   @Given("an event at {string}")
   public void anEventAt(String date) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new cucumber.api.PendingException();
+    aDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("d/MM/yyyy"));
   }
 
   @Given("an event in {string}")
   public void anEventIn(String place) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new cucumber.api.PendingException();
+    aPlace = place;
   }
 
   @Then("the fight is not registered")
@@ -117,7 +115,7 @@ public class FightSteps {
   }
 
   @When("I register the fight in the event for {string} and {string}")
-  public void iRegisterTheFightInTheEventForAnd(String firstBoxer, String secondBoxer) {
+  public void iRegisterTheFightInTheEventForAnd(String firstBoxerName, String secondBoxerName) {
     // Write code here that turns the phrase above into concrete actions
     throw new cucumber.api.PendingException();
   }
