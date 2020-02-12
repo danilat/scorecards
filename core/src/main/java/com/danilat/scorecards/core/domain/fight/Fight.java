@@ -5,21 +5,21 @@ import com.danilat.scorecards.core.domain.boxer.BoxerId;
 
 public class Fight extends Entity<FightId> {
 
-  private final BoxerId firstBoxer;
-  private final BoxerId secondBoxer;
+  private final BoxerId firstBoxerId;
+  private final BoxerId secondBoxerId;
 
-  public Fight(FightId id, BoxerId firstBoxer, BoxerId secondBoxer) {
+  public Fight(FightId id, BoxerId firstBoxerId, BoxerId secondBoxerId) {
     super(id);
-    this.firstBoxer = firstBoxer;
-    this.secondBoxer = secondBoxer;
+    this.firstBoxerId = firstBoxerId;
+    this.secondBoxerId = secondBoxerId;
   }
 
-  public BoxerId firstBoxer() {
-    return this.firstBoxer;
+  public BoxerId firstBoxerId() {
+    return this.firstBoxerId;
   }
 
-  public BoxerId secondBoxer() {
-    return this.secondBoxer;
+  public BoxerId secondBoxerId() {
+    return this.secondBoxerId;
   }
 
   public FightId id() {
