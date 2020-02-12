@@ -11,9 +11,7 @@ public abstract class EntityId {
 
   @Override
   public String toString() {
-    return "EntityId{" +
-        "id='" + id + '\'' +
-        '}';
+    return id;
   }
 
   @Override
