@@ -4,13 +4,13 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class UUIDGeneratorTest {
+public class UniqueIdGeneratorTest {
   @Test
-  public void theNextUuidIsUnique(){
-    UUIDGenerator uuidGenerator = new UUIDGenerator();
+  public void theNextIdIsUnique(){
+    UniqueIdGenerator uniqueIdGenerator = new UniqueIdGenerator();
 
-    String firstValue = uuidGenerator.next();
-    String secondValue = uuidGenerator.next();
+    String firstValue = uniqueIdGenerator.next();
+    String secondValue = uniqueIdGenerator.next();
 
     assertNotEquals(firstValue, secondValue);
   }

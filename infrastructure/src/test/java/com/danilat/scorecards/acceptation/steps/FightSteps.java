@@ -11,11 +11,10 @@ import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
-import com.danilat.scorecards.core.domain.fight.events.FightCreated;
 import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.mothers.FightMother;
 import com.danilat.scorecards.core.shared.Clock;
-import com.danilat.scorecards.core.shared.UUIDGenerator;
+import com.danilat.scorecards.core.shared.UniqueIdGenerator;
 import com.danilat.scorecards.core.shared.events.EventBus;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
@@ -43,14 +42,14 @@ public class FightSteps {
   private Exception someException;
   private EventBus eventBus;
   private Clock clock;
-  private UUIDGenerator uuidGenerator;
+  private UniqueIdGenerator uniqueIdGenerator;
 
   @Before
   public void setUp() {
     fightRepository = new InMemoryFightRepository();
     boxerRepository = new InMemoryBoxerRepository();
     clock = new Clock();
-    uuidGenerator = new UUIDGenerator();
+    uniqueIdGenerator = new UniqueIdGenerator();
     eventBus = domainEvent -> System.out.println("Publishing the event " + domainEvent);
   }
 
@@ -113,7 +112,7 @@ public class FightSteps {
   public void iRegisterTheFightInTheEventForAndForRounds(String firstBoxer, String secondBoxer,
       Integer numberOfRounds) {
     RegisterFight registerFight = new RegisterFight(fightRepository, boxerRepository, eventBus, clock,
-        uuidGenerator);
+        uniqueIdGenerator);
     BoxerId firstBoxerId = new BoxerId(firstBoxer);
     BoxerId secondBoxerId = new BoxerId(secondBoxer);
     RegisterFightParameters parameters = new RegisterFightParameters(firstBoxerId, secondBoxerId,
@@ -129,7 +128,7 @@ public class FightSteps {
   @When("I register the fight in the event for {string} and {string}")
   public void iRegisterTheFightInTheEventForAnd(String firstBoxer, String secondBoxer) {
     RegisterFight registerFight = new RegisterFight(fightRepository, boxerRepository, eventBus, clock,
-        uuidGenerator);
+        uniqueIdGenerator);
     BoxerId firstBoxerId = new BoxerId(firstBoxer);
     BoxerId secondBoxerId = new BoxerId(secondBoxer);
     RegisterFightParameters parameters = new RegisterFightParameters(firstBoxerId, secondBoxerId,

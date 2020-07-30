@@ -15,7 +15,7 @@ import com.danilat.scorecards.core.domain.fight.events.FightCreated;
 import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.shared.Clock;
 import com.danilat.scorecards.core.shared.events.EventBus;
-import com.danilat.scorecards.core.shared.UUIDGenerator;
+import com.danilat.scorecards.core.shared.UniqueIdGenerator;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -47,7 +47,7 @@ public class RegisterFightTest {
   @Mock
   private Clock clock;
   @Mock
-  private UUIDGenerator uuidGenerator;
+  private UniqueIdGenerator uniqueIdGenerator;
 
   private static final FightId AN_ID = new FightId("irrelevant id");
   private String aPlace = "Kinsasa, Zaire";
@@ -63,9 +63,9 @@ public class RegisterFightTest {
     when(boxerRepository.get(ALI)).thenReturn(Optional.of(BoxerMother.aBoxerWithId(ALI)));
     when(boxerRepository.get(FOREMAN)).thenReturn(Optional.of(BoxerMother.aBoxerWithId(FOREMAN)));
     when(clock.now()).thenReturn(anHappenedAt);
-    when(uuidGenerator.next()).thenReturn(anEventId);
+    when(uniqueIdGenerator.next()).thenReturn(anEventId);
     registerFight = new RegisterFight(fightRepository, boxerRepository, eventBus, clock,
-        uuidGenerator);
+        uniqueIdGenerator);
   }
 
   @Test
