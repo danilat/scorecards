@@ -7,6 +7,10 @@ import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.Event;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
+import com.danilat.scorecards.core.domain.fight.events.FightCreated;
+import com.danilat.scorecards.core.shared.Clock;
+import com.danilat.scorecards.core.shared.events.EventBus;
+import com.danilat.scorecards.core.shared.UUIDGenerator;
 import com.danilat.scorecards.core.usecases.UseCase;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import java.time.LocalDate;
@@ -23,10 +27,18 @@ public class RegisterFight implements UseCase<RegisterFightParameters> {
 
   private final FightRepository fightRepository;
   private final BoxerRepository boxerRepository;
+  private final EventBus eventBus;
+  private final Clock clock;
+  private final UUIDGenerator uuidGenerator;
 
-  public RegisterFight(FightRepository fightRepository, BoxerRepository boxerRepository) {
+  public RegisterFight(FightRepository fightRepository, BoxerRepository boxerRepository,
+      EventBus eventBus, Clock clock,
+      UUIDGenerator uuidGenerator) {
     this.fightRepository = fightRepository;
     this.boxerRepository = boxerRepository;
+    this.eventBus = eventBus;
+    this.clock = clock;
+    this.uuidGenerator = uuidGenerator;
   }
 
   @Override
@@ -42,6 +54,7 @@ public class RegisterFight implements UseCase<RegisterFightParameters> {
         secondBoxer.id(),
         event, parameters.getNumberOfRounds());
     fightRepository.save(fight);
+    eventBus.publish(new FightCreated(fight, clock.now(), uuidGenerator.next()));
     return fight;
   }
 
