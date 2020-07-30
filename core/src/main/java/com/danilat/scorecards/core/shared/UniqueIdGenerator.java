@@ -1,8 +1,10 @@
 package com.danilat.scorecards.core.shared;
 
+import java.util.UUID;
+
 public class UUIDGenerator {
 
   public String next() {
-    return null;
+    return UUID.randomUUID().toString();
   }
 }
