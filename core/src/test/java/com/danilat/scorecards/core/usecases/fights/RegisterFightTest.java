@@ -51,7 +51,7 @@ public class RegisterFightTest {
   }
 
   @Test
-  public void twoBoxersAndADateTheFightIsRegistered() {
+  public void givenTwoBoxersAndADateThenIsRegistered() {
     RegisterFightParameters parameters = new RegisterFightParameters(ALI, FOREMAN, aDate, aPlace,
         numberOfRounds);
 
@@ -66,7 +66,7 @@ public class RegisterFightTest {
   }
 
   @Test
-  public void twoBoxersAndADateTheFightIsPersisted() {
+  public void givenTwoBoxersAndADateThenIsPersisted() {
     RegisterFightParameters parameters = new RegisterFightParameters(ALI, FOREMAN, aDate, aPlace,
         numberOfRounds);
 
@@ -79,7 +79,7 @@ public class RegisterFightTest {
   public ExpectedException expectedEx = ExpectedException.none();
 
   @Test
-  public void twoBoxerButNotDateIsInvalid() {
+  public void givenTwoBoxerButNotDateThenIsInvalid() {
     expectedEx.expect(InvalidFightException.class);
     expectedEx.expectMessage("happenAt is mandatory");
 
@@ -90,7 +90,7 @@ public class RegisterFightTest {
   }
 
   @Test
-  public void firstBoxerIsNotPresentIsInvalid() {
+  public void givenFirstBoxerIsNotPresentThenIsInvalid() {
     expectedEx.expect(InvalidFightException.class);
     expectedEx.expectMessage("firstBoxer is mandatory");
 
@@ -101,7 +101,7 @@ public class RegisterFightTest {
   }
 
   @Test
-  public void firstBoxerIsNotExistingIsInvalid() {
+  public void givenFirstBoxerIsNotExistingThenIsInvalid() {
     expectedEx.expect(BoxerNotFoundException.class);
     expectedEx.expectMessage(NON_EXISTING_BOXER.toString() + " not found");
 
@@ -112,7 +112,7 @@ public class RegisterFightTest {
   }
 
   @Test
-  public void secondBoxerIsNotPresentIsInvalid() {
+  public void givenSecondBoxerIsNotPresentThenIsInvalid() {
     expectedEx.expect(InvalidFightException.class);
     expectedEx.expectMessage("secondBoxer is mandatory");
 
@@ -123,7 +123,7 @@ public class RegisterFightTest {
   }
 
   @Test
-  public void secondBoxerIsNotExistingIsInvalid() {
+  public void givenSecondBoxerIsNotExistingThenIsInvalid() {
     expectedEx.expect(BoxerNotFoundException.class);
     expectedEx.expectMessage(NON_EXISTING_BOXER.toString() + " not found");
 
@@ -134,7 +134,7 @@ public class RegisterFightTest {
   }
 
   @Test
-  public void numberOfRoundsIsNotPresentIsInvalid(){
+  public void givenNumberOfRoundsIsNotPresentThenIsInvalid(){
     expectedEx.expect(InvalidFightException.class);
     expectedEx.expectMessage("numberOfRounds is mandatory");
 
@@ -145,7 +145,7 @@ public class RegisterFightTest {
   }
 
   @Test
-  public void withLessThanThreeNumberOfRoundsIsInvalid(){
+  public void givenLessThanThreeNumberOfRoundsThenIsInvalid(){
     expectedEx.expect(InvalidFightException.class);
     expectedEx.expectMessage("numberOfRounds is less than three");
 
@@ -156,7 +156,7 @@ public class RegisterFightTest {
   }
 
   @Test
-  public void withMoreThanTwelveNumberOfRoundsIsInvalid(){
+  public void givenMoreThanTwelveNumberOfRoundsThenIsInvalid(){
     expectedEx.expect(InvalidFightException.class);
     expectedEx.expectMessage("numberOfRounds is more than twelve");
 

@@ -36,7 +36,7 @@ public class RetrieveAFightTest {
   }
 
   @Test
-  public void retrieveAnExistingFight() {
+  public void givenAnExistingFightThenIsRetrieved() {
     Fight fight = retrieveAFight.execute(AN_ID);
 
     assertEquals(existingFight, fight);
@@ -46,7 +46,7 @@ public class RetrieveAFightTest {
   public ExpectedException expectedException = ExpectedException.none();
 
   @Test
-  public void retrieveAnUnexistingFight() {
+  public void givenAnNonExistingFightThenIsNotRetrieved() {
     expectedException.expect(FightNotFoundException.class);
     expectedException.expectMessage(new FightId("unexisting id") + " not found");
 
