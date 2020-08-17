@@ -17,3 +17,13 @@ This is a backend service to support this features, uses Hexagonal Architecture 
 
 
 You can see the source code [on github](https://github.com/danilat/scorecards)
+
+### Run the tests
+
+`mvn clean test`
+
+### Run the app
+
+`mvn install`
+`cb boot/`
+`mvn spring-boot:run -Drun.jvmArguments="-Dspring.profiles.active=standalone"`
