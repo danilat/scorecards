@@ -3,6 +3,7 @@ package com.danilat.scorecards.repositories;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
+import com.danilat.scorecards.core.shared.UniqueIdGenerator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -13,7 +14,7 @@ public class InMemoryFightRepository extends InMemoryRepository<Fight, FightId> 
 
   @Override
   public FightId nextId() {
-    String unique = new UniqueIdentifierGenerator().next();
+    String unique = new UniqueIdGenerator().next();
     return new FightId(unique);
   }
 }
