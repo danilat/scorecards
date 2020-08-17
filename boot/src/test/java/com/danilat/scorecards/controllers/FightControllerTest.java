@@ -45,4 +45,12 @@ public class FightControllerTest {
         .andExpect(status().isOk())
         .andExpect(model().attribute("fight", equalTo(fight)));
   }
+
+  @Test
+  public void getsANonExistingFight() throws Exception {
+    String fightId = "non-existing-id";
+
+    this.mvc.perform(get("/fights/" + fightId))
+        .andExpect(status().isNotFound());
+  }
 }
