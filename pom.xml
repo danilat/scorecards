@@ -28,6 +28,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
+    <pmdVersion>6.26.0</pmdVersion>
   </properties>
 
   <build>
@@ -51,7 +52,6 @@
         <version>3.1.1</version>
         <configuration>
           <configLocation>google_checks.xml</configLocation>
-          <consoleOutput>true</consoleOutput>
           <failOnViolation>true</failOnViolation>
         </configuration>
         <executions>
@@ -60,6 +60,42 @@
             <phase>validate</phase>
             <goals>
               <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>3.13.0</version>
+        <dependencies>
+          <dependency>
+            <groupId>net.sourceforge.pmd</groupId>
+            <artifactId>pmd-core</artifactId>
+            <version>${pmdVersion}</version>
+          </dependency>
+          <dependency>
+            <groupId>net.sourceforge.pmd</groupId>
+            <artifactId>pmd-java</artifactId>
+            <version>${pmdVersion}</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <printFailingErrors>true</printFailingErrors>
+        </configuration>
+        <executions>
+          <execution>
+            <id>quality-criteria-pmd</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>quality-criteria-cpd</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>cpd-check</goal>
             </goals>
           </execution>
         </executions>

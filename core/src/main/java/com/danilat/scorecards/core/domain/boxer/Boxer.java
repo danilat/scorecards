@@ -15,4 +15,6 @@ public class Boxer extends Entity<BoxerId> {
   public BoxerId id() {
     return this.id;
   }
+
+  public String name() { return this.name; }
 }

@@ -4,9 +4,6 @@ import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.shared.UniqueIdGenerator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 @Repository
