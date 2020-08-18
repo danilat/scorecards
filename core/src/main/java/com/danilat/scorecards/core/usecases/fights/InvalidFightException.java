@@ -1,13 +1,12 @@
 package com.danilat.scorecards.core.usecases.fights;
 
+import static java.util.stream.Collectors.joining;
+
 import com.danilat.scorecards.core.domain.ScoreCardsBusinessException;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import static java.util.stream.Collectors.joining;
-
 import javax.validation.ConstraintViolation;
 
 public class InvalidFightException extends ScoreCardsBusinessException {

@@ -3,6 +3,7 @@ package com.danilat.scorecards.core.domain;
 import java.util.Objects;
 
 public abstract class EntityId {
+
   private final String id;
 
   public EntityId(String id) {
@@ -11,9 +12,9 @@ public abstract class EntityId {
 
   @Override
   public String toString() {
-    return "EntityId{" +
-        "id='" + id + '\'' +
-        '}';
+    return "EntityId{"
+        + "id='" + id + '\''
+        + '}';
   }
 
   @Override

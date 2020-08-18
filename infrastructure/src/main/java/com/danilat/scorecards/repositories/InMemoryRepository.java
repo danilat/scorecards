@@ -7,19 +7,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public abstract class InMemoryRepository<ENTITY extends Entity, ID extends EntityId> implements Repository<ENTITY, ID> {
+public abstract class InMemoryRepository<E extends Entity, I extends EntityId> implements Repository<E, I> {
 
-  protected final Map<EntityId, ENTITY> entities;
+  protected final Map<EntityId, E> entities;
 
   public InMemoryRepository() {
     this.entities = new HashMap<>();
   }
 
-  public void save(ENTITY entity) {
+  public void save(E entity) {
     entities.put(entity.id(), entity);
   }
 
-  public Optional<ENTITY> get(ID id) {
+  public Optional<E> get(I id) {
     return Optional.ofNullable(entities.get(id));
   }
 }

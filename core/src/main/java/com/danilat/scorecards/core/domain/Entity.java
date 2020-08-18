@@ -1,12 +1,12 @@
 package com.danilat.scorecards.core.domain;
 
-public abstract class Entity<ID extends EntityId> {
+public abstract class Entity<I extends EntityId> {
 
-  protected ID id;
+  protected I id;
 
-  public Entity(ID id) {
+  public Entity(I id) {
     this.id = id;
   }
 
-  abstract public ID id();
+  public abstract I id();
 }
