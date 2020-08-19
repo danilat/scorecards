@@ -9,8 +9,8 @@
   <version>0.0.1-SNAPSHOT</version>
   <modules>
     <module>core</module>
-    <module>boot</module>
     <module>infrastructure</module>
+    <module>boot</module>
   </modules>
   <packaging>pom</packaging>
 
