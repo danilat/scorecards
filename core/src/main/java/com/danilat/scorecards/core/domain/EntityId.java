@@ -34,4 +34,8 @@ public abstract class EntityId {
 
     return Objects.hash(id);
   }
+
+  public String value() {
+    return id;
+  }
 }

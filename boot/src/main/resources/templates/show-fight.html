@@ -1,10 +1,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <h1 th:text=${fight.id()}></h1>
-Boxer 1: <p th:text=${fight.firstBoxer()}></p>
-Boxer 2: <p th:text=${fight.secondBoxer()}></p>
+Boxer 1: <p th:text=${fight.firstBoxerName}></p>
+Boxer 2: <p th:text=${fight.secondBoxerName}></p>
 Event:
-<p th:text=${fight.event().place()}></p>
-<p th:text=${fight.event().happenAt()}></p>
+<p th:text=${fight.place}></p>
+<p th:text=${fight.happenAt}></p>
 </body>
 </html>

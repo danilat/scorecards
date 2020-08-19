@@ -3,11 +3,11 @@ package com.danilat.scorecards.core.usecases.fights;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
-import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightNotFoundException;
-import com.danilat.scorecards.core.domain.fight.FightRepository;
-import com.danilat.scorecards.core.mothers.FightMother;
+import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxers;
+import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersRepository;
+import com.danilat.scorecards.core.mothers.FightWithBoxersMother;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Rule;
@@ -19,27 +19,28 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RetrieveAFightTest {
-
   @Mock
-  private FightRepository fightRepository;
-  private RetrieveAFight retrieveAFight;
+  private FightWithBoxersRepository fightWithBoxersRepository;
 
   private static final FightId AN_ID = new FightId("irrelevant id");
-  private Fight existingFight;
+  private FightWithBoxers existingFightWithBoxers;
+
+  private RetrieveAFight retrieveAFight;
 
   @Before
   public void setup() {
-    existingFight = FightMother.aFightWithId(AN_ID);
-    when(fightRepository.get(AN_ID)).thenReturn(Optional.of(existingFight));
+    existingFightWithBoxers = FightWithBoxersMother.aFightWithBoxersWithId(AN_ID);
+    when(fightWithBoxersRepository.get(AN_ID)).thenReturn(Optional.of(
+        existingFightWithBoxers));
 
-    retrieveAFight = new RetrieveAFight(fightRepository);
+    retrieveAFight = new RetrieveAFight(fightWithBoxersRepository);
   }
 
   @Test
   public void givenAnExistingFightThenIsRetrieved() {
-    Fight fight = retrieveAFight.execute(AN_ID);
+    FightWithBoxers fight = retrieveAFight.execute(AN_ID);
 
-    assertEquals(existingFight, fight);
+    assertEquals(existingFightWithBoxers, fight);
   }
 
   @Rule

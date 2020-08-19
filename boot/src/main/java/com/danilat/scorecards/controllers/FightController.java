@@ -1,8 +1,8 @@
 package com.danilat.scorecards.controllers;
 
-import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightNotFoundException;
+import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxers;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ public class FightController {
   @GetMapping("{id}")
   public String findById(@PathVariable String id, Model model) {
     try {
-      Fight fight = retrieveAFight.execute(new FightId(id));
+      FightWithBoxers fight = retrieveAFight.execute(new FightId(id));
 
       model.addAttribute("fight", fight);
       return "show-fight";

@@ -1,6 +1,6 @@
 package com.danilat.scorecards.usecases;
 
-import com.danilat.scorecards.core.domain.fight.FightRepository;
+import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersRepository;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -10,11 +10,11 @@ import org.springframework.context.annotation.Configuration;
 public class UseCaseInitializer {
 
   @Autowired
-  private FightRepository fightRepository;
+  private FightWithBoxersRepository fightWithBoxersRepository;
 
   @Bean
   public RetrieveAFight retrieveAFight() {
-    return new RetrieveAFight(fightRepository);
+    return new RetrieveAFight(fightWithBoxersRepository);
   }
 }
 
