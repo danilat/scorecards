@@ -1,12 +1,18 @@
 language: java
 script: mvn clean verify
-
 env:
   global:
-    - CC_TEST_REPORTER_ID=6adcd3acd4607f5dc95b557cb343441e248a58b2006559f3e31843f42ce3a2ac
+  - CC_TEST_REPORTER_ID=6adcd3acd4607f5dc95b557cb343441e248a58b2006559f3e31843f42ce3a2ac
 before_script:
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
+- curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
+  > ./cc-test-reporter
+- chmod +x ./cc-test-reporter
+- "./cc-test-reporter before-build"
 after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+- "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
+deploy:
+  provider: heroku
+  app:
+    master: scorecards-dev
+  api_key:
+    secure: j1AOvZbUoiicZioT28jCgDPsj0zpJdMLCh6YeT/XLw3lGEYNzebAKqYEDrp1TvVT9uQn7gA3TO9qa11EB/bduE/PL6SFtnyeGhy8hjjux1V+tIIgFxuEMK3TNCRt7Atkjw2WRwyUuZAy7Rz1GMbTPc0sW0NASYWVjK4aprHCaZfV7ZPB5IJY1KqWf99CfFIz+d2bdKm6HfRJKbbg9aUHXKDHsoYB5aj1mG7WxIVgicnOLemHBZ3sOlyfsrNC40EvO8sK26UVhlRYrrBlhiT3NT+7T0nsjTPwuhNlOk0owkmjzL/Z7I92kj5C3MmUHGKH9FD6QqDbSGMoWKvF36xS6d914FOMNbf4vyB0cdsqVChDNaRXZdabYnhzCW29Y7pDqruT2+tZjKctjjWiWDOU+4ADgkBMfQX90sF690RNK1874yGXPkqEdt/bsUT15LOCALmTT+4peKhiwMC3LDtKFxeB0njL9+lvbfrPHRwrtJTEj5ZWJrPpyJuUpR6+pLfz94fQJRPZHrLO5Vnwq3yoTkUzpoVPvq+k1t1Q6LhglrhHP7f2XIeciGByH0hE4aNOdMoRBIAIT9ZD+YampaljCWVUuKZDSUUjJWL1671jBTbs+3MYF1bPOJpbDURN8Ppo7P0h2Z99vTcX+IwxMlGaYhrAssbnwrlEpI9CzxkdrZY=
