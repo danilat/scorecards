@@ -12,30 +12,27 @@ import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxers;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersRepository;
 import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.mothers.FightMother;
-import com.danilat.scorecards.core.mothers.FightWithBoxersMother;
 import com.danilat.scorecards.repositories.InMemoryBoxerRepository;
 import com.danilat.scorecards.repositories.InMemoryFightRepository;
 import com.danilat.scorecards.repositories.InMemoryFightWithBoxersRepository;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@SpringBootTest(classes = {InMemoryFightRepository.class, InMemoryBoxerRepository.class, InMemoryFightWithBoxersRepository.class})
-@RunWith(SpringRunner.class)
 public class FightWithBoxersRepositoryTest {
 
-
-  @Autowired
   private FightRepository fightRepository;
-  @Autowired
   private BoxerRepository boxerRepository;
-  @Autowired
   private FightWithBoxersRepository fightWithBoxersRepository;
   private FightId fightId = new FightId("some irrelevant id");
+
+  @Before
+  public void setup() {
+    fightRepository = new InMemoryFightRepository();
+    boxerRepository = new InMemoryBoxerRepository();
+    fightWithBoxersRepository = new InMemoryFightWithBoxersRepository(fightRepository,
+        boxerRepository);
+  }
 
 
   @Test
