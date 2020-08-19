@@ -18,7 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class FightController {
 
   @Autowired
-  RetrieveAFight retrieveAFight;
+  private RetrieveAFight retrieveAFight;
 
   @GetMapping("{id}")
   public String findById(@PathVariable String id, Model model) {

@@ -1,6 +1,8 @@
 package com.danilat.scorecards;
 
+import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
+import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.Event;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
@@ -25,13 +27,18 @@ public class ScorecardsApplication {
   @Autowired
   FightRepository fightRepository;
 
+  @Autowired
+  BoxerRepository boxerRepository;
+
   @PostConstruct
   public void init() {
     log.info("ScorecardsApplication initialization logic ...");
-    BoxerId ali = new BoxerId("ali");
-    BoxerId foreman = new BoxerId("foreman");
+    Boxer ali = new Boxer(new BoxerId("ali"), "Muhammad Ali");
+    boxerRepository.save(ali);
+    Boxer foreman = new Boxer(new BoxerId("foreman"), "George Foreman");
+    boxerRepository.save(foreman);
     Event event = new Event(LocalDate.now(), "Kinasa, Zaire");
-    Fight fight = new Fight(new FightId("1"), ali, foreman, event, 12);
+    Fight fight = new Fight(new FightId("1"), ali.id(), foreman.id(), event, 12);
     fightRepository.save(fight);
   }
 }
