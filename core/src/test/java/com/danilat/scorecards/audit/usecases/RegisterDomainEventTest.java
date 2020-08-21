@@ -4,7 +4,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.danilat.scorecards.audit.domain.DomainEventStore;
-import com.danilat.scorecards.core.shared.events.DomainEvent;
+import com.danilat.scorecards.shared.events.DomainEvent;
 import java.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;

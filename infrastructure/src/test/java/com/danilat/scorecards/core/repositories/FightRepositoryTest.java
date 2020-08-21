@@ -1,4 +1,4 @@
-package com.danilat.scorecards.repositories;
+package com.danilat.scorecards.core.repositories;
 
 import static org.junit.Assert.assertTrue;
 

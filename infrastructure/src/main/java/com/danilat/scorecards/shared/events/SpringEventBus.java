@@ -1,7 +1,5 @@
 package com.danilat.scorecards.shared.events;
 
-import com.danilat.scorecards.core.shared.events.DomainEvent;
-import com.danilat.scorecards.core.shared.events.EventBus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 

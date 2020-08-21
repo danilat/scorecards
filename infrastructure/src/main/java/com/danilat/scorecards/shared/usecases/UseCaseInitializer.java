@@ -1,4 +1,4 @@
-package com.danilat.scorecards.usecases;
+package com.danilat.scorecards.shared.usecases;
 
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersRepository;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;

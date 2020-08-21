@@ -1,8 +1,8 @@
-package com.danilat.scorecards.repositories;
+package com.danilat.scorecards.shared.repositories;
 
-import com.danilat.scorecards.core.domain.Entity;
-import com.danilat.scorecards.core.domain.EntityId;
-import com.danilat.scorecards.core.domain.Repository;
+import com.danilat.scorecards.shared.domain.Entity;
+import com.danilat.scorecards.shared.domain.EntityId;
+import com.danilat.scorecards.shared.domain.Repository;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;

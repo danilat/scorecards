@@ -1,6 +1,6 @@
 package com.danilat.scorecards.core.domain.fight.projections;
 
-import com.danilat.scorecards.core.domain.Entity;
+import com.danilat.scorecards.shared.domain.Entity;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import java.time.LocalDate;
 

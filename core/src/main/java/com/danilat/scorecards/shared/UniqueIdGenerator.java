@@ -1,4 +1,4 @@
-package com.danilat.scorecards.core.shared;
+package com.danilat.scorecards.shared;
 
 import java.util.UUID;
 

@@ -3,7 +3,7 @@ package com.danilat.scorecards.audit;
 import static org.junit.Assert.assertEquals;
 
 import com.danilat.scorecards.audit.domain.DomainEventStore;
-import com.danilat.scorecards.core.shared.events.DomainEvent;
+import com.danilat.scorecards.shared.events.DomainEvent;
 import java.time.LocalDate;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,4 +1,4 @@
-package com.danilat.scorecards.core.domain;
+package com.danilat.scorecards.shared.domain;
 
 import java.util.Objects;
 

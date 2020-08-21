@@ -1,8 +1,7 @@
 package com.danilat.scorecards.audit;
 
 import com.danilat.scorecards.audit.domain.DomainEventStore;
-import com.danilat.scorecards.core.domain.EntityId;
-import com.danilat.scorecards.core.shared.events.DomainEvent;
+import com.danilat.scorecards.shared.events.DomainEvent;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.stereotype.Repository;

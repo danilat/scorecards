@@ -1,4 +1,4 @@
-package com.danilat.scorecards.core.shared.events;
+package com.danilat.scorecards.shared.events;
 
 public interface EventBus {
 

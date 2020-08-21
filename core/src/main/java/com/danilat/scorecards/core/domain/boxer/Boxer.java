@@ -1,6 +1,6 @@
 package com.danilat.scorecards.core.domain.boxer;
 
-import com.danilat.scorecards.core.domain.Entity;
+import com.danilat.scorecards.shared.domain.Entity;
 
 public class Boxer extends Entity<BoxerId> {
 

@@ -2,8 +2,6 @@ package com.danilat.scorecards.shared.events;
 
 import static org.junit.Assert.assertTrue;
 
-import com.danilat.scorecards.core.shared.events.DomainEvent;
-import com.danilat.scorecards.core.shared.events.EventBus;
 import java.time.LocalDate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
