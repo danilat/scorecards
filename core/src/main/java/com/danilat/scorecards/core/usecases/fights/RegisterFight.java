@@ -6,6 +6,7 @@ import com.danilat.scorecards.core.domain.boxer.BoxerNotFoundException;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.Event;
 import com.danilat.scorecards.core.domain.fight.Fight;
+import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.domain.fight.events.FightCreated;
 import com.danilat.scorecards.core.shared.Clock;
@@ -50,7 +51,7 @@ public class RegisterFight implements UseCase<RegisterFightParameters> {
         .orElseThrow(() -> new BoxerNotFoundException(parameters.getSecondBoxer()));
     Event event = new Event(parameters.getHappenAt(), parameters.getPlace());
 
-    Fight fight = new Fight(fightRepository.nextId(), firstBoxer.id(),
+    Fight fight = new Fight(new FightId(uniqueIdGenerator.next()), firstBoxer.id(),
         secondBoxer.id(),
         event, parameters.getNumberOfRounds());
     fightRepository.save(fight);

@@ -49,21 +49,20 @@ public class RegisterFightTest {
   @Mock
   private UniqueIdGenerator uniqueIdGenerator;
 
-  private static final FightId AN_ID = new FightId("irrelevant id");
+  private static final String AN_ID = "irrelevant id";
   private String aPlace = "Kinsasa, Zaire";
   private Integer numberOfRounds = 12;
   private LocalDate anHappenedAt;
-  private String anEventId = "irrelevant event id";
 
   @Before
   public void setup() {
     aDate = LocalDate.now();
     anHappenedAt = LocalDate.now();
-    when(fightRepository.nextId()).thenReturn(AN_ID);
+    when(uniqueIdGenerator.next()).thenReturn(AN_ID);
     when(boxerRepository.get(ALI)).thenReturn(Optional.of(BoxerMother.aBoxerWithId(ALI)));
     when(boxerRepository.get(FOREMAN)).thenReturn(Optional.of(BoxerMother.aBoxerWithId(FOREMAN)));
     when(clock.now()).thenReturn(anHappenedAt);
-    when(uniqueIdGenerator.next()).thenReturn(anEventId);
+    when(uniqueIdGenerator.next()).thenReturn(AN_ID);
     registerFight = new RegisterFight(fightRepository, boxerRepository, eventBus, clock,
         uniqueIdGenerator);
   }
@@ -77,7 +76,7 @@ public class RegisterFightTest {
 
     assertEquals(ALI, fight.firstBoxer());
     assertEquals(FOREMAN, fight.secondBoxer());
-    assertEquals(AN_ID, fight.id());
+    assertEquals(AN_ID, fight.id().value());
     assertEquals(aDate, fight.event().happenAt());
     assertEquals(aPlace, fight.event().place());
     assertEquals(numberOfRounds, fight.numberOfRounds());
@@ -105,7 +104,7 @@ public class RegisterFightTest {
     verify(eventBus, times(1)).publish(fightCreatedArgumentCaptorCaptor.capture());
     FightCreated fightCreated = fightCreatedArgumentCaptorCaptor.getValue();
     assertEquals(fight, fightCreated.fight());
-    assertEquals(anEventId, fightCreated.eventId());
+    assertEquals(AN_ID, fightCreated.eventId());
     assertEquals(anHappenedAt, fightCreated.happenedAt());
   }
 
