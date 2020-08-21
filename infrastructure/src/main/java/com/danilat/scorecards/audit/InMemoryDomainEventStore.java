@@ -3,7 +3,6 @@ package com.danilat.scorecards.audit;
 import com.danilat.scorecards.audit.domain.DomainEventStore;
 import com.danilat.scorecards.shared.events.DomainEvent;
 import com.danilat.scorecards.shared.events.DomainEventId;
-import com.danilat.scorecards.shared.repositories.InMemoryRepository;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.stereotype.Repository;

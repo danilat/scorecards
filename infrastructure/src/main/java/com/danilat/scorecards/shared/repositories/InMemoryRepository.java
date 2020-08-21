@@ -1,15 +1,15 @@
 package com.danilat.scorecards.shared.repositories;
 
 import com.danilat.scorecards.shared.domain.Entity;
-import com.danilat.scorecards.shared.domain.EntityId;
+import com.danilat.scorecards.shared.domain.Id;
 import com.danilat.scorecards.shared.domain.Repository;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public abstract class InMemoryRepository<E extends Entity, I extends EntityId> implements Repository<E, I> {
+public abstract class InMemoryRepository<E extends Entity, I extends Id> implements Repository<E, I> {
 
-  protected final Map<EntityId, E> entities;
+  protected final Map<Id, E> entities;
 
   public InMemoryRepository() {
     this.entities = new HashMap<>();

@@ -1,6 +1,6 @@
 package com.danilat.scorecards.shared.domain;
 
-public abstract class Entity<I extends EntityId> {
+public abstract class Entity<I extends Id> {
 
   protected I id;
 

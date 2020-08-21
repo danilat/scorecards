@@ -2,17 +2,17 @@ package com.danilat.scorecards.shared.domain;
 
 import java.util.Objects;
 
-public abstract class EntityId {
+public abstract class Id {
 
   private final String id;
 
-  public EntityId(String id) {
+  public Id(String id) {
     this.id = id;
   }
 
   @Override
   public String toString() {
-    return "EntityId{"
+    return "Id{"
         + "id='" + id + '\''
         + '}';
   }
@@ -25,8 +25,8 @@ public abstract class EntityId {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    EntityId entityId = (EntityId) o;
-    return Objects.equals(id, entityId.id);
+    Id id = (Id) o;
+    return Objects.equals(this.id, id.id);
   }
 
   @Override

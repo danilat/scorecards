@@ -2,7 +2,7 @@ package com.danilat.scorecards.shared.domain;
 
 import java.util.Optional;
 
-public interface Repository<E extends Entity, I extends EntityId> {
+public interface Repository<E extends Entity, I extends Id> {
 
   void save(E entity);
 
