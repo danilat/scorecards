@@ -2,6 +2,8 @@ package com.danilat.scorecards.audit;
 
 import com.danilat.scorecards.audit.domain.DomainEventStore;
 import com.danilat.scorecards.shared.events.DomainEvent;
+import com.danilat.scorecards.shared.events.DomainEventId;
+import com.danilat.scorecards.shared.repositories.InMemoryRepository;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.stereotype.Repository;
@@ -9,7 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class InMemoryDomainEventStore implements DomainEventStore {
 
-  protected final Map<String, DomainEvent> persistence;
+  protected final Map<DomainEventId, DomainEvent> persistence;
 
   public InMemoryDomainEventStore() {
     this.persistence = new HashMap<>();
@@ -21,7 +23,7 @@ public class InMemoryDomainEventStore implements DomainEventStore {
   }
 
   @Override
-  public DomainEvent get(String id) {
+  public DomainEvent get(DomainEventId id) {
     return persistence.get(id);
   }
 }

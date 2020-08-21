@@ -22,15 +22,6 @@ public class EventBusTest {
   @Test
   public void publishAnEvent() {
     DomainEvent event = new DomainEvent(LocalDate.now(), "irrelevant id") {
-      @Override
-      public LocalDate happenedAt() {
-        return super.happenedAt();
-      }
-
-      @Override
-      public String eventId() {
-        return super.eventId();
-      }
     };
     eventBus.publish(event);
     assertTrue(listenerSpy.called);

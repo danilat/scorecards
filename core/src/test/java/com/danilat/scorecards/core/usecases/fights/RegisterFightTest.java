@@ -103,7 +103,7 @@ public class RegisterFightTest {
     verify(eventBus, times(1)).publish(fightCreatedArgumentCaptorCaptor.capture());
     FightCreated fightCreated = fightCreatedArgumentCaptorCaptor.getValue();
     assertEquals(fight, fightCreated.fight());
-    assertEquals(AN_ID, fightCreated.eventId());
+    assertEquals(AN_ID, fightCreated.eventId().value());
     assertEquals(anHappenedAt, fightCreated.happenedAt());
   }
 

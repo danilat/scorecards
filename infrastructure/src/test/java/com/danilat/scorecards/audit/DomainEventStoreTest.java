@@ -25,6 +25,6 @@ public class DomainEventStoreTest {
 
     domainEventStore.save(event);
 
-    assertEquals(event, domainEventStore.get("foobar"));
+    assertEquals(event, domainEventStore.get(event.eventId()));
   }
 }
