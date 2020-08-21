@@ -1,0 +1,20 @@
+package com.danilat.scorecards.audit.usecases;
+
+import com.danilat.scorecards.audit.domain.DomainEventStore;
+import com.danilat.scorecards.core.shared.events.DomainEvent;
+import com.danilat.scorecards.core.usecases.UseCase;
+
+public class RegisterDomainEvent implements UseCase<DomainEvent> {
+
+  private final DomainEventStore domainEventStore;
+
+  public RegisterDomainEvent(DomainEventStore domainEventStore) {
+    this.domainEventStore = domainEventStore;
+  }
+
+  @Override
+  public DomainEvent execute(DomainEvent domainEvent) {
+    domainEventStore.save(domainEvent);
+    return domainEvent;
+  }
+}
