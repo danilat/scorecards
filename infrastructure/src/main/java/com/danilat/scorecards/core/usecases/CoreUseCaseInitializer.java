@@ -1,4 +1,4 @@
-package com.danilat.scorecards.shared.usecases;
+package com.danilat.scorecards.core.usecases;
 
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersRepository;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class UseCaseInitializer {
+public class CoreUseCaseInitializer {
 
   @Autowired
   private FightWithBoxersRepository fightWithBoxersRepository;
