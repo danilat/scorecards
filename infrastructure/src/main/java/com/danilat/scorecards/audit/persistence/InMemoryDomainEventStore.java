@@ -1,4 +1,4 @@
-package com.danilat.scorecards.audit;
+package com.danilat.scorecards.audit.persistence;
 
 import com.danilat.scorecards.audit.domain.DomainEventStore;
 import com.danilat.scorecards.shared.events.DomainEvent;

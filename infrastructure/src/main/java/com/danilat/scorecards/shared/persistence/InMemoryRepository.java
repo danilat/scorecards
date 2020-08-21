@@ -1,4 +1,4 @@
-package com.danilat.scorecards.shared.repositories;
+package com.danilat.scorecards.shared.persistence;
 
 import com.danilat.scorecards.shared.domain.Entity;
 import com.danilat.scorecards.shared.domain.Id;

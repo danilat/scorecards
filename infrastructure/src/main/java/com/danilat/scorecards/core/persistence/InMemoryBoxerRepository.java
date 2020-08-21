@@ -1,9 +1,9 @@
-package com.danilat.scorecards.core.repositories;
+package com.danilat.scorecards.core.persistence;
 
 import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
-import com.danilat.scorecards.shared.repositories.InMemoryRepository;
+import com.danilat.scorecards.shared.persistence.InMemoryRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository

@@ -1,4 +1,4 @@
-package com.danilat.scorecards.core.repositories;
+package com.danilat.scorecards.core.persistence;
 
 import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;

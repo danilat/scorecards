@@ -1,4 +1,4 @@
-package com.danilat.scorecards.audit;
+package com.danilat.scorecards.audit.persistence;
 
 import static org.junit.Assert.assertEquals;
 
