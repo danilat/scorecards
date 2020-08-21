@@ -16,7 +16,7 @@
   <dependencies>
     <dependency>
       <groupId>com.danilat</groupId>
-      <artifactId>core</artifactId>
+      <artifactId>application</artifactId>
       <version>${project.parent.version}</version>
     </dependency>
     <dependency>
@@ -45,7 +45,7 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>core</artifactId>
+      <artifactId>application</artifactId>
       <version>${project.parent.version}</version>
       <type>test-jar</type>
       <scope>test</scope>

@@ -8,7 +8,7 @@
   <artifactId>scorecards</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <modules>
-    <module>core</module>
+    <module>application</module>
     <module>infrastructure</module>
     <module>boot</module>
   </modules>
