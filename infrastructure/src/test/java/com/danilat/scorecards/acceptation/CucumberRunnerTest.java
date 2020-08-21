@@ -1,12 +1,13 @@
 package com.danilat.scorecards.acceptation;
 
-import cucumber.api.CucumberOptions;
-import cucumber.api.SnippetType;
-import cucumber.api.junit.Cucumber;
+import io.cucumber.junit.Cucumber;
+import io.cucumber.junit.CucumberOptions;
+import io.cucumber.junit.CucumberOptions.SnippetType;
 import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(features = "classpath:features", plugin = {"pretty", "html:target/features"}, snippets = SnippetType.CAMELCASE)
+@CucumberOptions(features = "classpath:features", plugin = {"pretty",
+    "html:target/features"}, snippets = SnippetType.CAMELCASE, tags = "not @pending")
 public class CucumberRunnerTest {
 
 }

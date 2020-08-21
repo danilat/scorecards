@@ -1,3 +1,4 @@
+@pending
 Feature: Score a round
   Background:
     Given an existing boxer called "Kerman Lejarraga"
