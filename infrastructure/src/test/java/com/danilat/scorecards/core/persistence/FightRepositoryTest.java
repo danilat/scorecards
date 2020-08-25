@@ -1,11 +1,13 @@
 package com.danilat.scorecards.core.persistence;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.mothers.FightMother;
+import java.util.List;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,5 +30,15 @@ public class FightRepositoryTest {
 
     Optional retrieved = fightRepository.get(fightId);
     assertTrue(retrieved.isPresent());
+  }
+
+  @Test
+  public void getAllFights(){
+    Fight aFight = FightMother.aFightWithId(fightId);
+    fightRepository.save(aFight);
+
+    List<Fight> fights = fightRepository.all();
+
+    assertEquals(fights.get(0), aFight);
   }
 }
