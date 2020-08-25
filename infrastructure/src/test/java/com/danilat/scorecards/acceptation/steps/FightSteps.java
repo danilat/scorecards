@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import com.danilat.scorecards.shared.domain.ScoreCardsBusinessException;
 import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
@@ -12,18 +11,15 @@ import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxers;
-import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersRepository;
 import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.mothers.FightMother;
-import com.danilat.scorecards.shared.Clock;
-import com.danilat.scorecards.shared.UniqueIdGenerator;
-import com.danilat.scorecards.shared.events.EventBus;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
-import com.danilat.scorecards.core.persistence.InMemoryBoxerRepository;
-import com.danilat.scorecards.core.persistence.InMemoryFightRepository;
-import com.danilat.scorecards.core.persistence.InMemoryFightWithBoxersRepository;
+import com.danilat.scorecards.shared.Clock;
+import com.danilat.scorecards.shared.UniqueIdGenerator;
+import com.danilat.scorecards.shared.domain.ScoreCardsBusinessException;
+import com.danilat.scorecards.shared.events.EventBus;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -31,29 +27,29 @@ import io.cucumber.java.en.When;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class FightSteps {
 
-  private Fight existingFight;
+  @Autowired
   private FightRepository fightRepository;
-  private FightWithBoxersRepository fightWithBoxersRepository;
-  private FightWithBoxers retrievedFight;
-
-  private LocalDate aDate;
+  @Autowired
   private BoxerRepository boxerRepository;
+  @Autowired
+  RetrieveAFight retrieveAFight;
+  private Clock clock;
+  private UniqueIdGenerator uniqueIdGenerator;
+  private EventBus eventBus;
+  
+  private Fight existingFight;
+  private FightWithBoxers retrievedFight;
+  private LocalDate aDate;
   private Fight createdFight;
   private String aPlace;
   private Exception someException;
-  private EventBus eventBus;
-  private Clock clock;
-  private UniqueIdGenerator uniqueIdGenerator;
 
   @Before
   public void setUp() {
-    fightRepository = new InMemoryFightRepository();
-    boxerRepository = new InMemoryBoxerRepository();
-    fightWithBoxersRepository = new InMemoryFightWithBoxersRepository(fightRepository,
-        boxerRepository);
     clock = new Clock();
     uniqueIdGenerator = new UniqueIdGenerator();
     eventBus = domainEvent -> System.out.println("Publishing the event " + domainEvent);
@@ -71,7 +67,6 @@ public class FightSteps {
 
   @When("I retrieve the existing fight")
   public void i_retrieve_the_existing_fight() {
-    RetrieveAFight retrieveAFight = new RetrieveAFight(fightWithBoxersRepository);
     retrievedFight = retrieveAFight.execute(existingFight.id());
   }
 
@@ -83,7 +78,6 @@ public class FightSteps {
   @When("I retrieve a non-existing fight")
   public void i_retrieve_a_non_existing_fight() {
     try {
-      RetrieveAFight retrieveAFight = new RetrieveAFight(fightWithBoxersRepository);
       retrievedFight = retrieveAFight.execute(new FightId("some inexistent id"));
     } catch (ScoreCardsBusinessException businessException) {
     }
