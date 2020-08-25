@@ -1,6 +1,9 @@
 package com.danilat.scorecards.controllers;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.hasValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -17,9 +20,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 @SpringBootTest(classes = ScorecardsApplication.class)
 @RunWith(SpringRunner.class)
@@ -57,5 +60,16 @@ public class FightControllerTest {
 
     this.mvc.perform(get("/fights/" + fightId))
         .andExpect(status().isNotFound());
+  }
+
+  @Test
+  public void getsTheFormToCreateAFight() throws Exception {
+    Boxer aBoxer = BoxerMother.aBoxerWithId("pacquiao");
+    boxerRepository.save(aBoxer);
+
+    this.mvc.perform(get("/editor/fights/new"))
+        .andExpect(status().isOk())
+        .andExpect(model().attribute("boxers", hasValue(aBoxer)));
+
   }
 }
