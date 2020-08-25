@@ -8,6 +8,7 @@ import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.mothers.BoxerMother;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,9 +38,9 @@ public class BoxerRepositoryTest {
     Boxer aBoxer = BoxerMother.aBoxerWithId(boxerId);
     boxerRepository.save(aBoxer);
 
-    List<Boxer> boxers = boxerRepository.all();
+    Map<BoxerId, Boxer> boxers = boxerRepository.all();
 
-    assertEquals(boxers.get(0), aBoxer);
+    assertEquals(1, boxers.size());
   }
 
 }

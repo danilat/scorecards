@@ -25,8 +25,8 @@ public abstract class InMemoryRepository<E extends Entity, I extends Id> impleme
   public Optional<E> get(I id) {
     return Optional.ofNullable(entities.get(id));
   }
-
-  public List<E> all() {
-    return new ArrayList<>(entities.values());
+  
+  public Map<I, E> all() {
+    return (Map<I, E>) entities;
   }
 }

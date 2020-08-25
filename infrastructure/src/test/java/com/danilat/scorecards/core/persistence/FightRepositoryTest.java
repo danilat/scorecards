@@ -7,7 +7,7 @@ import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.mothers.FightMother;
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,12 +33,12 @@ public class FightRepositoryTest {
   }
 
   @Test
-  public void getAllFights(){
+  public void getAllFights() {
     Fight aFight = FightMother.aFightWithId(fightId);
     fightRepository.save(aFight);
 
-    List<Fight> fights = fightRepository.all();
+    Map<FightId, Fight> fights = fightRepository.all();
 
-    assertEquals(fights.get(0), aFight);
+    assertEquals(1, fights.size());
   }
 }
