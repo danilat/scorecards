@@ -4,7 +4,7 @@ import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightNotFoundException;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxers;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersRepository;
-import com.danilat.scorecards.core.usecases.UseCase;
+import com.danilat.scorecards.shared.UseCase;
 
 public class RetrieveAFight implements UseCase<FightId> {
 

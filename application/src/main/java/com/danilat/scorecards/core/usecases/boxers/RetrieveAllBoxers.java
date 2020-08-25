@@ -3,7 +3,7 @@ package com.danilat.scorecards.core.usecases.boxers;
 import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
-import com.danilat.scorecards.core.usecases.UseCase;
+import com.danilat.scorecards.shared.UseCase;
 import java.util.Map;
 
 public class RetrieveAllBoxers implements UseCase<UseCase.Empty>{

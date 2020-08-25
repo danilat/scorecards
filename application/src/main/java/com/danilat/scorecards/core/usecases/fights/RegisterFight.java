@@ -12,7 +12,7 @@ import com.danilat.scorecards.core.domain.fight.events.FightCreated;
 import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 import com.danilat.scorecards.shared.events.EventBus;
-import com.danilat.scorecards.core.usecases.UseCase;
+import com.danilat.scorecards.shared.UseCase;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import java.time.LocalDate;
 import java.util.Set;
