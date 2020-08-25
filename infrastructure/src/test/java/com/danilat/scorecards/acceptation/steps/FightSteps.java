@@ -16,11 +16,7 @@ import com.danilat.scorecards.core.mothers.FightMother;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
-import com.danilat.scorecards.shared.Clock;
-import com.danilat.scorecards.shared.UniqueIdGenerator;
 import com.danilat.scorecards.shared.domain.ScoreCardsBusinessException;
-import com.danilat.scorecards.shared.events.EventBus;
-import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -36,24 +32,16 @@ public class FightSteps {
   @Autowired
   private BoxerRepository boxerRepository;
   @Autowired
-  RetrieveAFight retrieveAFight;
-  private Clock clock;
-  private UniqueIdGenerator uniqueIdGenerator;
-  private EventBus eventBus;
-  
+  private RetrieveAFight retrieveAFight;
+  @Autowired
+  private RegisterFight registerFight;
+
   private Fight existingFight;
   private FightWithBoxers retrievedFight;
   private LocalDate aDate;
   private Fight createdFight;
   private String aPlace;
   private Exception someException;
-
-  @Before
-  public void setUp() {
-    clock = new Clock();
-    uniqueIdGenerator = new UniqueIdGenerator();
-    eventBus = domainEvent -> System.out.println("Publishing the event " + domainEvent);
-  }
 
   @Given("an existing fight")
   public void an_existing_fight() {
@@ -115,9 +103,6 @@ public class FightSteps {
   @When("I register the fight in the event for {string} and {string} for {int} rounds")
   public void iRegisterTheFightInTheEventForAndForRounds(String firstBoxer, String secondBoxer,
       Integer numberOfRounds) {
-    RegisterFight registerFight = new RegisterFight(fightRepository, boxerRepository, eventBus,
-        clock,
-        uniqueIdGenerator);
     BoxerId firstBoxerId = new BoxerId(firstBoxer);
     BoxerId secondBoxerId = new BoxerId(secondBoxer);
     RegisterFightParameters parameters = new RegisterFightParameters(firstBoxerId, secondBoxerId,
@@ -132,9 +117,6 @@ public class FightSteps {
 
   @When("I register the fight in the event for {string} and {string}")
   public void iRegisterTheFightInTheEventForAnd(String firstBoxer, String secondBoxer) {
-    RegisterFight registerFight = new RegisterFight(fightRepository, boxerRepository, eventBus,
-        clock,
-        uniqueIdGenerator);
     BoxerId firstBoxerId = new BoxerId(firstBoxer);
     BoxerId secondBoxerId = new BoxerId(secondBoxer);
     RegisterFightParameters parameters = new RegisterFightParameters(firstBoxerId, secondBoxerId,
