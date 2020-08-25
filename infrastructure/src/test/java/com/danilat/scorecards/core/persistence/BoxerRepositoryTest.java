@@ -7,7 +7,6 @@ import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.mothers.BoxerMother;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.Before;
@@ -34,7 +33,7 @@ public class BoxerRepositoryTest {
   }
 
   @Test
-  public void getAllBoxers(){
+  public void getAllBoxers() {
     Boxer aBoxer = BoxerMother.aBoxerWithId(boxerId);
     boxerRepository.save(aBoxer);
 

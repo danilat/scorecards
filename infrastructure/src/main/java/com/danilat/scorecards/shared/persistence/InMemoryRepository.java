@@ -3,9 +3,7 @@ package com.danilat.scorecards.shared.persistence;
 import com.danilat.scorecards.shared.domain.Entity;
 import com.danilat.scorecards.shared.domain.Id;
 import com.danilat.scorecards.shared.domain.Repository;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -25,7 +23,7 @@ public abstract class InMemoryRepository<E extends Entity, I extends Id> impleme
   public Optional<E> get(I id) {
     return Optional.ofNullable(entities.get(id));
   }
-  
+
   public Map<I, E> all() {
     return (Map<I, E>) entities;
   }

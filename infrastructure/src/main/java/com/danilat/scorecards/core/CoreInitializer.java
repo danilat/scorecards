@@ -3,6 +3,7 @@ package com.danilat.scorecards.core;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersRepository;
+import com.danilat.scorecards.core.usecases.boxers.RetrieveAllBoxers;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
 import com.danilat.scorecards.shared.Clock;
@@ -47,6 +48,11 @@ public class CoreInitializer {
   @Bean
   public RegisterFight registerFight(){
     return new RegisterFight(fightRepository, boxerRepository, eventBus,clock,uniqueIdGenerator);
+  }
+
+  @Bean
+  public RetrieveAllBoxers retrieveAllBoxers(){
+    return new RetrieveAllBoxers(boxerRepository);
   }
 }
 

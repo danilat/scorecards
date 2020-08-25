@@ -76,14 +76,6 @@ public class FightSteps {
     assertNull(retrievedFight);
   }
 
-  @Given("an existing boxer called {string}")
-  public void anExistingBoxerIs(String name) {
-    BoxerId boxerId = new BoxerId(name);
-    Boxer aBoxer = BoxerMother.aBoxerWithIdAndName(boxerId, name);
-    boxerRepository.save(aBoxer);
-  }
-
-
   @Given("an event in {string} at {string}")
   public void anEventInIn(String place, String date) throws ParseException {
     aDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("d/MM/yyyy"));
