@@ -6,15 +6,18 @@ import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersRepos
 import com.danilat.scorecards.core.usecases.fights.RegisterFight;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
 import com.danilat.scorecards.shared.Clock;
+import com.danilat.scorecards.shared.SharedInitializer;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 import com.danilat.scorecards.shared.events.EventBus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 @Configuration
 @ComponentScan
+@Import(SharedInitializer.class)
 public class CoreInitializer {
 
   @Autowired
