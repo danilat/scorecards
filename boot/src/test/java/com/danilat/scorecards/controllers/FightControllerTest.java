@@ -23,7 +23,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest(classes = ScorecardsApplication.class)
 @RunWith(SpringRunner.class)
-@ActiveProfiles("test")
 @AutoConfigureMockMvc
 public class FightControllerTest {
 
