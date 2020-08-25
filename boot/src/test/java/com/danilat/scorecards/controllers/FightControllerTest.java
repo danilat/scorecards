@@ -1,7 +1,9 @@
 package com.danilat.scorecards.controllers;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.hasValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -69,7 +71,7 @@ public class FightControllerTest {
 
     this.mvc.perform(get("/editor/fights/new"))
         .andExpect(status().isOk())
-        .andExpect(model().attribute("boxers", hasValue(aBoxer)));
+        .andExpect(model().attribute("boxers", hasItems(aBoxer)));
 
   }
 }

@@ -9,4 +9,11 @@ public abstract class Entity<I extends Id> {
   }
 
   public abstract I id();
+
+  @Override
+  public String toString() {
+    return getClass().getName() + "{" +
+        "id=" + id +
+        '}';
+  }
 }
