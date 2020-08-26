@@ -168,6 +168,17 @@ public class RegisterFightTest {
   }
 
   @Test
+  public void givenFirstAndSecondBoxersAreTheSameThenIsInvalid() {
+    expectedEx.expect(InvalidFightException.class);
+    expectedEx.expectMessage("firstBoxer and secondBoxer should be different");
+
+    RegisterFightParameters parameters = new RegisterFightParameters(ALI, ALI, aDate, aPlace,
+        numberOfRounds);
+
+    registerFight.execute(parameters);
+  }
+
+  @Test
   public void givenNumberOfRoundsIsNotPresentThenIsInvalid() {
     expectedEx.expect(InvalidFightException.class);
     expectedEx.expectMessage("numberOfRounds is mandatory");

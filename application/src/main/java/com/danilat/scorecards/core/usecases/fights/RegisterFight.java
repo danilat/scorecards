@@ -9,17 +9,18 @@ import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.domain.fight.events.FightCreated;
+import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
-import com.danilat.scorecards.shared.events.EventBus;
 import com.danilat.scorecards.shared.UseCase;
-import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
+import com.danilat.scorecards.shared.events.EventBus;
 import java.time.LocalDate;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -82,6 +83,15 @@ public class RegisterFight implements UseCase<RegisterFightParameters> {
     @Max(value = 12, message = "numberOfRounds is more than twelve")
     private final Integer numberOfRounds;
 
+    @AssertFalse(message = "firstBoxer and secondBoxer should be different")
+    public boolean isFirstBoxersEqualThanSecondBoxer() {
+      if (getFirstBoxer() == null) {
+        return true;
+      }
+      return getFirstBoxer().equals(getSecondBoxer());
+    }
+
+
     public BoxerId getFirstBoxer() {
       return firstBoxer;
     }
@@ -101,6 +111,7 @@ public class RegisterFight implements UseCase<RegisterFightParameters> {
     public Integer getNumberOfRounds() {
       return numberOfRounds;
     }
+
 
     public RegisterFightParameters(BoxerId firstBoxer, BoxerId secondBoxer, LocalDate happenAt,
         String place, Integer numberOfRounds) {
