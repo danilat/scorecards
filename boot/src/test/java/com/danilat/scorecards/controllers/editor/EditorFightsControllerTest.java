@@ -57,7 +57,7 @@ public class EditorFightsControllerTest extends BaseControllerTest {
   public void postANewFightWithInValidParameters() throws Exception {
     this.mvc.perform(post("/editor/fights")
         .param("firstBoxer", firstBoxer.id().value())
-        .param("secondBoxer",  "foobar")
+        .param("secondBoxer", "foobar")
         .param("numberOfRounds", "0")
         .param("place", "MGM Grand Garden Arena")
         .param("happenAt", LocalDate.now().toString()))

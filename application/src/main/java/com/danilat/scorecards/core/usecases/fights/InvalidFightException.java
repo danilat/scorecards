@@ -24,4 +24,8 @@ public class InvalidFightException extends ScoreCardsBusinessException {
         .forEach(violation -> messages.add(violation.getMessage()));
     return messages.stream().collect(joining(". "));
   }
+
+  public Set<ConstraintViolation<RegisterFightParameters>> getViolations() {
+    return violations;
+  }
 }

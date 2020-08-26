@@ -1,18 +1,27 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
-<form th:action="@{/editor/fights}" method="post">
+
+
+<form th:action="@{/editor/fights}" method="post" th:object="${fight}">
+  <ul style="border: 1px solid red;" th:if="${errors}">
+    <li th:each="err : ${errors}">
+      <p th:text="${err.propertyPath}"></p>
+      <p th:text="${err.message}"></p>
+    </li>
+  </ul>
+
   <h1>Create a new fight</h1>
   First Boxer
-  <select name="firstBoxer">
+  <select th:field="*{firstBoxer}">
     <option th:each="boxer : ${boxers}"
             th:value="${boxer.id().value()}"
             th:text="${boxer.name()}">Joana Pastrana</option>
   </select>
   Second Boxer
-  <select name="secondBoxer">
+  <select th:field="*{secondBoxer}">
     <option th:each="boxer : ${boxers}"
             th:value="${boxer.id().value()}"
-            th:text="${boxer.name()}">Joana Pastrana</option>
+            th:text="${boxer.name()}">Katy Diaz</option>
   </select>
   <br>
   Number of rounds <input type="number" name="numberOfRounds" th:value="*{numberOfRounds}"/>
