@@ -5,7 +5,7 @@
 <form th:action="@{/editor/fights}" method="post" th:object="${fight}">
   <ul style="border: 1px solid red;" th:if="${errors}">
     <li th:each="err : ${errors}">
-      <p th:text="${err.propertyPath}"></p>
+      <p th:text="${err.fieldName}"></p>
       <p th:text="${err.message}"></p>
     </li>
   </ul>
@@ -24,7 +24,7 @@
             th:text="${boxer.name()}">Katy Diaz</option>
   </select>
   <br>
-  Number of rounds <input type="number" name="numberOfRounds" th:value="*{numberOfRounds}"/>
+  Number of rounds <input type="number" name="numberOfRounds" th:value="*{numberOfRounds}" th:class="${errors.hasError('numberOfRounds')}? fieldError"/>
   <br>
   Place <input type="text" name="place" th:value="*{place}"/>
   <br>

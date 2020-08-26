@@ -48,7 +48,7 @@ public class EditorFightsController {
       Fight fight = registerFight.execute(parameters);
       return "redirect:/fights/" + fight.id().value();
     } catch (InvalidFightException e) {
-      model.addAttribute("errors", e.getViolations());
+      model.addAttribute("errors", e.getErrors());
       model.addAttribute("fight", fightForm);
       return createForm(model);
     }
