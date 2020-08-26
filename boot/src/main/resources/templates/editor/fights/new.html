@@ -24,7 +24,7 @@
             th:text="${boxer.name()}">Katy Diaz</option>
   </select>
   <br>
-  Number of rounds <input type="number" name="numberOfRounds" th:value="*{numberOfRounds}" th:class="${errors.hasError('numberOfRounds')}? fieldError"/>
+  Number of rounds <input type="number" name="numberOfRounds" th:value="*{numberOfRounds}" th:class="${errors?.hasError('numberOfRounds')}? fieldError"/>
   <br>
   Place <input type="text" name="place" th:value="*{place}"/>
   <br>
