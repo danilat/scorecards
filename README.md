@@ -25,5 +25,7 @@ You can see the source code [on github](https://github.com/danilat/scorecards)
 ### Run the app
 
 `mvn install`
+
 `cb boot/`
+
 `mvn spring-boot:run -Drun.jvmArguments="-Dspring.profiles.active=standalone"`
