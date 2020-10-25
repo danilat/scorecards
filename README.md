@@ -28,4 +28,4 @@ You can see the source code [on github](https://github.com/danilat/scorecards)
 
 `cb boot/`
 
-`mvn spring-boot:run -Drun.jvmArguments="-Dspring.profiles.active=standalone"`
+`mvn spring-boot:run -Dspring-boot.run.profiles=dev`
