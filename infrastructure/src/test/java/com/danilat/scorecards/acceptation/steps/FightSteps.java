@@ -132,4 +132,13 @@ public class FightSteps {
     assertNull(createdFight);
     assertNotNull(someException);
   }
+
+  @Given("an existing fight between {string} and {string} with {int} rounds")
+  public void anExistingFightBetweenAndWithRounds(String firstBoxer, String secondBoxer, Integer numberOfRounds) {
+    BoxerId firstBoxerId = new BoxerId(firstBoxer);
+    BoxerId secondBoxerId = new BoxerId(secondBoxer);
+    RegisterFightParameters parameters = new RegisterFightParameters(firstBoxerId, secondBoxerId,
+            LocalDate.now(), "irrelevant place", numberOfRounds);
+    createdFight = registerFight.execute(parameters);
+  }
 }
