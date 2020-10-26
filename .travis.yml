@@ -10,6 +10,8 @@ before_script:
 - "./cc-test-reporter before-build"
 after_script:
 - "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
+- chmod +x cucumber_studio.sh
+- ./cucumber_studio.sh
 deploy:
   provider: heroku
   app:
