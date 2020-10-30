@@ -7,19 +7,19 @@ Feature: Score all rounds
   Scenario: the first round in a fight
     When an aficionado scores the round "1" for the existing fight with "10" and "9"
     Then the round is scored with with "10" and "9"
-    And the fight score is "10" to "9"
+    And the fight scoreCard is "10" to "9"
 
-  Scenario: the next rounds in a fight, the fight score sums
+  Scenario: the next rounds in a fight, the fight scoreCard sums
     Given the existing fight has been scored by the aficionado in the round "1" with "10" and "9"
     When an aficionado scores the round "2" for the existing fight with "10" and "10"
     Then the round is scored with with "10" and "10"
-    And the fight score is "20" to "19"
+    And the fight scoreCard is "20" to "19"
 
-  Scenario: a round is re-scored changes the score for the round
+  Scenario: a round is re-scored changes the scoreCard for the round
     Given the existing fight has been scored by the aficionado in the round "1" with "10" and "10"
     When an aficionado scores the round "1" for the existing fight with "10" and "9"
     Then the round is scored with with "10" and "9"
-    And the fight score is "10" to "9"
+    And the fight scoreCard is "10" to "9"
 
   Scenario: out of range of the interval of rounds in a fight
     When an aficionado scores the round "13" for the existing fight with "10" and "9"
