@@ -38,9 +38,10 @@ public class ScoreSteps {
     }
 
     @Given("the existing fight has been scored by the aficionado in the round {int} with {int} and {int}")
-    public void theExistingFightHasBeenScoredByTheAficionadoInTheRoundWithAnd(Integer int1, Integer int2, Integer int3) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+    public void theExistingFightHasBeenScoredByTheAficionadoInTheRoundWithAnd(Integer round, Integer firstBoxerScore, Integer secondBoxerScore) {
+        Fight fight = world.getFight();
+        ScoreRound.ScoreFightParameters params = new ScoreRound.ScoreFightParameters(fight.id(), round, fight.firstBoxer(), firstBoxerScore, fight.secondBoxer(), secondBoxerScore);
+        scoreCard = scoreRound.execute(params);
     }
 
     @When("an aficionado scores the round {int} for the non-existing fight with {int} and {int}")

@@ -6,6 +6,7 @@ import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.score.ScoreCard;
 import com.danilat.scorecards.core.domain.score.ScoreCardId;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
+import com.danilat.scorecards.core.mothers.ScoreCardMother;
 import com.danilat.scorecards.core.usecases.Auth;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 import org.junit.Before;
@@ -15,6 +16,8 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 import com.danilat.scorecards.core.usecases.fights.ScoreRound.ScoreFightParameters;
+
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -43,7 +46,7 @@ public class ScoreRoundTest {
     }
 
     @Test
-    public void givenAFightScoresARoundsThenTheScoreIsRegistered() {
+    public void givenAFightScoresARoundThenScoreIsRegistered() {
         Integer round = 1;
         Integer aliScore = 10;
         Integer foremanScore = 9;
@@ -72,5 +75,29 @@ public class ScoreRoundTest {
         ScoreCard scoreCard = scoreRound.execute(params);
 
         verify(scoreCardRepository, times(1)).save(scoreCard);
+    }
+
+    @Test
+    public void givenAFightScoresSomeRoundsThenScoreIsAccumulated() {
+        ScoreCard existingScorecard = ScoreCardMother.aScoreCardWithIdFightIdFirstAndSecondBoxer(AN_ID, A_FIGHT_ID, ALI, FOREMAN);
+        Integer previousAliScore = 10;
+        Integer previousForemanScore = 9;
+        existingScorecard.scoreRound(1, previousAliScore, previousForemanScore);
+        when(scoreCardRepository.findByFightIdAndAccountId(A_FIGHT_ID, AN_AFICIONADO)).thenReturn(Optional.of(existingScorecard));
+
+
+        Integer round = 2;
+        Integer aliScore = 10;
+        Integer foremanScore = 9;
+        ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, ALI, aliScore, FOREMAN, foremanScore);
+
+        ScoreCard scoreCard = scoreRound.execute(params);
+
+        assertEquals(AN_ID, scoreCard.id());
+        assertEquals(aliScore, scoreCard.firstBoxerScore(round));
+        assertEquals(foremanScore, scoreCard.secondBoxerScore(round));
+        assertEquals((previousAliScore + aliScore), scoreCard.firstBoxerScore().intValue());
+        assertEquals((previousForemanScore + foremanScore), scoreCard.secondBoxerScore().intValue());
+
     }
 }
