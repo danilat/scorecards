@@ -34,13 +34,13 @@ Feature: Score all rounds
     Then the round is not scored
 
   Scenario: there are scores in rounds less than 1
-      When an aficionado scores the round 1 for the existing fight with 0 and 9
-      Then the fight is not scored
+    When an aficionado scores the round 1 for the existing fight with 0 and 9
+    Then the round is not scored
 
   Scenario: there are scores a round more than 10
-      When an aficionado scores the round 1 for the existing fight with 11 and 9
-      Then the round is not scored
+    When an aficionado scores the round 1 for the existing fight with 11 and 9
+    Then the round is not scored
 
   Scenario: there are scores in a rounds only for a boxer
-        When an aficionado scores the round 1 for the existing fight with 10 for the first boxer
-        Then the round is not scored
+    When an aficionado scores the round 1 for the existing fight with 10 for the first boxer
+    Then the round is not scored

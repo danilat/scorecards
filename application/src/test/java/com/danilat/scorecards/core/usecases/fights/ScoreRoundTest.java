@@ -77,15 +77,17 @@ public class ScoreRoundTest {
         verify(scoreCardRepository, times(1)).save(scoreCard);
     }
 
-    @Test
-    public void givenAFightScoresSomeRoundsThenScoreIsAccumulated() {
+    private void givenExistingScoreCardOnFirstRound(Integer previousAliScore, Integer previousForemanScore){
         ScoreCard existingScorecard = ScoreCardMother.aScoreCardWithIdFightIdFirstAndSecondBoxer(AN_ID, A_FIGHT_ID, ALI, FOREMAN);
-        Integer previousAliScore = 10;
-        Integer previousForemanScore = 9;
         existingScorecard.scoreRound(1, previousAliScore, previousForemanScore);
         when(scoreCardRepository.findByFightIdAndAccountId(A_FIGHT_ID, AN_AFICIONADO)).thenReturn(Optional.of(existingScorecard));
+    }
 
-
+    @Test
+    public void givenAFightScoresSomeRoundsThenScoreIsAccumulated() {
+        Integer previousAliScore = 10;
+        Integer previousForemanScore = 9;
+        givenExistingScoreCardOnFirstRound(previousAliScore, previousForemanScore);
         Integer round = 2;
         Integer aliScore = 10;
         Integer foremanScore = 9;
