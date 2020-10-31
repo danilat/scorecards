@@ -35,6 +35,8 @@ public class FightSteps {
   private RetrieveAFight retrieveAFight;
   @Autowired
   private RegisterFight registerFight;
+  @Autowired
+  private World world;
 
   private Fight existingFight;
   private FightWithBoxers retrievedFight;
@@ -140,5 +142,6 @@ public class FightSteps {
     RegisterFightParameters parameters = new RegisterFightParameters(firstBoxerId, secondBoxerId,
             LocalDate.now(), "irrelevant place", numberOfRounds);
     createdFight = registerFight.execute(parameters);
+    world.setFight(createdFight);
   }
 }

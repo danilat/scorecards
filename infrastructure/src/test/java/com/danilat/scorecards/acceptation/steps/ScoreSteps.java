@@ -1,46 +1,62 @@
 package com.danilat.scorecards.acceptation.steps;
 
+import com.danilat.scorecards.core.domain.fight.Fight;
+import com.danilat.scorecards.core.domain.score.ScoreCard;
+import com.danilat.scorecards.core.usecases.fights.ScoreRound;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.junit.Assert.assertEquals;
 
 public class ScoreSteps {
-    @When("an aficionado scores the round {string} for the existing fight with {string} and {string}")
-    public void anAficionadoScoresTheRoundForTheExistingFightWithAnd(String string, String string2, String string3) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+    @Autowired
+    private ScoreRound scoreRound;
+    @Autowired
+    private World world;
+
+    private ScoreCard scoreCard;
+
+    @When("an aficionado scores the round {int} for the existing fight with {int} and {int}")
+    public void anAficionadoScoresTheRoundForTheExistingFightWithAnd(Integer round, Integer firstBoxerScore, Integer secondBoxerScore) {
+        Fight fight = world.getFight();
+        ScoreRound.ScoreFightParameters params = new ScoreRound.ScoreFightParameters(fight.id(), round, fight.firstBoxer(), firstBoxerScore, fight.secondBoxer(), secondBoxerScore);
+        scoreCard = scoreRound.execute(params);
     }
-    @Then("the round is scored with with {string} and {string}")
-    public void theRoundIsScoredWithWithAnd(String string, String string2) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+
+    @Then("the round {int} is scored with with {int} and {int}")
+    public void theRoundIsScoredWithWithAnd(Integer round, Integer firstBoxerScore, Integer secondBoxerScore) {
+        assertEquals(firstBoxerScore, scoreCard.firstBoxerScore(round));
+        assertEquals(secondBoxerScore, scoreCard.secondBoxerScore(round));
     }
-    @Then("the fight score is {string} to {string}")
-    public void theFightScoreIsTo(String string, String string2) {
+
+    @Then("the fight scoreCard is {int} to {int}")
+    public void theFightScoreCardIsTo(Integer firstBoxerScore, Integer secondBoxerScore) {
+        assertEquals(firstBoxerScore, scoreCard.firstBoxerScore());
+        assertEquals(secondBoxerScore, scoreCard.secondBoxerScore());
+    }
+
+    @Given("the existing fight has been scored by the aficionado in the round {int} with {int} and {int}")
+    public void theExistingFightHasBeenScoredByTheAficionadoInTheRoundWithAnd(Integer int1, Integer int2, Integer int3) {
         // Write code here that turns the phrase above into concrete actions
         throw new io.cucumber.java.PendingException();
     }
 
-    @When("an aficionado scores without none round")
-    public void anAficionadoScoresWithoutNoneRound() {
+    @When("an aficionado scores the round {int} for the non-existing fight with {int} and {int}")
+    public void anAficionadoScoresTheRoundForTheNonExistingFightWithAnd(Integer int1, Integer int2, Integer int3) {
         // Write code here that turns the phrase above into concrete actions
         throw new io.cucumber.java.PendingException();
     }
 
-    @When("an aficionado scores the round {string} for the non-existing fight with {string} and {string}")
-    public void anAficionadoScoresTheRoundForTheNonExistingFightWithAnd(String string, String string2, String string3) {
+    @Then("the round is not scored")
+    public void theRoundIsNotScored() {
         // Write code here that turns the phrase above into concrete actions
         throw new io.cucumber.java.PendingException();
     }
 
-    @Then("the fight is not scored")
-    public void theFightIsNotScored() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
-
-    @Given("the existing fight has been scored by the aficionado in the round {string} with {string} and {string}")
-    public void theExistingFightHasBeenScoredByTheAficionadoInTheRoundWithAnd(String string, String string2, String string3) {
+    @When("an aficionado scores the round {int} for the existing fight with {int} for the first boxer")
+    public void anAficionadoScoresTheRoundForTheExistingFightWithForTheFirstBoxer(Integer int1, Integer int2) {
         // Write code here that turns the phrase above into concrete actions
         throw new io.cucumber.java.PendingException();
     }
