@@ -9,8 +9,6 @@ import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.core.usecases.Auth;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 
-import java.util.Optional;
-
 public class ScoreRound {
     private ScoreCardRepository scoreCardRepository;
     private final UniqueIdGenerator uniqueIdGenerator;
@@ -27,7 +25,7 @@ public class ScoreRound {
         ScoreCard scoreCard = this.scoreCardRepository.findByFightIdAndAccountId(params.getFightId(), accountId)
                 .orElseGet(() -> {
                     ScoreCardId id = new ScoreCardId(uniqueIdGenerator.next());
-                    return new ScoreCard(id, accountId, params.getFightId(), params.getFirstBoxerId(), params.getSecondBoxerId());
+                    return ScoreCard.create(id, accountId, params.getFightId(), params.getFirstBoxerId(), params.getSecondBoxerId());
                 });
         scoreCard.scoreRound(params.getRound(), params.getFirstBoxerScore(), params.getSecondBoxerScore());
         this.scoreCardRepository.save(scoreCard);

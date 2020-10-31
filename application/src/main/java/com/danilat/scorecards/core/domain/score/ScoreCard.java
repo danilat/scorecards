@@ -15,14 +15,18 @@ public class ScoreCard extends Entity<ScoreCardId> {
     private final HashMap<Integer, Integer> secondBoxerScores;
     private AccountId accountId;
 
-    public ScoreCard(ScoreCardId id, AccountId accountId, FightId fightId, BoxerId firstBoxerId, BoxerId secondBoxerId) {
+    public ScoreCard(ScoreCardId id, AccountId accountId, FightId fightId, BoxerId firstBoxerId, BoxerId secondBoxerId, HashMap<Integer, Integer> firstBoxerScores, HashMap<Integer, Integer> secondBoxerScores) {
         super(id);
         this.fightId = fightId;
         this.firstBoxerId = firstBoxerId;
         this.secondBoxerId = secondBoxerId;
         this.accountId = accountId;
-        this.firstBoxerScores = new HashMap<>();
-        this.secondBoxerScores = new HashMap<>();
+        this.firstBoxerScores = firstBoxerScores;
+        this.secondBoxerScores = secondBoxerScores;
+    }
+
+    public static ScoreCard create(ScoreCardId id, AccountId accountId, FightId fightId, BoxerId firstBoxerId, BoxerId secondBoxerId) {
+        return new ScoreCard(id, accountId, fightId, firstBoxerId, secondBoxerId, new HashMap<>(), new HashMap<>());
     }
 
     @Override

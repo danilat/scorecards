@@ -11,6 +11,6 @@ public class ScoreCardMother {
         return aScoreCardWithIdFightIdFirstAndSecondBoxer(scoreCardId, new FightId("1"), new BoxerId("ALI"), new BoxerId("FOREMAN"));
     }
     public static ScoreCard aScoreCardWithIdFightIdFirstAndSecondBoxer(ScoreCardId scoreCardId, FightId fightId, BoxerId firstBoxer, BoxerId secondBoxer) {
-        return new ScoreCard(scoreCardId, new AccountId("foo"), fightId, firstBoxer, secondBoxer);
+        return ScoreCard.create(scoreCardId, new AccountId("foo"), fightId, firstBoxer, secondBoxer);
     }
 }
