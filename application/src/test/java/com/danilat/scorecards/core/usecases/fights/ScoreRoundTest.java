@@ -10,7 +10,9 @@ import com.danilat.scorecards.core.mothers.ScoreCardMother;
 import com.danilat.scorecards.core.usecases.Auth;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -100,6 +102,30 @@ public class ScoreRoundTest {
         assertEquals(foremanScore, scoreCard.secondBoxerScore(round));
         assertEquals((previousAliScore + aliScore), scoreCard.firstBoxerScore().intValue());
         assertEquals((previousForemanScore + foremanScore), scoreCard.secondBoxerScore().intValue());
+    }
 
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
+    @Test
+    public void givenAScoreForARoundGreaterOfInterval() {
+        expectedException.expect(InvalidScoreException.class);
+        expectedException.expectMessage("round interval is between 1 and 12");
+
+        int round = 13;
+        ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, ALI, 10, FOREMAN, 9);
+
+        scoreRound.execute(params);
+    }
+
+    @Test
+    public void givenAScoreForARoundLesserOfInterval() {
+        expectedException.expect(InvalidScoreException.class);
+        expectedException.expectMessage("round interval is between 1 and 12");
+
+        int round = 0;
+        ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, ALI, 10, FOREMAN, 9);
+
+        scoreRound.execute(params);
     }
 }

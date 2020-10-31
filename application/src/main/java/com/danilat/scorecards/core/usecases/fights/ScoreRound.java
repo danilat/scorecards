@@ -9,6 +9,14 @@ import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.core.usecases.Auth;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import java.util.Set;
+
 public class ScoreRound {
     private ScoreCardRepository scoreCardRepository;
     private final UniqueIdGenerator uniqueIdGenerator;
@@ -21,6 +29,7 @@ public class ScoreRound {
     }
 
     public ScoreCard execute(ScoreFightParameters params) {
+        validate(params);
         AccountId accountId = auth.currentAccount();
         ScoreCard scoreCard = this.scoreCardRepository.findByFightIdAndAccountId(params.getFightId(), accountId)
                 .orElseGet(() -> {
@@ -32,8 +41,19 @@ public class ScoreRound {
         return scoreCard;
     }
 
+    private void validate(ScoreFightParameters params) {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<ScoreFightParameters>> violations = validator.validate(params);
+        if (!violations.isEmpty()) {
+            throw new InvalidScoreException(violations);
+        }
+    }
+
     public static class ScoreFightParameters {
         private final FightId fightId;
+        @Min(value = 1, message = "round interval is between 1 and 12")
+        @Max(value = 12, message = "round interval is between 1 and 12")
         private final int round;
         private final BoxerId firstBoxerId;
         private final int firstBoxerScore;
