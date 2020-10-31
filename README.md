@@ -2,7 +2,7 @@
 
 This is a little side-project to support scoring in boxing fights.
 
-As boxing aficionado I would like to score fights and share it with my friends an other boxing fitghts. But at this moment is more an experiment than a real application.
+As boxing aficionado I would like to scoreCard fights and share it with my friends an other boxing fitghts. But at this moment is more an experiment than a real application.
 
 ## Principal features (WIP):
 - Register fights
