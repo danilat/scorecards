@@ -44,9 +44,9 @@ public class ScoreRoundTest {
 
     @Test
     public void givenAFightScoresARoundsThenTheScoreIsRegistered() {
-        int round = 1;
-        int aliScore = 10;
-        int foremanScore = 9;
+        Integer round = 1;
+        Integer aliScore = 10;
+        Integer foremanScore = 9;
         ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, ALI, aliScore, FOREMAN, foremanScore);
 
         ScoreCard scoreCard = scoreRound.execute(params);

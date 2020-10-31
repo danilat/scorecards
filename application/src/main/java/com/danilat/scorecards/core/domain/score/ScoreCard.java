@@ -46,19 +46,19 @@ public class ScoreCard extends Entity<ScoreCardId> {
         return accountId;
     }
 
-    public int firstBoxerScore() {
+    public Integer firstBoxerScore() {
         return firstBoxerScores.values().stream().reduce(0, Integer::sum);
     }
 
-    public int firstBoxerScore(int round) {
+    public Integer firstBoxerScore(int round) {
         return firstBoxerScores.get(round);
     }
 
-    public int secondBoxerScore() {
+    public Integer secondBoxerScore() {
         return secondBoxerScores.values().stream().reduce(0, Integer::sum);
     }
 
-    public int secondBoxerScore(int round) {
+    public Integer secondBoxerScore(int round) {
         return secondBoxerScores.get(round);
     }
 
