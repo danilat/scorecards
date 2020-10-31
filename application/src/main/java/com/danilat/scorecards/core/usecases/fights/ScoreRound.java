@@ -60,7 +60,7 @@ public class ScoreRound {
         private final BoxerId secondBoxerId;
         private final int secondBoxerScore;
 
-        public ScoreFightParameters(FightId fightId, int round, BoxerId firstBoxerId, int firstBoxerScore, BoxerId secondBoxerId, int secondBoxerScore) {
+        public ScoreFightParameters(FightId fightId, Integer round, BoxerId firstBoxerId, Integer firstBoxerScore, BoxerId secondBoxerId, Integer secondBoxerScore) {
             this.fightId = fightId;
             this.round = round;
             this.firstBoxerId = firstBoxerId;
