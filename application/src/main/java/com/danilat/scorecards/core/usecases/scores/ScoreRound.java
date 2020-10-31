@@ -1,8 +1,10 @@
-package com.danilat.scorecards.core.usecases.fights;
+package com.danilat.scorecards.core.usecases.scores;
 
 import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.fight.FightId;
+import com.danilat.scorecards.core.domain.fight.FightNotFoundException;
+import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.domain.score.ScoreCard;
 import com.danilat.scorecards.core.domain.score.ScoreCardId;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
@@ -19,11 +21,13 @@ import java.util.Set;
 
 public class ScoreRound {
     private ScoreCardRepository scoreCardRepository;
+    private final FightRepository fightRepository;
     private final UniqueIdGenerator uniqueIdGenerator;
     private final Auth auth;
 
-    public ScoreRound(ScoreCardRepository scoreCardRepository, UniqueIdGenerator uniqueIdGenerator, Auth auth) {
+    public ScoreRound(ScoreCardRepository scoreCardRepository, FightRepository fightRepository, UniqueIdGenerator uniqueIdGenerator, Auth auth) {
         this.scoreCardRepository = scoreCardRepository;
+        this.fightRepository = fightRepository;
         this.uniqueIdGenerator = uniqueIdGenerator;
         this.auth = auth;
     }
@@ -48,6 +52,7 @@ public class ScoreRound {
         if (!violations.isEmpty()) {
             throw new InvalidScoreException(violations);
         }
+        fightRepository.get(params.getFightId()).orElseThrow(() -> new FightNotFoundException(params.getFightId()));
     }
 
     public static class ScoreFightParameters {

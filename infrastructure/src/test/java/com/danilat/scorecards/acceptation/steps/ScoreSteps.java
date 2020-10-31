@@ -4,7 +4,7 @@ import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.score.ScoreCard;
-import com.danilat.scorecards.core.usecases.fights.ScoreRound;
+import com.danilat.scorecards.core.usecases.scores.ScoreRound;
 import com.danilat.scorecards.shared.domain.ScoreCardsBusinessException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;

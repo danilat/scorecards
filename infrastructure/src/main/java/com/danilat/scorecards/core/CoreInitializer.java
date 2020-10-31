@@ -8,7 +8,7 @@ import com.danilat.scorecards.core.usecases.Auth;
 import com.danilat.scorecards.core.usecases.boxers.RetrieveAllBoxers;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
-import com.danilat.scorecards.core.usecases.fights.ScoreRound;
+import com.danilat.scorecards.core.usecases.scores.ScoreRound;
 import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.SharedInitializer;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
@@ -65,7 +65,7 @@ public class CoreInitializer {
 
     @Bean
     public ScoreRound scoreRound() {
-        return new ScoreRound(scoreCardRepository, uniqueIdGenerator, auth);
+        return new ScoreRound(scoreCardRepository, fightRepository, uniqueIdGenerator, auth);
     }
 }
 

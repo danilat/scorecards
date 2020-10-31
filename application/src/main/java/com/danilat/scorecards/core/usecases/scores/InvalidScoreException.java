@@ -1,4 +1,4 @@
-package com.danilat.scorecards.core.usecases.fights;
+package com.danilat.scorecards.core.usecases.scores;
 
 import com.danilat.scorecards.shared.usecases.InvalidParametersException;
 
