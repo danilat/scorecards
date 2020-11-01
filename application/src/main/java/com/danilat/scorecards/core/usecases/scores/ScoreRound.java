@@ -16,6 +16,7 @@ import com.danilat.scorecards.shared.UniqueIdGenerator;
 import javax.validation.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 public class ScoreRound {
@@ -64,9 +65,15 @@ public class ScoreRound {
         @Max(value = 12, message = "round interval is between 1 and 12")
         private final Integer round;
         private final BoxerId firstBoxerId;
-        private final int firstBoxerScore;
+        @NotNull(message = "firstBoxerScore is mandatory")
+        @Min(value = 1, message = "scores interval is between 1 and 10")
+        @Max(value = 10, message = "scores interval is between 1 and 10")
+        private final Integer firstBoxerScore;
         private final BoxerId secondBoxerId;
-        private final int secondBoxerScore;
+        @NotNull(message = "secondBoxerScore is mandatory")
+        @Min(value = 1, message = "scores interval is between 1 and 10")
+        @Max(value = 10, message = "scores interval is between 1 and 10")
+        private final Integer secondBoxerScore;
 
         public ScoreFightParameters(FightId fightId, Integer round, BoxerId firstBoxerId, Integer firstBoxerScore, BoxerId secondBoxerId, Integer secondBoxerScore) {
             this.fightId = fightId;

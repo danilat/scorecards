@@ -160,4 +160,37 @@ public class ScoreRoundTest {
 
         scoreRound.execute(params);
     }
+
+    @Test
+    public void givenAScoreForOnlyABoxerThenFails() {
+        expectedException.expect(InvalidScoreException.class);
+        expectedException.expectMessage("secondBoxerScore is mandatory");
+
+        int round = 1;
+        ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, ALI, 10, FOREMAN, null);
+
+        scoreRound.execute(params);
+    }
+
+    @Test
+    public void givenAScoreIsLessThanMinimum() {
+        expectedException.expect(InvalidScoreException.class);
+        expectedException.expectMessage("scores interval is between 1 and 10");
+
+        int round = 1;
+        ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, ALI, 10, FOREMAN, 0);
+
+        scoreRound.execute(params);
+    }
+
+    @Test
+    public void givenAScoreIsMoreThanMaximum() {
+        expectedException.expect(InvalidScoreException.class);
+        expectedException.expectMessage("scores interval is between 1 and 10");
+
+        int round = 1;
+        ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, ALI, 11, FOREMAN, 9);
+
+        scoreRound.execute(params);
+    }
 }
