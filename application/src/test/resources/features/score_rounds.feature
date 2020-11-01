@@ -41,6 +41,6 @@ Feature: Score all rounds
     When an aficionado scores the round 1 for the existing fight with 11 and 9
     Then the round is not scored
 
-  Scenario: there are scores in a rounds only for a boxer
-    When an aficionado scores the round 1 for the existing fight with 10 for the first boxer
+  Scenario: there are a boxer scored that is not one of the fighters
+    When an aficionado scores the round 1 for the existing fight with 10 for "Mohamed Ali" and 10 for "Mike Tyson"
     Then the round is not scored

@@ -6,15 +6,10 @@ import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightNotFoundException;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
-import com.danilat.scorecards.core.domain.score.RoundOutOfIntervalException;
-import com.danilat.scorecards.core.domain.score.ScoreCard;
-import com.danilat.scorecards.core.domain.score.ScoreCardId;
-import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
+import com.danilat.scorecards.core.domain.score.*;
 import com.danilat.scorecards.core.mothers.FightMother;
 import com.danilat.scorecards.core.mothers.ScoreCardMother;
 import com.danilat.scorecards.core.usecases.Auth;
-import com.danilat.scorecards.core.usecases.scores.InvalidScoreException;
-import com.danilat.scorecards.core.usecases.scores.ScoreRound;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 import org.junit.Before;
 import org.junit.Rule;
@@ -34,10 +29,10 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class ScoreRoundTest {
     private ScoreRound scoreRound;
-    private static final BoxerId ALI = new BoxerId("Ali");
-    private static final BoxerId FOREMAN = new BoxerId("Foreman");
     private static final FightId A_FIGHT_ID = new FightId("1");
     private static final Fight A_FIGHT = new FightMother().aFightWithId(A_FIGHT_ID);
+    private static final BoxerId FIRST_BOXER = A_FIGHT.firstBoxer();
+    private static final BoxerId SECOND_BOXER = A_FIGHT.secondBoxer();
     private static final ScoreCardId AN_ID = new ScoreCardId("an scorecard id");
     private static final AccountId AN_AFICIONADO = new AccountId("an account id");
 
@@ -63,15 +58,15 @@ public class ScoreRoundTest {
         Integer round = 1;
         Integer aliScore = 10;
         Integer foremanScore = 9;
-        ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, ALI, aliScore, FOREMAN, foremanScore);
+        ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, aliScore, SECOND_BOXER, foremanScore);
 
         ScoreCard scoreCard = scoreRound.execute(params);
 
         assertEquals(AN_ID, scoreCard.id());
         assertEquals(AN_AFICIONADO, scoreCard.accountId());
         assertEquals(A_FIGHT_ID, scoreCard.fightId());
-        assertEquals(ALI, scoreCard.firstBoxerId());
-        assertEquals(FOREMAN, scoreCard.secondBoxerId());
+        assertEquals(FIRST_BOXER, scoreCard.firstBoxerId());
+        assertEquals(SECOND_BOXER, scoreCard.secondBoxerId());
         assertEquals(aliScore, scoreCard.firstBoxerScore());
         assertEquals(foremanScore, scoreCard.secondBoxerScore());
         assertEquals(aliScore, scoreCard.firstBoxerScore(round));
@@ -83,7 +78,7 @@ public class ScoreRoundTest {
         int round = 1;
         int aliScore = 10;
         int foremanScore = 9;
-        ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, ALI, aliScore, FOREMAN, foremanScore);
+        ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, aliScore, SECOND_BOXER, foremanScore);
 
         ScoreCard scoreCard = scoreRound.execute(params);
 
@@ -91,7 +86,7 @@ public class ScoreRoundTest {
     }
 
     private void givenExistingScoreCardOnFirstRound(Integer previousAliScore, Integer previousForemanScore) {
-        ScoreCard existingScorecard = ScoreCardMother.aScoreCardWithIdFightIdFirstAndSecondBoxer(AN_ID, A_FIGHT_ID, ALI, FOREMAN);
+        ScoreCard existingScorecard = ScoreCardMother.aScoreCardWithIdFightIdFirstAndSecondBoxer(AN_ID, A_FIGHT_ID, FIRST_BOXER, SECOND_BOXER);
         existingScorecard.scoreRound(1, previousAliScore, previousForemanScore);
         when(scoreCardRepository.findByFightIdAndAccountId(A_FIGHT_ID, AN_AFICIONADO)).thenReturn(Optional.of(existingScorecard));
     }
@@ -104,7 +99,7 @@ public class ScoreRoundTest {
         Integer round = 2;
         Integer aliScore = 10;
         Integer foremanScore = 9;
-        ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, ALI, aliScore, FOREMAN, foremanScore);
+        ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, aliScore, SECOND_BOXER, foremanScore);
 
         ScoreCard scoreCard = scoreRound.execute(params);
 
@@ -122,7 +117,7 @@ public class ScoreRoundTest {
     public void givenAScoreForUnExistingFightThenFails() {
         expectedException.expect(FightNotFoundException.class);
 
-        ScoreFightParameters params = new ScoreFightParameters(new FightId("not-exists"), 1, ALI, 10, FOREMAN, 9);
+        ScoreFightParameters params = new ScoreFightParameters(new FightId("not-exists"), 1, FIRST_BOXER, 10, SECOND_BOXER, 9);
 
         scoreRound.execute(params);
     }
@@ -133,7 +128,7 @@ public class ScoreRoundTest {
         expectedException.expectMessage("round interval is between 1 and 12");
 
         int round = 13;
-        ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, ALI, 10, FOREMAN, 9);
+        ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, 10, SECOND_BOXER, 9);
 
         scoreRound.execute(params);
     }
@@ -144,7 +139,7 @@ public class ScoreRoundTest {
         expectedException.expectMessage("round interval is between 1 and 12");
 
         int round = 0;
-        ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, ALI, 10, FOREMAN, 9);
+        ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, 10, SECOND_BOXER, 9);
 
         scoreRound.execute(params);
     }
@@ -156,7 +151,7 @@ public class ScoreRoundTest {
         expectedException.expect(RoundOutOfIntervalException.class);
 
         int roundOutOfInterval = fight.numberOfRounds() + 1;
-        ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, roundOutOfInterval, ALI, 10, FOREMAN, 9);
+        ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, roundOutOfInterval, FIRST_BOXER, 10, SECOND_BOXER, 9);
 
         scoreRound.execute(params);
     }
@@ -167,29 +162,39 @@ public class ScoreRoundTest {
         expectedException.expectMessage("secondBoxerScore is mandatory");
 
         int round = 1;
-        ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, ALI, 10, FOREMAN, null);
+        ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, 10, SECOND_BOXER, null);
 
         scoreRound.execute(params);
     }
 
     @Test
-    public void givenAScoreIsLessThanMinimum() {
+    public void givenAScoreIsLessThanMinimumTheFails() {
         expectedException.expect(InvalidScoreException.class);
         expectedException.expectMessage("scores interval is between 1 and 10");
 
         int round = 1;
-        ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, ALI, 10, FOREMAN, 0);
+        ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, 10, SECOND_BOXER, 0);
 
         scoreRound.execute(params);
     }
 
     @Test
-    public void givenAScoreIsMoreThanMaximum() {
+    public void givenAScoreIsMoreThanMaximumTheFails() {
         expectedException.expect(InvalidScoreException.class);
         expectedException.expectMessage("scores interval is between 1 and 10");
 
         int round = 1;
-        ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, ALI, 11, FOREMAN, 9);
+        ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, 11, SECOND_BOXER, 9);
+
+        scoreRound.execute(params);
+    }
+
+    @Test
+    public void givenAScoredBoxerNotPartOfTheFightTheFails() {
+        expectedException.expect(BoxerIsNotInFightException.class);
+
+        BoxerId tyson = new BoxerId("tyson");
+        ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, 1, FIRST_BOXER, 10, tyson, 10);
 
         scoreRound.execute(params);
     }

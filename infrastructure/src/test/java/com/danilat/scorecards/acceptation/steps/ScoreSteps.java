@@ -79,4 +79,15 @@ public class ScoreSteps {
             someException = businessException;
         }
     }
+
+    @When("an aficionado scores the round {int} for the existing fight with {int} for {string} and {int} for {string}")
+    public void anAficionadoScoresTheRoundForTheExistingFightWithForAndFor(Integer round, Integer firstBoxerScore, String firstBoxer, Integer secondBoxerScore, String secondBoxer) {
+        Fight fight = world.getFight();
+        ScoreRound.ScoreFightParameters params = new ScoreRound.ScoreFightParameters(fight.id(), round, new BoxerId(firstBoxer), firstBoxerScore, new BoxerId(secondBoxer), secondBoxerScore);
+        try {
+            scoreCard = scoreRound.execute(params);
+        } catch (ScoreCardsBusinessException businessException) {
+            someException = businessException;
+        }
+    }
 }

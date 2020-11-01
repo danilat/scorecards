@@ -6,10 +6,7 @@ import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightNotFoundException;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
-import com.danilat.scorecards.core.domain.score.RoundOutOfIntervalException;
-import com.danilat.scorecards.core.domain.score.ScoreCard;
-import com.danilat.scorecards.core.domain.score.ScoreCardId;
-import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
+import com.danilat.scorecards.core.domain.score.*;
 import com.danilat.scorecards.core.usecases.Auth;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 
@@ -56,6 +53,9 @@ public class ScoreRound {
         }
         if (params.getRound() > fight.numberOfRounds()) {
             throw new RoundOutOfIntervalException(fight.numberOfRounds(), params.getRound());
+        }
+        if (!fight.firstBoxer().equals(params.getFirstBoxerId()) || !fight.secondBoxer().equals(params.getSecondBoxerId())) {
+            throw new BoxerIsNotInFightException();
         }
     }
 
