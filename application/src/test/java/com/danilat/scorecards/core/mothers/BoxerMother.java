@@ -4,7 +4,8 @@ import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 
 public class BoxerMother {
-  public static Boxer aBoxerWithId(BoxerId id){
+
+  public static Boxer aBoxerWithId(BoxerId id) {
     return aBoxerWithIdAndName(id, "a boxer name for " + id.value());
   }
 

@@ -8,10 +8,8 @@ import javax.validation.ConstraintViolation;
 
 public class InvalidFightException extends InvalidParametersException {
 
-    public InvalidFightException(Set<ConstraintViolation<RegisterFightParameters>> violations) {
-        super();
-        violations.stream().forEach(violation -> {
-            addParameterViolation(violation);
-        });
-    }
+  public InvalidFightException(Set<ConstraintViolation<RegisterFightParameters>> violations) {
+    super();
+    violations.forEach(violation -> addParameterViolation(violation));
+  }
 }

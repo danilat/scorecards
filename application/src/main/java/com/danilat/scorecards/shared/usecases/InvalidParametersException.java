@@ -6,8 +6,9 @@ import com.danilat.scorecards.shared.domain.ScoreCardsBusinessException;
 import javax.validation.ConstraintViolation;
 
 public abstract class InvalidParametersException extends ScoreCardsBusinessException {
-    public void addParameterViolation(ConstraintViolation violation) {
-        Error error = new Error(violation);
-        getErrors().add(error);
-    }
+
+  public void addParameterViolation(ConstraintViolation violation) {
+    Error error = new Error(violation);
+    getErrors().add(error);
+  }
 }

@@ -140,7 +140,7 @@ public class FightSteps {
     BoxerId firstBoxerId = new BoxerId(firstBoxer);
     BoxerId secondBoxerId = new BoxerId(secondBoxer);
     RegisterFightParameters parameters = new RegisterFightParameters(firstBoxerId, secondBoxerId,
-            LocalDate.now(), "irrelevant place", numberOfRounds);
+        LocalDate.now(), "irrelevant place", numberOfRounds);
     createdFight = registerFight.execute(parameters);
     world.setFight(createdFight);
   }

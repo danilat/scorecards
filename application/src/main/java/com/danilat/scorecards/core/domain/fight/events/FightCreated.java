@@ -5,6 +5,7 @@ import com.danilat.scorecards.shared.events.DomainEvent;
 import java.time.LocalDate;
 
 public class FightCreated extends DomainEvent {
+
   private Fight fight;
 
   public FightCreated(Fight fight, LocalDate happenedAt, String eventId) {
@@ -16,5 +17,5 @@ public class FightCreated extends DomainEvent {
     return fight;
   }
 
-  
+
 }

@@ -93,6 +93,7 @@ public class RegisterFightTest {
 
   @Captor
   ArgumentCaptor<FightCreated> fightCreatedArgumentCaptorCaptor;
+
   @Test
   public void givenTwoBoxersAndADateThenAnEventIsPublished() {
     RegisterFightParameters parameters = new RegisterFightParameters(ALI, FOREMAN, aDate, aPlace,

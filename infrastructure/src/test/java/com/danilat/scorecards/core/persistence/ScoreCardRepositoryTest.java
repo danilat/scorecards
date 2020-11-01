@@ -14,31 +14,32 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ScoreCardRepositoryTest {
-    private ScoreCardRepository scoreCardRepository;
-    private ScoreCardId scoreCardId = new ScoreCardId("an id");
 
-    @Before
-    public void setup() {
-        scoreCardRepository = new InMemoryScoreCardRepository();
-    }
+  private ScoreCardRepository scoreCardRepository;
+  private final ScoreCardId scoreCardId = new ScoreCardId("an id");
 
-    @Test
-    public void saveAScoreCard() {
-        ScoreCard aScoreCard = ScoreCardMother.aScoreCardWithId(scoreCardId);
+  @Before
+  public void setup() {
+    scoreCardRepository = new InMemoryScoreCardRepository();
+  }
 
-        scoreCardRepository.save(aScoreCard);
+  @Test
+  public void saveAScoreCard() {
+    ScoreCard aScoreCard = ScoreCardMother.aScoreCardWithId(scoreCardId);
 
-        Optional retrieved = scoreCardRepository.get(scoreCardId);
-        assertTrue(retrieved.isPresent());
-    }
+    scoreCardRepository.save(aScoreCard);
 
-    @Test
-    public void getAllScoreCards() {
-        ScoreCard aScoreCard = ScoreCardMother.aScoreCardWithId(scoreCardId);
-        scoreCardRepository.save(aScoreCard);
+    Optional<ScoreCard> retrieved = scoreCardRepository.get(scoreCardId);
+    assertTrue(retrieved.isPresent());
+  }
 
-        Map<ScoreCardId, ScoreCard> scoreCards = scoreCardRepository.all();
+  @Test
+  public void getAllScoreCards() {
+    ScoreCard aScoreCard = ScoreCardMother.aScoreCardWithId(scoreCardId);
+    scoreCardRepository.save(aScoreCard);
 
-        assertEquals(1, scoreCards.size());
-    }
+    Map<ScoreCardId, ScoreCard> scoreCards = scoreCardRepository.all();
+
+    assertEquals(1, scoreCards.size());
+  }
 }

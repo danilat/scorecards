@@ -12,10 +12,13 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 @Repository
-public class InMemoryScoreCardRepository extends InMemoryRepository<ScoreCard, ScoreCardId> implements ScoreCardRepository {
-    @Override
-    public Optional<ScoreCard> findByFightIdAndAccountId(FightId fightId, AccountId accountId) {
-        Predicate<ScoreCard> predicate = (scoreCard) -> scoreCard.accountId().equals(accountId) && scoreCard.fightId().equals(fightId);
-        return entities.values().stream().filter(predicate).findFirst();
-    }
+public class InMemoryScoreCardRepository extends InMemoryRepository<ScoreCard, ScoreCardId> implements
+    ScoreCardRepository {
+
+  @Override
+  public Optional<ScoreCard> findByFightIdAndAccountId(FightId fightId, AccountId accountId) {
+    Predicate<ScoreCard> predicate = (scoreCard) -> scoreCard.accountId().equals(accountId) && scoreCard.fightId()
+        .equals(fightId);
+    return entities.values().stream().filter(predicate).findFirst();
+  }
 }

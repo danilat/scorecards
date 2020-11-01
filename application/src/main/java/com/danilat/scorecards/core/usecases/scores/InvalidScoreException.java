@@ -6,9 +6,8 @@ import javax.validation.ConstraintViolation;
 import java.util.Set;
 
 public class InvalidScoreException extends InvalidParametersException {
-    public InvalidScoreException(Set<ConstraintViolation<ScoreRound.ScoreFightParameters>> violations) {
-        violations.stream().forEach(violation -> {
-            addParameterViolation(violation);
-        });
-    }
+
+  public InvalidScoreException(Set<ConstraintViolation<ScoreRound.ScoreFightParameters>> violations) {
+    violations.forEach(violation -> addParameterViolation(violation));
+  }
 }

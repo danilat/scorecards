@@ -4,7 +4,7 @@ import com.danilat.scorecards.shared.domain.Entity;
 
 public class Boxer extends Entity<BoxerId> {
 
-  private String name;
+  private final String name;
 
   public Boxer(BoxerId id, String name) {
     super(id);
@@ -16,5 +16,7 @@ public class Boxer extends Entity<BoxerId> {
     return this.id;
   }
 
-  public String name() { return this.name; }
+  public String name() {
+    return this.name;
+  }
 }

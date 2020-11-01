@@ -7,7 +7,8 @@ import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(features = "classpath:features", plugin = {
-    "html:target/features", "message:target/cucumber_messages"}, snippets = SnippetType.CAMELCASE, tags = "not @pending")
+    "html:target/features",
+    "message:target/cucumber_messages"}, snippets = SnippetType.CAMELCASE, tags = "not @pending")
 public class CucumberRunnerTest {
 
 }

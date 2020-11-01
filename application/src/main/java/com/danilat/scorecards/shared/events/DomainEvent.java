@@ -3,6 +3,7 @@ package com.danilat.scorecards.shared.events;
 import java.time.LocalDate;
 
 public abstract class DomainEvent {
+
   private LocalDate happenedAt;
   private DomainEventId eventId;
 

@@ -5,13 +5,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class World {
-    private Fight fight;
 
-    public void setFight(Fight fight) {
-        this.fight = fight;
-    }
+  private Fight fight;
 
-    public Fight getFight() {
-        return fight;
-    }
+  public void setFight(Fight fight) {
+    this.fight = fight;
+  }
+
+  public Fight getFight() {
+    return fight;
+  }
 }

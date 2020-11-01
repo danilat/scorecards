@@ -6,7 +6,7 @@ import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.shared.UseCase;
 import java.util.Map;
 
-public class RetrieveAllBoxers implements UseCase<UseCase.Empty>{
+public class RetrieveAllBoxers implements UseCase<UseCase.Empty> {
 
   private final BoxerRepository boxerRepository;
 

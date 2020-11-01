@@ -18,7 +18,8 @@ public class InMemoryFightWithBoxersRepository implements
   private FightRepository fightRepository;
   private BoxerRepository boxerRepository;
 
-  public InMemoryFightWithBoxersRepository(@Autowired FightRepository fightRepository, @Autowired BoxerRepository boxerRepository) {
+  public InMemoryFightWithBoxersRepository(@Autowired FightRepository fightRepository,
+      @Autowired BoxerRepository boxerRepository) {
     this.fightRepository = fightRepository;
     this.boxerRepository = boxerRepository;
   }

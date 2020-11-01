@@ -24,48 +24,48 @@ import org.springframework.context.annotation.Import;
 @Import(SharedInitializer.class)
 public class CoreInitializer {
 
-    @Autowired
-    private FightWithBoxersRepository fightWithBoxersRepository;
+  @Autowired
+  private FightWithBoxersRepository fightWithBoxersRepository;
 
-    @Autowired
-    private FightRepository fightRepository;
+  @Autowired
+  private FightRepository fightRepository;
 
-    @Autowired
-    private BoxerRepository boxerRepository;
+  @Autowired
+  private BoxerRepository boxerRepository;
 
-    @Autowired
-    private EventBus eventBus;
+  @Autowired
+  private EventBus eventBus;
 
-    @Autowired
-    private Clock clock;
+  @Autowired
+  private Clock clock;
 
-    @Autowired
-    private UniqueIdGenerator uniqueIdGenerator;
+  @Autowired
+  private UniqueIdGenerator uniqueIdGenerator;
 
-    @Autowired
-    private ScoreCardRepository scoreCardRepository;
+  @Autowired
+  private ScoreCardRepository scoreCardRepository;
 
-    @Autowired
-    private Auth auth;
+  @Autowired
+  private Auth auth;
 
-    @Bean
-    public RetrieveAFight retrieveAFight() {
-        return new RetrieveAFight(fightWithBoxersRepository);
-    }
+  @Bean
+  public RetrieveAFight retrieveAFight() {
+    return new RetrieveAFight(fightWithBoxersRepository);
+  }
 
-    @Bean
-    public RegisterFight registerFight() {
-        return new RegisterFight(fightRepository, boxerRepository, eventBus, clock, uniqueIdGenerator);
-    }
+  @Bean
+  public RegisterFight registerFight() {
+    return new RegisterFight(fightRepository, boxerRepository, eventBus, clock, uniqueIdGenerator);
+  }
 
-    @Bean
-    public RetrieveAllBoxers retrieveAllBoxers() {
-        return new RetrieveAllBoxers(boxerRepository);
-    }
+  @Bean
+  public RetrieveAllBoxers retrieveAllBoxers() {
+    return new RetrieveAllBoxers(boxerRepository);
+  }
 
-    @Bean
-    public ScoreRound scoreRound() {
-        return new ScoreRound(scoreCardRepository, fightRepository, uniqueIdGenerator, auth);
-    }
+  @Bean
+  public ScoreRound scoreRound() {
+    return new ScoreRound(scoreCardRepository, fightRepository, uniqueIdGenerator, auth);
+  }
 }
 

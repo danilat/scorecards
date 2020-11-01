@@ -14,80 +14,91 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static org.junit.Assert.*;
 
 public class ScoreSteps {
-    @Autowired
-    private ScoreRound scoreRound;
-    @Autowired
-    private World world;
 
-    private ScoreCard scoreCard;
-    private ScoreCardsBusinessException someException;
+  @Autowired
+  private ScoreRound scoreRound;
+  @Autowired
+  private World world;
 
-    @When("an aficionado scores the round {int} for the existing fight with {int} and {int}")
-    public void anAficionadoScoresTheRoundForTheExistingFightWithAnd(Integer round, Integer firstBoxerScore, Integer secondBoxerScore) {
-        Fight fight = world.getFight();
-        ScoreRound.ScoreFightParameters params = new ScoreRound.ScoreFightParameters(fight.id(), round, fight.firstBoxer(), firstBoxerScore, fight.secondBoxer(), secondBoxerScore);
-        try {
-            scoreCard = scoreRound.execute(params);
-        } catch (ScoreCardsBusinessException businessException) {
-            someException = businessException;
-        }
+  private ScoreCard scoreCard;
+  private ScoreCardsBusinessException someException;
+
+  @When("an aficionado scores the round {int} for the existing fight with {int} and {int}")
+  public void anAficionadoScoresTheRoundForTheExistingFightWithAnd(Integer round, Integer firstBoxerScore,
+      Integer secondBoxerScore) {
+    Fight fight = world.getFight();
+    ScoreRound.ScoreFightParameters params = new ScoreRound.ScoreFightParameters(fight.id(), round, fight.firstBoxer(),
+        firstBoxerScore, fight.secondBoxer(), secondBoxerScore);
+    try {
+      scoreCard = scoreRound.execute(params);
+    } catch (ScoreCardsBusinessException businessException) {
+      someException = businessException;
     }
+  }
 
-    @Then("the round {int} is scored with with {int} and {int}")
-    public void theRoundIsScoredWithWithAnd(Integer round, Integer firstBoxerScore, Integer secondBoxerScore) {
-        assertEquals(firstBoxerScore, scoreCard.firstBoxerScore(round));
-        assertEquals(secondBoxerScore, scoreCard.secondBoxerScore(round));
-    }
+  @Then("the round {int} is scored with with {int} and {int}")
+  public void theRoundIsScoredWithWithAnd(Integer round, Integer firstBoxerScore, Integer secondBoxerScore) {
+    assertEquals(firstBoxerScore, scoreCard.firstBoxerScore(round));
+    assertEquals(secondBoxerScore, scoreCard.secondBoxerScore(round));
+  }
 
-    @Then("the fight scoreCard is {int} to {int}")
-    public void theFightScoreCardIsTo(Integer firstBoxerScore, Integer secondBoxerScore) {
-        assertEquals(firstBoxerScore, scoreCard.firstBoxerScore());
-        assertEquals(secondBoxerScore, scoreCard.secondBoxerScore());
-    }
+  @Then("the fight scoreCard is {int} to {int}")
+  public void theFightScoreCardIsTo(Integer firstBoxerScore, Integer secondBoxerScore) {
+    assertEquals(firstBoxerScore, scoreCard.firstBoxerScore());
+    assertEquals(secondBoxerScore, scoreCard.secondBoxerScore());
+  }
 
-    @Given("the existing fight has been scored by the aficionado in the round {int} with {int} and {int}")
-    public void theExistingFightHasBeenScoredByTheAficionadoInTheRoundWithAnd(Integer round, Integer firstBoxerScore, Integer secondBoxerScore) {
-        Fight fight = world.getFight();
-        ScoreRound.ScoreFightParameters params = new ScoreRound.ScoreFightParameters(fight.id(), round, fight.firstBoxer(), firstBoxerScore, fight.secondBoxer(), secondBoxerScore);
-        scoreCard = scoreRound.execute(params);
-    }
+  @Given("the existing fight has been scored by the aficionado in the round {int} with {int} and {int}")
+  public void theExistingFightHasBeenScoredByTheAficionadoInTheRoundWithAnd(Integer round, Integer firstBoxerScore,
+      Integer secondBoxerScore) {
+    Fight fight = world.getFight();
+    ScoreRound.ScoreFightParameters params = new ScoreRound.ScoreFightParameters(fight.id(), round, fight.firstBoxer(),
+        firstBoxerScore, fight.secondBoxer(), secondBoxerScore);
+    scoreCard = scoreRound.execute(params);
+  }
 
-    @When("an aficionado scores the round {int} for the non-existing fight with {int} and {int}")
-    public void anAficionadoScoresTheRoundForTheNonExistingFightWithAnd(Integer round, Integer firstBoxerScore, Integer secondBoxerScore) {
-        FightId nonExistingFightId = new FightId("not-exists");
-        ScoreRound.ScoreFightParameters params = new ScoreRound.ScoreFightParameters(nonExistingFightId, round, new BoxerId("irrelevant 1"), firstBoxerScore, new BoxerId("irrelevant 2"), secondBoxerScore);
-        try {
-            scoreCard = scoreRound.execute(params);
-        } catch (ScoreCardsBusinessException businessException) {
-            someException = businessException;
-        }
+  @When("an aficionado scores the round {int} for the non-existing fight with {int} and {int}")
+  public void anAficionadoScoresTheRoundForTheNonExistingFightWithAnd(Integer round, Integer firstBoxerScore,
+      Integer secondBoxerScore) {
+    FightId nonExistingFightId = new FightId("not-exists");
+    ScoreRound.ScoreFightParameters params = new ScoreRound.ScoreFightParameters(nonExistingFightId, round,
+        new BoxerId("irrelevant 1"), firstBoxerScore, new BoxerId("irrelevant 2"), secondBoxerScore);
+    try {
+      scoreCard = scoreRound.execute(params);
+    } catch (ScoreCardsBusinessException businessException) {
+      someException = businessException;
     }
+  }
 
-    @Then("the round is not scored")
-    public void theRoundIsNotScored() {
-        assertNotNull(someException);
-        assertNull(scoreCard);
-    }
+  @Then("the round is not scored")
+  public void theRoundIsNotScored() {
+    assertNotNull(someException);
+    assertNull(scoreCard);
+  }
 
-    @When("an aficionado scores the round {int} for the existing fight with {int} for the first boxer")
-    public void anAficionadoScoresTheRoundForTheExistingFightWithForTheFirstBoxer(Integer round, Integer firstBoxerScore) {
-        Fight fight = world.getFight();
-        ScoreRound.ScoreFightParameters params = new ScoreRound.ScoreFightParameters(fight.id(), round, fight.firstBoxer(), firstBoxerScore, fight.secondBoxer(), null);
-        try {
-            scoreCard = scoreRound.execute(params);
-        } catch (ScoreCardsBusinessException businessException) {
-            someException = businessException;
-        }
+  @When("an aficionado scores the round {int} for the existing fight with {int} for the first boxer")
+  public void anAficionadoScoresTheRoundForTheExistingFightWithForTheFirstBoxer(Integer round,
+      Integer firstBoxerScore) {
+    Fight fight = world.getFight();
+    ScoreRound.ScoreFightParameters params = new ScoreRound.ScoreFightParameters(fight.id(), round, fight.firstBoxer(),
+        firstBoxerScore, fight.secondBoxer(), null);
+    try {
+      scoreCard = scoreRound.execute(params);
+    } catch (ScoreCardsBusinessException businessException) {
+      someException = businessException;
     }
+  }
 
-    @When("an aficionado scores the round {int} for the existing fight with {int} for {string} and {int} for {string}")
-    public void anAficionadoScoresTheRoundForTheExistingFightWithForAndFor(Integer round, Integer firstBoxerScore, String firstBoxer, Integer secondBoxerScore, String secondBoxer) {
-        Fight fight = world.getFight();
-        ScoreRound.ScoreFightParameters params = new ScoreRound.ScoreFightParameters(fight.id(), round, new BoxerId(firstBoxer), firstBoxerScore, new BoxerId(secondBoxer), secondBoxerScore);
-        try {
-            scoreCard = scoreRound.execute(params);
-        } catch (ScoreCardsBusinessException businessException) {
-            someException = businessException;
-        }
+  @When("an aficionado scores the round {int} for the existing fight with {int} for {string} and {int} for {string}")
+  public void anAficionadoScoresTheRoundForTheExistingFightWithForAndFor(Integer round, Integer firstBoxerScore,
+      String firstBoxer, Integer secondBoxerScore, String secondBoxer) {
+    Fight fight = world.getFight();
+    ScoreRound.ScoreFightParameters params = new ScoreRound.ScoreFightParameters(fight.id(), round,
+        new BoxerId(firstBoxer), firstBoxerScore, new BoxerId(secondBoxer), secondBoxerScore);
+    try {
+      scoreCard = scoreRound.execute(params);
+    } catch (ScoreCardsBusinessException businessException) {
+      someException = businessException;
     }
+  }
 }
