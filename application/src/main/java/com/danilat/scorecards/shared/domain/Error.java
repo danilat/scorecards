@@ -20,6 +20,12 @@ public class Error {
     this.messageTemplate = messageTemplate;
   }
 
+  public Error(String fieldName, String message) {
+    this.fieldName = fieldName;
+    this.message = message;
+    this.messageTemplate = message;
+  }
+
   public String getFieldName() {
     return fieldName;
   }

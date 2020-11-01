@@ -2,19 +2,18 @@ package com.danilat.scorecards.core.usecases.scores;
 
 import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
+import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightNotFoundException;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
+import com.danilat.scorecards.core.domain.score.RoundOutOfIntervalException;
 import com.danilat.scorecards.core.domain.score.ScoreCard;
 import com.danilat.scorecards.core.domain.score.ScoreCardId;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.core.usecases.Auth;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
+import javax.validation.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.Set;
@@ -46,20 +45,24 @@ public class ScoreRound {
     }
 
     private void validate(ScoreFightParameters params) {
+        Fight fight = fightRepository.get(params.getFightId()).orElseThrow(() -> new FightNotFoundException(params.getFightId()));
+
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
         Set<ConstraintViolation<ScoreFightParameters>> violations = validator.validate(params);
         if (!violations.isEmpty()) {
             throw new InvalidScoreException(violations);
         }
-        fightRepository.get(params.getFightId()).orElseThrow(() -> new FightNotFoundException(params.getFightId()));
+        if (params.getRound() > fight.numberOfRounds()) {
+            throw new RoundOutOfIntervalException(fight.numberOfRounds(), params.getRound());
+        }
     }
 
     public static class ScoreFightParameters {
         private final FightId fightId;
         @Min(value = 1, message = "round interval is between 1 and 12")
         @Max(value = 12, message = "round interval is between 1 and 12")
-        private final int round;
+        private final Integer round;
         private final BoxerId firstBoxerId;
         private final int firstBoxerScore;
         private final BoxerId secondBoxerId;
@@ -97,5 +100,6 @@ public class ScoreRound {
         public int getSecondBoxerScore() {
             return secondBoxerScore;
         }
+
     }
 }

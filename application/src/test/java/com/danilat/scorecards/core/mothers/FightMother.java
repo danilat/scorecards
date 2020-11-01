@@ -16,4 +16,9 @@ public class FightMother {
     Event theRumbleInTheJungle = new Event(LocalDate.now(),"Kinsasa, Zaire");
     return new Fight(id, new BoxerId("ali"), new BoxerId("foreman"), theRumbleInTheJungle, 12);
   }
+
+  public static Fight aFightWithIdAndNumberOfRounds(FightId id, Integer numerOfRounds) {
+    Event theRumbleInTheJungle = new Event(LocalDate.now(),"Kinsasa, Zaire");
+    return new Fight(id, new BoxerId("ali"), new BoxerId("foreman"), theRumbleInTheJungle, numerOfRounds);
+  }
 }

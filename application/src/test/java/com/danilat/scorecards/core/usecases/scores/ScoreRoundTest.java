@@ -6,6 +6,7 @@ import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightNotFoundException;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
+import com.danilat.scorecards.core.domain.score.RoundOutOfIntervalException;
 import com.danilat.scorecards.core.domain.score.ScoreCard;
 import com.danilat.scorecards.core.domain.score.ScoreCardId;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
@@ -89,7 +90,7 @@ public class ScoreRoundTest {
         verify(scoreCardRepository, times(1)).save(scoreCard);
     }
 
-    private void givenExistingScoreCardOnFirstRound(Integer previousAliScore, Integer previousForemanScore){
+    private void givenExistingScoreCardOnFirstRound(Integer previousAliScore, Integer previousForemanScore) {
         ScoreCard existingScorecard = ScoreCardMother.aScoreCardWithIdFightIdFirstAndSecondBoxer(AN_ID, A_FIGHT_ID, ALI, FOREMAN);
         existingScorecard.scoreRound(1, previousAliScore, previousForemanScore);
         when(scoreCardRepository.findByFightIdAndAccountId(A_FIGHT_ID, AN_AFICIONADO)).thenReturn(Optional.of(existingScorecard));
@@ -144,6 +145,18 @@ public class ScoreRoundTest {
 
         int round = 0;
         ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, ALI, 10, FOREMAN, 9);
+
+        scoreRound.execute(params);
+    }
+
+    @Test
+    public void givenAScoreForARoundGreaterOfIntervalOfTheRoundThenFails() {
+        Fight fight = FightMother.aFightWithIdAndNumberOfRounds(A_FIGHT_ID, 10);
+        when(fightRepository.get(fight.id())).thenReturn(Optional.of(fight));
+        expectedException.expect(RoundOutOfIntervalException.class);
+
+        int roundOutOfInterval = fight.numberOfRounds() + 1;
+        ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, roundOutOfInterval, ALI, 10, FOREMAN, 9);
 
         scoreRound.execute(params);
     }
