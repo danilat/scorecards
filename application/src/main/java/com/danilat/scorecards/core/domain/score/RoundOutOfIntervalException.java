@@ -1,9 +1,9 @@
 package com.danilat.scorecards.core.domain.score;
 
 import com.danilat.scorecards.shared.domain.Error;
-import com.danilat.scorecards.shared.domain.ScoreCardsBusinessException;
+import com.danilat.scorecards.shared.usecases.InvalidParametersException;
 
-public class RoundOutOfIntervalException extends ScoreCardsBusinessException {
+public class RoundOutOfIntervalException extends InvalidParametersException {
 
   public RoundOutOfIntervalException(Integer maxNumberOfRounds, Integer round) {
     String message = round + " is not in the interval of rounds between 1 and " + maxNumberOfRounds;

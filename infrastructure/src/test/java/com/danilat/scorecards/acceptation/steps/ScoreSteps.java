@@ -5,7 +5,7 @@ import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.score.ScoreCard;
 import com.danilat.scorecards.core.usecases.scores.ScoreRound;
-import com.danilat.scorecards.shared.domain.ScoreCardsBusinessException;
+import com.danilat.scorecards.shared.domain.ScoreCardsException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -21,7 +21,7 @@ public class ScoreSteps {
   private World world;
 
   private ScoreCard scoreCard;
-  private ScoreCardsBusinessException someException;
+  private ScoreCardsException someException;
 
   @When("an aficionado scores the round {int} for the existing fight with {int} and {int}")
   public void anAficionadoScoresTheRoundForTheExistingFightWithAnd(Integer round, Integer firstBoxerScore,
@@ -31,7 +31,7 @@ public class ScoreSteps {
         firstBoxerScore, fight.secondBoxer(), secondBoxerScore);
     try {
       scoreCard = scoreRound.execute(params);
-    } catch (ScoreCardsBusinessException businessException) {
+    } catch (ScoreCardsException businessException) {
       someException = businessException;
     }
   }
@@ -65,7 +65,7 @@ public class ScoreSteps {
         new BoxerId("irrelevant 1"), firstBoxerScore, new BoxerId("irrelevant 2"), secondBoxerScore);
     try {
       scoreCard = scoreRound.execute(params);
-    } catch (ScoreCardsBusinessException businessException) {
+    } catch (ScoreCardsException businessException) {
       someException = businessException;
     }
   }
@@ -84,7 +84,7 @@ public class ScoreSteps {
         firstBoxerScore, fight.secondBoxer(), null);
     try {
       scoreCard = scoreRound.execute(params);
-    } catch (ScoreCardsBusinessException businessException) {
+    } catch (ScoreCardsException businessException) {
       someException = businessException;
     }
   }
@@ -97,7 +97,7 @@ public class ScoreSteps {
         new BoxerId(firstBoxer), firstBoxerScore, new BoxerId(secondBoxer), secondBoxerScore);
     try {
       scoreCard = scoreRound.execute(params);
-    } catch (ScoreCardsBusinessException businessException) {
+    } catch (ScoreCardsException businessException) {
       someException = businessException;
     }
   }

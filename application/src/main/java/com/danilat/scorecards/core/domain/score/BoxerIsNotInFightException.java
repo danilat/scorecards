@@ -1,7 +1,7 @@
 package com.danilat.scorecards.core.domain.score;
 
-import com.danilat.scorecards.shared.domain.ScoreCardsBusinessException;
+import com.danilat.scorecards.shared.domain.ScoreCardsException;
 
-public class BoxerIsNotInFightException extends ScoreCardsBusinessException {
+public class BoxerIsNotInFightException extends ScoreCardsException {
 
 }

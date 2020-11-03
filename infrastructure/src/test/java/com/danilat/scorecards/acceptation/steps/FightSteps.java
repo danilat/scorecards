@@ -16,7 +16,7 @@ import com.danilat.scorecards.core.mothers.FightMother;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
-import com.danilat.scorecards.shared.domain.ScoreCardsBusinessException;
+import com.danilat.scorecards.shared.domain.ScoreCardsException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -69,7 +69,7 @@ public class FightSteps {
   public void i_retrieve_a_non_existing_fight() {
     try {
       retrievedFight = retrieveAFight.execute(new FightId("some inexistent id"));
-    } catch (ScoreCardsBusinessException businessException) {
+    } catch (ScoreCardsException businessException) {
     }
   }
 
@@ -104,7 +104,7 @@ public class FightSteps {
 
     try {
       createdFight = registerFight.execute(parameters);
-    } catch (ScoreCardsBusinessException businessException) {
+    } catch (ScoreCardsException businessException) {
       someException = businessException;
     }
   }
@@ -118,7 +118,7 @@ public class FightSteps {
 
     try {
       createdFight = registerFight.execute(parameters);
-    } catch (ScoreCardsBusinessException businessException) {
+    } catch (ScoreCardsException businessException) {
       someException = businessException;
     }
   }

@@ -1,8 +1,8 @@
 package com.danilat.scorecards.core.domain.fight;
 
-import com.danilat.scorecards.shared.domain.ScoreCardsBusinessException;
+import com.danilat.scorecards.shared.domain.ScoreCardsException;
 
-public class FightNotFoundException extends ScoreCardsBusinessException {
+public class FightNotFoundException extends ScoreCardsException {
 
   private final FightId fightId;
 

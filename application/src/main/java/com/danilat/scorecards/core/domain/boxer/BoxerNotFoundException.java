@@ -1,8 +1,8 @@
 package com.danilat.scorecards.core.domain.boxer;
 
-import com.danilat.scorecards.shared.domain.ScoreCardsBusinessException;
+import com.danilat.scorecards.shared.domain.ScoreCardsException;
 
-public class BoxerNotFoundException extends ScoreCardsBusinessException {
+public class BoxerNotFoundException extends ScoreCardsException {
 
   private final BoxerId boxerId;
 
