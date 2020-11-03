@@ -7,15 +7,21 @@ import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightNotFoundException;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.domain.score.*;
+import com.danilat.scorecards.core.domain.score.events.RoundScored;
 import com.danilat.scorecards.core.mothers.FightMother;
 import com.danilat.scorecards.core.mothers.ScoreCardMother;
 import com.danilat.scorecards.core.usecases.Auth;
+import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
+import com.danilat.scorecards.shared.events.EventBus;
+import java.time.LocalDate;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -34,7 +40,8 @@ public class ScoreRoundTest {
   private static final Fight A_FIGHT = new FightMother().aFightWithId(A_FIGHT_ID);
   private static final BoxerId FIRST_BOXER = A_FIGHT.firstBoxer();
   private static final BoxerId SECOND_BOXER = A_FIGHT.secondBoxer();
-  private static final ScoreCardId AN_ID = new ScoreCardId("an scorecard id");
+  private static final String AN_ID = "an id";
+  private static final ScoreCardId AN_SCORECARD_ID = new ScoreCardId(AN_ID);
   private static final AccountId AN_AFICIONADO = new AccountId("an account id");
 
   @Spy
@@ -45,13 +52,20 @@ public class ScoreRoundTest {
   private Auth auth;
   @Mock
   private FightRepository fightRepository;
+  @Spy
+  private EventBus eventBus;
+  @Mock
+  private Clock clock;
+  private LocalDate anHappenedAt;
 
   @Before
   public void setup() {
-    when(uniqueIdGenerator.next()).thenReturn(AN_ID.value());
+    anHappenedAt = LocalDate.now();
+    when(uniqueIdGenerator.next()).thenReturn(AN_ID);
     when(auth.currentAccount()).thenReturn(AN_AFICIONADO);
     when(fightRepository.get(A_FIGHT.id())).thenReturn(Optional.of(A_FIGHT));
-    scoreRound = new ScoreRound(scoreCardRepository, fightRepository, uniqueIdGenerator, auth);
+    when(clock.now()).thenReturn(anHappenedAt);
+    scoreRound = new ScoreRound(scoreCardRepository, fightRepository, uniqueIdGenerator, auth, eventBus, clock);
   }
 
   @Test
@@ -64,7 +78,7 @@ public class ScoreRoundTest {
 
     ScoreCard scoreCard = scoreRound.execute(params);
 
-    assertEquals(AN_ID, scoreCard.id());
+    assertEquals(AN_SCORECARD_ID, scoreCard.id());
     assertEquals(AN_AFICIONADO, scoreCard.accountId());
     assertEquals(A_FIGHT_ID, scoreCard.fightId());
     assertEquals(FIRST_BOXER, scoreCard.firstBoxerId());
@@ -76,7 +90,7 @@ public class ScoreRoundTest {
   }
 
   @Test
-  public void givenAFightScoresARoundsThenPersistTheScoreCard() {
+  public void givenAFightScoresARoundThenPersistTheScoreCard() {
     int round = 1;
     int aliScore = 10;
     int foremanScore = 9;
@@ -90,7 +104,7 @@ public class ScoreRoundTest {
 
   private void givenExistingScoreCardOnFirstRound(Integer previousAliScore, Integer previousForemanScore) {
     ScoreCard existingScorecard = ScoreCardMother
-        .aScoreCardWithIdFightIdFirstAndSecondBoxer(AN_ID, A_FIGHT_ID, FIRST_BOXER, SECOND_BOXER);
+        .aScoreCardWithIdFightIdFirstAndSecondBoxer(AN_SCORECARD_ID, A_FIGHT_ID, FIRST_BOXER, SECOND_BOXER);
     existingScorecard.scoreRound(1, previousAliScore, previousForemanScore);
     when(scoreCardRepository.findByFightIdAndAccountId(A_FIGHT_ID, AN_AFICIONADO))
         .thenReturn(Optional.of(existingScorecard));
@@ -109,11 +123,31 @@ public class ScoreRoundTest {
 
     ScoreCard scoreCard = scoreRound.execute(params);
 
-    assertEquals(AN_ID, scoreCard.id());
+    assertEquals(AN_SCORECARD_ID, scoreCard.id());
     assertEquals(aliScore, scoreCard.firstBoxerScore(round));
     assertEquals(foremanScore, scoreCard.secondBoxerScore(round));
     assertEquals((previousAliScore + aliScore), scoreCard.firstBoxerScore().intValue());
     assertEquals((previousForemanScore + foremanScore), scoreCard.secondBoxerScore().intValue());
+  }
+
+  @Captor
+  ArgumentCaptor<RoundScored> roundScoredArgumentCaptor;
+
+  @Test
+  public void givenAFightScoresARoundThenAnEventIsPublished() {
+    Integer round = 1;
+    Integer aliScore = 10;
+    Integer foremanScore = 9;
+    ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, aliScore, SECOND_BOXER,
+        foremanScore);
+
+    ScoreCard scoreCard = scoreRound.execute(params);
+
+    verify(eventBus, times(1)).publish(roundScoredArgumentCaptor.capture());
+    RoundScored roundScored = roundScoredArgumentCaptor.getValue();
+    assertEquals(scoreCard, roundScored.scoreCard());
+    assertEquals(anHappenedAt, roundScored.happenedAt());
+    assertEquals(AN_ID, roundScored.eventId().value());
   }
 
   @Rule

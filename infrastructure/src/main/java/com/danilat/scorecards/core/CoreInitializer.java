@@ -65,7 +65,7 @@ public class CoreInitializer {
 
   @Bean
   public ScoreRound scoreRound() {
-    return new ScoreRound(scoreCardRepository, fightRepository, uniqueIdGenerator, auth);
+    return new ScoreRound(scoreCardRepository, fightRepository, uniqueIdGenerator, auth, eventBus, clock);
   }
 }
 

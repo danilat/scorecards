@@ -13,6 +13,7 @@ import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightPa
 import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 import com.danilat.scorecards.shared.UseCase;
+import com.danilat.scorecards.shared.events.DomainEventId;
 import com.danilat.scorecards.shared.events.EventBus;
 import java.time.LocalDate;
 import java.util.Set;
@@ -56,7 +57,7 @@ public class RegisterFight implements UseCase<RegisterFightParameters> {
         secondBoxer.id(),
         event, parameters.getNumberOfRounds());
     fightRepository.save(fight);
-    eventBus.publish(new FightCreated(fight, clock.now(), uniqueIdGenerator.next()));
+    eventBus.publish(new FightCreated(fight, clock.now(), new DomainEventId(uniqueIdGenerator.next())));
     return fight;
   }
 

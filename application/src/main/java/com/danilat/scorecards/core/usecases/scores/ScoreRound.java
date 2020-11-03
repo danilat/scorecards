@@ -11,9 +11,13 @@ import com.danilat.scorecards.core.domain.score.RoundOutOfIntervalException;
 import com.danilat.scorecards.core.domain.score.ScoreCard;
 import com.danilat.scorecards.core.domain.score.ScoreCardId;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
+import com.danilat.scorecards.core.domain.score.events.RoundScored;
 import com.danilat.scorecards.core.usecases.Auth;
+import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 
+import com.danilat.scorecards.shared.events.DomainEventId;
+import com.danilat.scorecards.shared.events.EventBus;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -29,13 +33,17 @@ public class ScoreRound {
   private final FightRepository fightRepository;
   private final UniqueIdGenerator uniqueIdGenerator;
   private final Auth auth;
+  private final EventBus eventBus;
+  private final Clock clock;
 
   public ScoreRound(ScoreCardRepository scoreCardRepository, FightRepository fightRepository,
-      UniqueIdGenerator uniqueIdGenerator, Auth auth) {
+      UniqueIdGenerator uniqueIdGenerator, Auth auth, EventBus eventBus, Clock clock) {
     this.scoreCardRepository = scoreCardRepository;
     this.fightRepository = fightRepository;
     this.uniqueIdGenerator = uniqueIdGenerator;
     this.auth = auth;
+    this.eventBus = eventBus;
+    this.clock = clock;
   }
 
   public ScoreCard execute(ScoreFightParameters params) {
@@ -49,6 +57,8 @@ public class ScoreRound {
         });
     scoreCard.scoreRound(params.getRound(), params.getFirstBoxerScore(), params.getSecondBoxerScore());
     this.scoreCardRepository.save(scoreCard);
+    RoundScored roundScored = new RoundScored(scoreCard, clock.now(), new DomainEventId(uniqueIdGenerator.next()));
+    this.eventBus.publish(roundScored);
     return scoreCard;
   }
 
