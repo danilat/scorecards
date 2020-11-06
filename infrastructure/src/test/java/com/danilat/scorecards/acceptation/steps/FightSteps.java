@@ -44,8 +44,19 @@ public class FightSteps {
   private FightWithBoxers retrievedFight;
   private LocalDate aDate;
   private String aPlace;
+  private final PrimaryPort<FightWithBoxers> retrieveFightPort = new PrimaryPort<FightWithBoxers>() {
+    @Override
+    public void success(FightWithBoxers fight) {
+      retrievedFight = fight;
+    }
 
-  private PrimaryPort<Fight> getPrimaryPort() {
+    @Override
+    public void error(Errors errors) {
+      world.setErrors(errors);
+    }
+  };
+
+  private PrimaryPort<Fight> getRegisterFightPort() {
     return new PrimaryPort<Fight>() {
       @Override
       public void success(Fight fight) {
@@ -73,7 +84,7 @@ public class FightSteps {
 
   @When("I retrieve the existing fight")
   public void i_retrieve_the_existing_fight() {
-    retrievedFight = retrieveAFight.execute(existingFight.id());
+    retrieveAFight.execute(retrieveFightPort, existingFight.id());
   }
 
   @Then("the fight is present")
@@ -83,10 +94,7 @@ public class FightSteps {
 
   @When("I retrieve a non-existing fight")
   public void i_retrieve_a_non_existing_fight() {
-    try {
-      retrievedFight = retrieveAFight.execute(new FightId("some inexistent id"));
-    } catch (ScoreCardsException businessException) {
-    }
+    retrieveAFight.execute(retrieveFightPort, new FightId("some inexistent id"));
   }
 
   @Then("the fight is not present")
@@ -118,7 +126,7 @@ public class FightSteps {
     RegisterFightParameters parameters = new RegisterFightParameters(firstBoxerId, secondBoxerId,
         aDate, aPlace, numberOfRounds);
 
-    registerFight.execute(getPrimaryPort(), parameters);
+    registerFight.execute(getRegisterFightPort(), parameters);
   }
 
   @When("I register the fight in the event for {string} and {string}")
@@ -128,7 +136,7 @@ public class FightSteps {
     RegisterFightParameters parameters = new RegisterFightParameters(firstBoxerId, secondBoxerId,
         aDate, aPlace, null);
 
-    registerFight.execute(getPrimaryPort(), parameters);
+    registerFight.execute(getRegisterFightPort(), parameters);
   }
 
   @Then("the fight is successfully registered")
@@ -150,6 +158,6 @@ public class FightSteps {
     RegisterFightParameters parameters = new RegisterFightParameters(firstBoxerId, secondBoxerId,
         LocalDate.now(), "irrelevant place", numberOfRounds);
 
-    registerFight.execute(getPrimaryPort(), parameters);
+    registerFight.execute(getRegisterFightPort(), parameters);
   }
 }

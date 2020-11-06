@@ -1,19 +1,26 @@
 package com.danilat.scorecards.core.usecases.fights;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightNotFoundException;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxers;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersRepository;
 import com.danilat.scorecards.core.mothers.FightWithBoxersMother;
+import com.danilat.scorecards.shared.PrimaryPort;
+import com.danilat.scorecards.shared.domain.Errors;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -28,6 +35,26 @@ public class RetrieveAFightTest {
 
   private RetrieveAFight retrieveAFight;
 
+  @Mock
+  private PrimaryPort<FightWithBoxers> primaryPort;
+
+  @Captor
+  ArgumentCaptor<FightWithBoxers> fightArgumentCaptor;
+
+  private FightWithBoxers getFight() {
+    verify(primaryPort).success(fightArgumentCaptor.capture());
+    FightWithBoxers fight = fightArgumentCaptor.getValue();
+    return fight;
+  }
+
+  @Captor
+  ArgumentCaptor<Errors> errorsArgumentCaptor;
+
+  private Errors getErrors() {
+    verify(primaryPort).error(errorsArgumentCaptor.capture());
+    return errorsArgumentCaptor.getValue();
+  }
+
   @Before
   public void setup() {
     existingFightWithBoxers = FightWithBoxersMother.aFightWithBoxersWithId(AN_ID);
@@ -39,9 +66,9 @@ public class RetrieveAFightTest {
 
   @Test
   public void givenAnExistingFightThenIsRetrieved() {
-    FightWithBoxers fight = retrieveAFight.execute(AN_ID);
+    retrieveAFight.execute(primaryPort, AN_ID);
 
-    assertEquals(existingFightWithBoxers, fight);
+    assertEquals(existingFightWithBoxers, getFight());
   }
 
   @Rule
@@ -49,9 +76,8 @@ public class RetrieveAFightTest {
 
   @Test
   public void givenAnNonExistingFightThenIsNotRetrieved() {
-    expectedException.expect(FightNotFoundException.class);
-    expectedException.expectMessage(new FightId("unexisting id") + " not found");
+    retrieveAFight.execute(primaryPort, new FightId("un-existing id"));
 
-    retrieveAFight.execute(new FightId("unexisting id"));
+    assertTrue(getErrors().hasMessage(new FightId("un-existing id") + " not found"));
   }
 }

@@ -1,9 +1,10 @@
 package com.danilat.scorecards.controllers;
 
 import com.danilat.scorecards.core.domain.fight.FightId;
-import com.danilat.scorecards.core.domain.fight.FightNotFoundException;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxers;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
+import com.danilat.scorecards.shared.PrimaryPort;
+import com.danilat.scorecards.shared.domain.Errors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -20,16 +21,27 @@ public class FightController {
   @Autowired
   private RetrieveAFight retrieveAFight;
 
+  private Model model;
+  private String findByIdResult;
+
+  private PrimaryPort<FightWithBoxers> fightWithBoxersPort = new PrimaryPort<FightWithBoxers>() {
+    @Override
+    public void success(FightWithBoxers fight) {
+      model.addAttribute("fight", fight);
+      findByIdResult = "show-fight";
+    }
+
+    @Override
+    public void error(Errors errors) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, errors.toString());
+    }
+  };
+
   @GetMapping("{id}")
   public String findById(@PathVariable String id, Model model) {
-    try {
-      FightWithBoxers fight = retrieveAFight.execute(new FightId(id));
-
-      model.addAttribute("fight", fight);
-      return "show-fight";
-    } catch (FightNotFoundException exception) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Fight not found", exception);
-    }
+    this.model = model;
+    retrieveAFight.execute(fightWithBoxersPort, new FightId(id));
+    return findByIdResult;
   }
 
 }
