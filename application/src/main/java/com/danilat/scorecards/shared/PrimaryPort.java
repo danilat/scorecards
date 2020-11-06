@@ -6,5 +6,7 @@ public interface PrimaryPort<E> {
 
   void success(E entity);
 
-  void error(Errors errors);
+  default void error(Errors errors){
+    throw new RuntimeException("The method error is not implemented");
+  }
 }

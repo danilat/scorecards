@@ -21,25 +21,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping(value = "/editor/fights")
-public class EditorFightsController implements PrimaryPort<Fight> {
+public class EditorFightsController {
 
   @Autowired
   private RetrieveAllBoxers retrieveAllBoxers;
-
   @Autowired
   private RegisterFight registerFight;
+
   private Model model;
   private FightForm fightForm;
   private String createResult;
+  private Map<BoxerId, Boxer> retrievedBoxers;
 
   @GetMapping("new")
   public String createForm(Model model) {
-    Map<BoxerId, Boxer> boxers = retrieveAllBoxers.execute();
-    model.addAttribute("boxers", boxers.values());
+    retrieveAllBoxers.execute(retrieveAllBoxersPort());
+    model.addAttribute("boxers", retrievedBoxers.values());
     if (!model.containsAttribute("fight")) {
       model.addAttribute("fight", new FightForm());
     }
     return "editor/fights/new";
+  }
+
+  private PrimaryPort<Map<BoxerId, Boxer>> retrieveAllBoxersPort() {
+    return boxers -> retrievedBoxers = boxers;
   }
 
   @PostMapping("")
@@ -50,20 +55,24 @@ public class EditorFightsController implements PrimaryPort<Fight> {
         new BoxerId(fightForm.getFirstBoxer()),
         new BoxerId(fightForm.getSecondBoxer()), fightForm.getHappenAt(), fightForm.getPlace(),
         fightForm.getNumberOfRounds());
-    registerFight.execute(this, parameters);
+    registerFight.execute(registerFightPort(), parameters);
     return createResult;
   }
 
-  @Override
-  public void success(Fight fight) {
-    createResult = "redirect:/fights/" + fight.id().value();
-  }
+  private PrimaryPort<Fight> registerFightPort() {
+    return new PrimaryPort<Fight>() {
+      @Override
+      public void success(Fight fight) {
+        createResult = "redirect:/fights/" + fight.id().value();
+      }
 
-  @Override
-  public void error(Errors errors) {
-    model.addAttribute("errors", errors);
-    model.addAttribute("fight", fightForm);
-    createResult = createForm(model);
+      @Override
+      public void error(Errors errors) {
+        model.addAttribute("errors", errors);
+        model.addAttribute("fight", fightForm);
+        createResult = createForm(model);
+      }
+    };
   }
 
   private class FightForm {
