@@ -4,21 +4,27 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.danilat.scorecards.audit.domain.DomainEventStore;
+import com.danilat.scorecards.core.usecases.UseCaseUnitTest;
+import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.events.DomainEvent;
 import java.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class RegisterDomainEventTest {
+public class RegisterDomainEventTest extends UseCaseUnitTest<DomainEvent> {
 
   private RegisterDomainEvent registerDomainEvent;
 
   @Spy
   private DomainEventStore domainEventStore;
+
+  @Mock
+  private PrimaryPort<DomainEvent> primaryPort;
 
   @Before
   public void setup() {
@@ -30,8 +36,14 @@ public class RegisterDomainEventTest {
     DomainEvent domainEvent = new DomainEvent(LocalDate.now(), "an id") {
     };
 
-    registerDomainEvent.execute(domainEvent);
+    registerDomainEvent.execute(domainEvent, primaryPort);
 
+    domainEvent = getSuccessEntity();
     verify(domainEventStore, times(1)).save(domainEvent);
+  }
+
+  @Override
+  public PrimaryPort getPrimaryPort() {
+    return primaryPort;
   }
 }
