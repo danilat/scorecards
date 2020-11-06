@@ -40,7 +40,7 @@ public class FightController {
   @GetMapping("{id}")
   public String findById(@PathVariable String id, Model model) {
     this.model = model;
-    retrieveAFight.execute(new FightId(id), fightWithBoxersPort);
+    retrieveAFight.execute(fightWithBoxersPort, new FightId(id));
     return findByIdResult;
   }
 

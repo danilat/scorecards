@@ -20,6 +20,6 @@ public class RegisterAnyDomainEventSubscriber {
 
   @EventListener
   public void listen(DomainEvent domainEvent) {
-    registerDomainEvent.execute(domainEvent, primaryPort);
+    registerDomainEvent.execute(primaryPort, domainEvent);
   }
 }

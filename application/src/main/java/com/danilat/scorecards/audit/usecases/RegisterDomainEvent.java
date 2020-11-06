@@ -14,7 +14,7 @@ public class RegisterDomainEvent implements UseCase<DomainEvent, DomainEvent> {
   }
 
   public void execute(
-      DomainEvent domainEvent, PrimaryPort<DomainEvent> primaryPort) {
+      PrimaryPort<DomainEvent> primaryPort, DomainEvent domainEvent) {
     domainEventStore.save(domainEvent);
     primaryPort.success(domainEvent);
   }

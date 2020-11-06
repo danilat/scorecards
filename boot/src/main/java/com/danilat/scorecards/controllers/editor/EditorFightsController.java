@@ -55,7 +55,7 @@ public class EditorFightsController {
         new BoxerId(fightForm.getFirstBoxer()),
         new BoxerId(fightForm.getSecondBoxer()), fightForm.getHappenAt(), fightForm.getPlace(),
         fightForm.getNumberOfRounds());
-    registerFight.execute(parameters, registerFightPort());
+    registerFight.execute(registerFightPort(), parameters);
     return createResult;
   }
 

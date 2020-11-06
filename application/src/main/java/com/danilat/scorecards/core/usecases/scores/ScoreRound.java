@@ -34,7 +34,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
-public class ScoreRound implements UseCase<ScoreFightParameters, ScoreCard> {
+public class ScoreRound implements UseCase<ScoreCard, ScoreFightParameters> {
 
   private final ScoreCardRepository scoreCardRepository;
   private final FightRepository fightRepository;
@@ -43,7 +43,6 @@ public class ScoreRound implements UseCase<ScoreFightParameters, ScoreCard> {
   private final EventBus eventBus;
   private final Clock clock;
   private Errors errors;
-  private ConstraintValidatorToErrorMapper constraintValidatorToErrorMapper;
 
   public ScoreRound(ScoreCardRepository scoreCardRepository, FightRepository fightRepository,
       UniqueIdGenerator uniqueIdGenerator, Auth auth, EventBus eventBus, Clock clock) {
@@ -53,22 +52,16 @@ public class ScoreRound implements UseCase<ScoreFightParameters, ScoreCard> {
     this.auth = auth;
     this.eventBus = eventBus;
     this.clock = clock;
-    constraintValidatorToErrorMapper = new ConstraintValidatorToErrorMapper<ScoreFightParameters>();
   }
 
   @Override
-  public void execute(ScoreFightParameters params, PrimaryPort<ScoreCard> primaryPort) {
+  public void execute(PrimaryPort<ScoreCard> primaryPort, ScoreFightParameters params) {
     if (!validate(params)) {
       primaryPort.error(errors);
       return;
     }
-    AccountId accountId = auth.currentAccount();
-    ScoreCard scoreCard = this.scoreCardRepository.findByFightIdAndAccountId(params.getFightId(), accountId)
-        .orElseGet(() -> {
-          ScoreCardId id = new ScoreCardId(uniqueIdGenerator.next());
-          return ScoreCard
-              .create(id, accountId, params.getFightId(), params.getFirstBoxerId(), params.getSecondBoxerId());
-        });
+
+    ScoreCard scoreCard = getOrCreateScoreCard(params);
     scoreCard.scoreRound(params.getRound(), params.getFirstBoxerScore(), params.getSecondBoxerScore());
     this.scoreCardRepository.save(scoreCard);
     RoundScored roundScored = new RoundScored(scoreCard, clock.now(), new DomainEventId(uniqueIdGenerator.next()));
@@ -76,12 +69,20 @@ public class ScoreRound implements UseCase<ScoreFightParameters, ScoreCard> {
     primaryPort.success(scoreCard);
   }
 
+  private ScoreCard getOrCreateScoreCard(ScoreFightParameters params) {
+    AccountId accountId = auth.currentAccount();
+    return this.scoreCardRepository.findByFightIdAndAccountId(params.getFightId(), accountId)
+        .orElseGet(() -> {
+          ScoreCardId id = new ScoreCardId(uniqueIdGenerator.next());
+          return ScoreCard
+              .create(id, accountId, params.getFightId(), params.getFirstBoxerId(), params.getSecondBoxerId());
+        });
+  }
+
   private boolean validate(ScoreFightParameters params) {
     errors = new Errors();
-    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-    Validator validator = factory.getValidator();
-    Set<ConstraintViolation<ScoreFightParameters>> violations = validator.validate(params);
-    errors.addAll(constraintValidatorToErrorMapper.mapConstraintViolationsToErrors(violations));
+    errors.addAll(params.validate());
+
     Optional<Fight> optionalFight = fightRepository.get(params.getFightId());
     if (!optionalFight.isPresent()) {
       Error error = new FightNotFoundError(params.getFightId());
@@ -154,5 +155,12 @@ public class ScoreRound implements UseCase<ScoreFightParameters, ScoreCard> {
       return secondBoxerScore;
     }
 
+    public Errors validate() {
+      ConstraintValidatorToErrorMapper constraintValidatorToErrorMapper = new ConstraintValidatorToErrorMapper<ScoreFightParameters>();
+      ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+      Validator validator = factory.getValidator();
+      Set<ConstraintViolation<ScoreFightParameters>> violations = validator.validate(this);
+      return constraintValidatorToErrorMapper.mapConstraintViolationsToErrors(violations);
+    }
   }
 }

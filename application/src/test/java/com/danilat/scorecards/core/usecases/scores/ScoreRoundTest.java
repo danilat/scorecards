@@ -80,7 +80,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
     ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, aliScore, SECOND_BOXER,
         foremanScore);
 
-    scoreRound.execute(params, primaryPort);
+    scoreRound.execute(primaryPort, params);
 
     ScoreCard scoreCard = getSuccessEntity();
     assertEquals(AN_SCORECARD_ID, scoreCard.id());
@@ -102,7 +102,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
     ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, aliScore, SECOND_BOXER,
         foremanScore);
 
-    scoreRound.execute(params, primaryPort);
+    scoreRound.execute(primaryPort, params);
 
     ScoreCard scoreCard = getSuccessEntity();
     verify(scoreCardRepository, times(1)).save(scoreCard);
@@ -127,7 +127,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
     ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, aliScore, SECOND_BOXER,
         foremanScore);
 
-    scoreRound.execute(params, primaryPort);
+    scoreRound.execute(primaryPort, params);
 
     ScoreCard scoreCard = getSuccessEntity();
     assertEquals(AN_SCORECARD_ID, scoreCard.id());
@@ -148,7 +148,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
     ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, aliScore, SECOND_BOXER,
         foremanScore);
 
-    scoreRound.execute(params, primaryPort);
+    scoreRound.execute(primaryPort, params);
 
     ScoreCard scoreCard = getSuccessEntity();
     verify(eventBus, times(1)).publish(roundScoredArgumentCaptor.capture());
@@ -164,7 +164,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
     ScoreFightParameters params = new ScoreFightParameters(nonExistingFightId, 1, FIRST_BOXER, 10, SECOND_BOXER,
         9);
 
-    scoreRound.execute(params, primaryPort);
+    scoreRound.execute(primaryPort, params);
 
     Errors errors = getErrors();
     assertEquals("Fight: " + nonExistingFightId + " not found", errors.getMessagesContentFor("fightId"));
@@ -175,7 +175,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
     int round = 13;
     ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, 10, SECOND_BOXER, 9);
 
-    scoreRound.execute(params, primaryPort);
+    scoreRound.execute(primaryPort, params);
 
     Errors errors = getErrors();
     assertEquals(round + " is out of the interval between 1 and 12", errors.getMessagesContentFor("round"));
@@ -186,7 +186,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
     int round = 0;
     ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, 10, SECOND_BOXER, 9);
 
-    scoreRound.execute(params, primaryPort);
+    scoreRound.execute(primaryPort, params);
 
     Errors errors = getErrors();
     assertEquals(round + " is out of the interval between 1 and 12", errors.getMessagesContentFor("round"));
@@ -200,7 +200,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
     ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, roundOutOfInterval, FIRST_BOXER, 10,
         SECOND_BOXER, 9);
 
-    scoreRound.execute(params, primaryPort);
+    scoreRound.execute(primaryPort, params);
 
     Errors errors = getErrors();
     assertEquals(roundOutOfInterval + " is out of the interval between 1 and " + fight.numberOfRounds(),
@@ -212,7 +212,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
     int round = 1;
     ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, 10, SECOND_BOXER, null);
 
-    scoreRound.execute(params, primaryPort);
+    scoreRound.execute(primaryPort, params);
 
     Errors errors = getErrors();
     assertEquals("secondBoxerScore is mandatory", errors.getMessagesContentFor("secondBoxerScore"));
@@ -223,7 +223,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
     int round = 1;
     ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, 10, SECOND_BOXER, 0);
 
-    scoreRound.execute(params, primaryPort);
+    scoreRound.execute(primaryPort, params);
 
     Errors errors = getErrors();
     assertEquals("scores interval is between 1 and 10", errors.getMessagesContentFor("secondBoxerScore"));
@@ -234,7 +234,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
     int round = 1;
     ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, 11, SECOND_BOXER, 9);
 
-    scoreRound.execute(params, primaryPort);
+    scoreRound.execute(primaryPort, params);
 
     Errors errors = getErrors();
     assertEquals("scores interval is between 1 and 10", errors.getMessagesContentFor("firstBoxerScore"));
@@ -245,7 +245,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
     BoxerId tyson = new BoxerId("tyson");
     ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, 1, tyson, 10, SECOND_BOXER, 10);
 
-    scoreRound.execute(params, primaryPort);
+    scoreRound.execute(primaryPort, params);
     Errors errors = getErrors();
     assertEquals(tyson + " is not in the fight" + A_FIGHT_ID, errors.getMessagesContentFor("firstBoxer"));
   }
@@ -255,7 +255,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
     BoxerId tyson = new BoxerId("tyson");
     ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, 1, FIRST_BOXER, 10, tyson, 10);
 
-    scoreRound.execute(params, primaryPort);
+    scoreRound.execute(primaryPort, params);
     Errors errors = getErrors();
     assertEquals(tyson + " is not in the fight" + A_FIGHT_ID, errors.getMessagesContentFor("secondBoxer"));
   }

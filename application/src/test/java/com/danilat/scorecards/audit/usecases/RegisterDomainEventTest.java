@@ -36,7 +36,7 @@ public class RegisterDomainEventTest extends UseCaseUnitTest<DomainEvent> {
     DomainEvent domainEvent = new DomainEvent(LocalDate.now(), "an id") {
     };
 
-    registerDomainEvent.execute(domainEvent, primaryPort);
+    registerDomainEvent.execute(primaryPort, domainEvent);
 
     domainEvent = getSuccessEntity();
     verify(domainEventStore, times(1)).save(domainEvent);

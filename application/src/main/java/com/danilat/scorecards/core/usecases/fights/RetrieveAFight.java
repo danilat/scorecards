@@ -9,7 +9,7 @@ import com.danilat.scorecards.shared.domain.Error;
 import com.danilat.scorecards.shared.domain.Errors;
 import java.util.Optional;
 
-public class RetrieveAFight implements UseCase<FightId, FightWithBoxers> {
+public class RetrieveAFight implements UseCase<FightWithBoxers, FightId> {
 
   private final FightWithBoxersRepository fightWithBoxersRepository;
 
@@ -19,7 +19,7 @@ public class RetrieveAFight implements UseCase<FightId, FightWithBoxers> {
   }
 
   public void execute(
-      FightId id, PrimaryPort<FightWithBoxers> primaryPort) {
+      PrimaryPort<FightWithBoxers> primaryPort, FightId id) {
     Optional<FightWithBoxers> optionalFightWithBoxers = fightWithBoxersRepository.get(id);
     if (optionalFightWithBoxers.isPresent()) {
       primaryPort.success(optionalFightWithBoxers.get());

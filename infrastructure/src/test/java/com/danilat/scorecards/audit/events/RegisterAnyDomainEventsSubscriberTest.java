@@ -31,6 +31,6 @@ public class RegisterAnyDomainEventsSubscriberTest {
     };
     eventBus.publish(event);
 
-    verify(registerDomainEvent, times(1)).execute(eq(event), any(PrimaryPort.class));
+    verify(registerDomainEvent, times(1)).execute(any(PrimaryPort.class), eq(event));
   }
 }
