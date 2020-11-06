@@ -7,15 +7,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
-import com.danilat.scorecards.core.domain.boxer.BoxerNotFoundException;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.domain.fight.events.FightCreated;
 import com.danilat.scorecards.core.mothers.BoxerMother;
+import com.danilat.scorecards.core.usecases.UseCaseUnitTest;
 import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.PrimaryPort;
-import com.danilat.scorecards.shared.domain.Error;
 import com.danilat.scorecards.shared.domain.Errors;
 import com.danilat.scorecards.shared.events.EventBus;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
@@ -23,18 +22,13 @@ import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightPa
 import java.time.LocalDate;
 import java.util.Optional;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.mockito.junit.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.class)
-public class RegisterFightTest {
+public class RegisterFightTest extends UseCaseUnitTest<Fight> {
 
   private static final BoxerId ALI = new BoxerId("Ali");
   private static final BoxerId FOREMAN = new BoxerId("Foreman");
@@ -59,6 +53,7 @@ public class RegisterFightTest {
   private Integer numberOfRounds = 12;
   private LocalDate anHappenedAt;
 
+
   @Before
   public void setup() {
     aDate = LocalDate.now();
@@ -72,21 +67,9 @@ public class RegisterFightTest {
         uniqueIdGenerator);
   }
 
-  @Captor
-  ArgumentCaptor<Fight> fightArgumentCaptor;
-
-  private Fight getFight() {
-    verify(primaryPort).success(fightArgumentCaptor.capture());
-    Fight fight = fightArgumentCaptor.getValue();
-    return fight;
-  }
-
-  @Captor
-  ArgumentCaptor<Errors> errorsArgumentCaptor;
-
-  private Errors getErrors() {
-    verify(primaryPort).error(errorsArgumentCaptor.capture());
-    return errorsArgumentCaptor.getValue();
+  @Override
+  public PrimaryPort getPrimaryPort() {
+    return primaryPort;
   }
 
   @Test
@@ -96,7 +79,7 @@ public class RegisterFightTest {
 
     registerFight.execute(primaryPort, parameters);
 
-    Fight fight = getFight();
+    Fight fight = getSuccessEntity();
     assertEquals(ALI, fight.firstBoxer());
     assertEquals(FOREMAN, fight.secondBoxer());
     assertEquals(AN_ID, fight.id().value());
@@ -112,7 +95,7 @@ public class RegisterFightTest {
 
     registerFight.execute(primaryPort, parameters);
 
-    Fight fight = getFight();
+    Fight fight = getSuccessEntity();
     verify(fightRepository, times(1)).save(fight);
   }
 
@@ -126,7 +109,7 @@ public class RegisterFightTest {
 
     registerFight.execute(primaryPort, parameters);
 
-    Fight fight = getFight();
+    Fight fight = getSuccessEntity();
     verify(eventBus, times(1)).publish(fightCreatedArgumentCaptorCaptor.capture());
     FightCreated fightCreated = fightCreatedArgumentCaptorCaptor.getValue();
     assertEquals(fight, fightCreated.fight());

@@ -1,33 +1,32 @@
 package com.danilat.scorecards.core.usecases.boxers;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.verify;
+
 import static org.mockito.Mockito.when;
 
 import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.mothers.BoxerMother;
+import com.danilat.scorecards.core.usecases.UseCaseUnitTest;
 import com.danilat.scorecards.shared.PrimaryPort;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.class)
-public class RetrieveAllBoxersTest {
+public class RetrieveAllBoxersTest extends UseCaseUnitTest<Map<BoxerId, Boxer>> {
 
   @Mock
   private BoxerRepository boxerRepository;
 
   @Mock
   PrimaryPort<Map<BoxerId, Boxer>> primaryPort;
-  @Captor
-  private ArgumentCaptor<Map<BoxerId, Boxer>> boxersArgumentCaptor;
+
+  @Override
+  public PrimaryPort getPrimaryPort() {
+    return primaryPort;
+  }
 
   @Test
   public void givenNoBoxersThenIsEmpty() {
@@ -36,8 +35,7 @@ public class RetrieveAllBoxersTest {
 
     retrieveAllBoxers.execute(primaryPort);
 
-    verify(primaryPort).success(boxersArgumentCaptor.capture());
-    Map<BoxerId, Boxer> boxers = boxersArgumentCaptor.getValue();
+    Map<BoxerId, Boxer> boxers = getSuccessEntity();
     assertEquals(0, boxers.size());
   }
 
@@ -51,9 +49,7 @@ public class RetrieveAllBoxersTest {
 
     retrieveAllBoxers.execute(primaryPort);
 
-    verify(primaryPort).success(boxersArgumentCaptor.capture());
-    Map<BoxerId, Boxer> boxers = boxersArgumentCaptor.getValue();
+    Map<BoxerId, Boxer> boxers = getSuccessEntity();
     assertEquals(existingBoxers, boxers);
   }
-
 }
