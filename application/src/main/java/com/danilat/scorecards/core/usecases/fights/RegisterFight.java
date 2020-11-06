@@ -7,6 +7,7 @@ import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.domain.fight.events.FightCreated;
+import com.danilat.scorecards.core.usecases.ConstraintValidatorToErrorMapper;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.PrimaryPort;
@@ -36,6 +37,8 @@ public class RegisterFight implements UseCase<RegisterFightParameters> {
   private final UniqueIdGenerator uniqueIdGenerator;
   private Errors errors;
 
+  private ConstraintValidatorToErrorMapper constraintValidatorToErrorMapper;
+
   public RegisterFight(FightRepository fightRepository, BoxerRepository boxerRepository,
       EventBus eventBus, Clock clock,
       UniqueIdGenerator uniqueIdGenerator) {
@@ -44,6 +47,7 @@ public class RegisterFight implements UseCase<RegisterFightParameters> {
     this.eventBus = eventBus;
     this.clock = clock;
     this.uniqueIdGenerator = uniqueIdGenerator;
+    constraintValidatorToErrorMapper = new ConstraintValidatorToErrorMapper<RegisterFightParameters>();
   }
 
   @Override
@@ -71,23 +75,10 @@ public class RegisterFight implements UseCase<RegisterFightParameters> {
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     Validator validator = factory.getValidator();
     Set<ConstraintViolation<RegisterFightParameters>> violations = validator.validate(parameters);
-    if (!violations.isEmpty()) {
-      violations.forEach(violation -> {
-        Error error = mapConstraintViolationToError(violation);
-        errors.add(error);
-      });
-    }
+    errors.addAll(constraintValidatorToErrorMapper.mapConstraintViolationsToErrors(violations));
     boxerExists(parameters.getFirstBoxer(), "firstBoxer");
     boxerExists(parameters.getSecondBoxer(), "secondBoxer");
     return errors.size() == 0;
-  }
-
-  private Error mapConstraintViolationToError(ConstraintViolation violation) {
-    String fieldName = violation.getPropertyPath().toString();
-    String message = violation.getMessage();
-    String messageTemplate = violation.getMessageTemplate();
-    Error error = new Error(fieldName, message, messageTemplate);
-    return error;
   }
 
   private void boxerExists(BoxerId boxerId, String fieldName) {
