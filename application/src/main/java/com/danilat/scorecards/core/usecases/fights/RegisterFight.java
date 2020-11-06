@@ -1,18 +1,21 @@
 package com.danilat.scorecards.core.usecases.fights;
 
-import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
-import com.danilat.scorecards.core.domain.boxer.BoxerNotFoundException;
+import com.danilat.scorecards.core.domain.boxer.BoxerNotFoundError;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.Event;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.domain.fight.events.FightCreated;
+import com.danilat.scorecards.core.usecases.ConstraintValidatorToErrorMapper;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import com.danilat.scorecards.shared.Clock;
+import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 import com.danilat.scorecards.shared.UseCase;
+import com.danilat.scorecards.shared.domain.Error;
+import com.danilat.scorecards.shared.domain.Errors;
 import com.danilat.scorecards.shared.events.DomainEventId;
 import com.danilat.scorecards.shared.events.EventBus;
 import java.time.LocalDate;
@@ -26,13 +29,14 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-public class RegisterFight implements UseCase<RegisterFightParameters> {
+public class RegisterFight implements UseCase<Fight, RegisterFightParameters> {
 
   private final FightRepository fightRepository;
   private final BoxerRepository boxerRepository;
   private final EventBus eventBus;
   private final Clock clock;
   private final UniqueIdGenerator uniqueIdGenerator;
+  private Errors errors;
 
   public RegisterFight(FightRepository fightRepository, BoxerRepository boxerRepository,
       EventBus eventBus, Clock clock,
@@ -44,29 +48,33 @@ public class RegisterFight implements UseCase<RegisterFightParameters> {
     this.uniqueIdGenerator = uniqueIdGenerator;
   }
 
-  @Override
-  public Fight execute(RegisterFightParameters parameters) {
-    validate(parameters);
-    Boxer firstBoxer = this.boxerRepository.get(parameters.getFirstBoxer())
-        .orElseThrow(() -> new BoxerNotFoundException(parameters.getFirstBoxer()));
-    Boxer secondBoxer = this.boxerRepository.get(parameters.getSecondBoxer())
-        .orElseThrow(() -> new BoxerNotFoundException(parameters.getSecondBoxer()));
-    Event event = new Event(parameters.getHappenAt(), parameters.getPlace());
+  public void execute(PrimaryPort<Fight> primaryPort, RegisterFightParameters parameters) {
+    if (!validate(parameters)) {
+      primaryPort.error(errors);
+      return;
+    }
 
-    Fight fight = new Fight(new FightId(uniqueIdGenerator.next()), firstBoxer.id(),
-        secondBoxer.id(),
+    Event event = new Event(parameters.getHappenAt(), parameters.getPlace());
+    Fight fight = new Fight(new FightId(uniqueIdGenerator.next()), parameters.getFirstBoxer(),
+        parameters.getSecondBoxer(),
         event, parameters.getNumberOfRounds());
     fightRepository.save(fight);
     eventBus.publish(new FightCreated(fight, clock.now(), new DomainEventId(uniqueIdGenerator.next())));
-    return fight;
+    primaryPort.success(fight);
   }
 
-  private void validate(RegisterFightParameters parameters) {
-    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-    Validator validator = factory.getValidator();
-    Set<ConstraintViolation<RegisterFightParameters>> violations = validator.validate(parameters);
-    if (!violations.isEmpty()) {
-      throw new InvalidFightException(violations);
+  private boolean validate(RegisterFightParameters parameters) {
+    errors = new Errors();
+    errors.addAll(parameters.validate());
+    boxerExists(parameters.getFirstBoxer(), "firstBoxer");
+    boxerExists(parameters.getSecondBoxer(), "secondBoxer");
+    return errors.size() == 0;
+  }
+
+  private void boxerExists(BoxerId boxerId, String fieldName) {
+    if (!this.boxerRepository.get(boxerId).isPresent()) {
+      Error error = new BoxerNotFoundError(fieldName, boxerId);
+      errors.add(error);
     }
   }
 
@@ -121,6 +129,14 @@ public class RegisterFight implements UseCase<RegisterFightParameters> {
       this.happenAt = happenAt;
       this.place = place;
       this.numberOfRounds = numberOfRounds;
+    }
+
+    public Errors validate() {
+      ConstraintValidatorToErrorMapper constraintValidatorToErrorMapper = new ConstraintValidatorToErrorMapper<RegisterFightParameters>();
+      ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+      Validator validator = factory.getValidator();
+      Set<ConstraintViolation<RegisterFightParameters>> violations = validator.validate(this);
+      return constraintValidatorToErrorMapper.mapConstraintViolationsToErrors(violations);
     }
   }
 }

@@ -1,8 +1,8 @@
 package com.danilat.scorecards.shared;
 
-public interface UseCase<T> {
+public interface UseCase<OUTPUT, INPUT> {
 
-  Object execute(T parameters);
+  void execute(PrimaryPort<OUTPUT> primaryPort, INPUT parameters);
 
   class Empty {
 

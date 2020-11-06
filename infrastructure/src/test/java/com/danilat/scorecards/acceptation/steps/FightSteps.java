@@ -16,7 +16,8 @@ import com.danilat.scorecards.core.mothers.FightMother;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
-import com.danilat.scorecards.shared.domain.ScoreCardsBusinessException;
+import com.danilat.scorecards.shared.PrimaryPort;
+import com.danilat.scorecards.shared.domain.Errors;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -41,9 +42,34 @@ public class FightSteps {
   private Fight existingFight;
   private FightWithBoxers retrievedFight;
   private LocalDate aDate;
-  private Fight createdFight;
   private String aPlace;
-  private Exception someException;
+  private final PrimaryPort<FightWithBoxers> retrieveFightPort = new PrimaryPort<FightWithBoxers>() {
+    @Override
+    public void success(FightWithBoxers fight) {
+      retrievedFight = fight;
+    }
+
+    @Override
+    public void error(Errors errors) {
+      world.setErrors(errors);
+    }
+  };
+
+  private PrimaryPort<Fight> getRegisterFightPort() {
+    return new PrimaryPort<Fight>() {
+      @Override
+      public void success(Fight fight) {
+        world.setFight(fight);
+        world.setErrors(null);
+      }
+
+      @Override
+      public void error(Errors errors) {
+        world.setErrors(errors);
+        world.setFight(null);
+      }
+    };
+  }
 
   @Given("an existing fight")
   public void an_existing_fight() {
@@ -57,7 +83,7 @@ public class FightSteps {
 
   @When("I retrieve the existing fight")
   public void i_retrieve_the_existing_fight() {
-    retrievedFight = retrieveAFight.execute(existingFight.id());
+    retrieveAFight.execute(retrieveFightPort, existingFight.id());
   }
 
   @Then("the fight is present")
@@ -67,10 +93,7 @@ public class FightSteps {
 
   @When("I retrieve a non-existing fight")
   public void i_retrieve_a_non_existing_fight() {
-    try {
-      retrievedFight = retrieveAFight.execute(new FightId("some inexistent id"));
-    } catch (ScoreCardsBusinessException businessException) {
-    }
+    retrieveAFight.execute(retrieveFightPort, new FightId("some inexistent id"));
   }
 
   @Then("the fight is not present")
@@ -102,11 +125,7 @@ public class FightSteps {
     RegisterFightParameters parameters = new RegisterFightParameters(firstBoxerId, secondBoxerId,
         aDate, aPlace, numberOfRounds);
 
-    try {
-      createdFight = registerFight.execute(parameters);
-    } catch (ScoreCardsBusinessException businessException) {
-      someException = businessException;
-    }
+    registerFight.execute(getRegisterFightPort(), parameters);
   }
 
   @When("I register the fight in the event for {string} and {string}")
@@ -116,23 +135,19 @@ public class FightSteps {
     RegisterFightParameters parameters = new RegisterFightParameters(firstBoxerId, secondBoxerId,
         aDate, aPlace, null);
 
-    try {
-      createdFight = registerFight.execute(parameters);
-    } catch (ScoreCardsBusinessException businessException) {
-      someException = businessException;
-    }
+    registerFight.execute(getRegisterFightPort(), parameters);
   }
 
   @Then("the fight is successfully registered")
   public void theFightIsRegistered() {
-    assertNotNull(createdFight);
-    assertNotNull(createdFight.id());
+    assertNotNull(world.getFight());
+    assertNotNull(world.getFight().id());
   }
 
   @Then("the fight is not registered")
   public void theFightIsNotRegistered() {
-    assertNull(createdFight);
-    assertNotNull(someException);
+    assertNull(world.getFight());
+    assertNotNull(world.getErrors());
   }
 
   @Given("an existing fight between {string} and {string} with {int} rounds")
@@ -141,7 +156,7 @@ public class FightSteps {
     BoxerId secondBoxerId = new BoxerId(secondBoxer);
     RegisterFightParameters parameters = new RegisterFightParameters(firstBoxerId, secondBoxerId,
         LocalDate.now(), "irrelevant place", numberOfRounds);
-    createdFight = registerFight.execute(parameters);
-    world.setFight(createdFight);
+
+    registerFight.execute(getRegisterFightPort(), parameters);
   }
 }

@@ -1,36 +1,34 @@
 package com.danilat.scorecards.core.usecases.fights;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
-import com.danilat.scorecards.core.domain.boxer.BoxerNotFoundException;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.domain.fight.events.FightCreated;
 import com.danilat.scorecards.core.mothers.BoxerMother;
+import com.danilat.scorecards.core.usecases.UseCaseUnitTest;
 import com.danilat.scorecards.shared.Clock;
+import com.danilat.scorecards.shared.PrimaryPort;
+import com.danilat.scorecards.shared.domain.Errors;
 import com.danilat.scorecards.shared.events.EventBus;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import java.time.LocalDate;
 import java.util.Optional;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.mockito.junit.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.class)
-public class RegisterFightTest {
+public class RegisterFightTest extends UseCaseUnitTest<Fight> {
 
   private static final BoxerId ALI = new BoxerId("Ali");
   private static final BoxerId FOREMAN = new BoxerId("Foreman");
@@ -47,11 +45,14 @@ public class RegisterFightTest {
   private Clock clock;
   @Mock
   private UniqueIdGenerator uniqueIdGenerator;
+  @Mock
+  private PrimaryPort<Fight> primaryPort;
 
   private static final String AN_ID = "irrelevant id";
   private String aPlace = "Kinsasa, Zaire";
   private Integer numberOfRounds = 12;
   private LocalDate anHappenedAt;
+
 
   @Before
   public void setup() {
@@ -66,13 +67,19 @@ public class RegisterFightTest {
         uniqueIdGenerator);
   }
 
+  @Override
+  public PrimaryPort getPrimaryPort() {
+    return primaryPort;
+  }
+
   @Test
   public void givenTwoBoxersAndADateThenIsRegistered() {
     RegisterFightParameters parameters = new RegisterFightParameters(ALI, FOREMAN, aDate, aPlace,
         numberOfRounds);
 
-    Fight fight = registerFight.execute(parameters);
+    registerFight.execute(primaryPort, parameters);
 
+    Fight fight = getSuccessEntity();
     assertEquals(ALI, fight.firstBoxer());
     assertEquals(FOREMAN, fight.secondBoxer());
     assertEquals(AN_ID, fight.id().value());
@@ -86,8 +93,9 @@ public class RegisterFightTest {
     RegisterFightParameters parameters = new RegisterFightParameters(ALI, FOREMAN, aDate, aPlace,
         numberOfRounds);
 
-    Fight fight = registerFight.execute(parameters);
+    registerFight.execute(primaryPort, parameters);
 
+    Fight fight = getSuccessEntity();
     verify(fightRepository, times(1)).save(fight);
   }
 
@@ -99,8 +107,9 @@ public class RegisterFightTest {
     RegisterFightParameters parameters = new RegisterFightParameters(ALI, FOREMAN, aDate, aPlace,
         numberOfRounds);
 
-    Fight fight = registerFight.execute(parameters);
+    registerFight.execute(primaryPort, parameters);
 
+    Fight fight = getSuccessEntity();
     verify(eventBus, times(1)).publish(fightCreatedArgumentCaptorCaptor.capture());
     FightCreated fightCreated = fightCreatedArgumentCaptorCaptor.getValue();
     assertEquals(fight, fightCreated.fight());
@@ -108,110 +117,113 @@ public class RegisterFightTest {
     assertEquals(anHappenedAt, fightCreated.happenedAt());
   }
 
-  @Rule
-  public ExpectedException expectedEx = ExpectedException.none();
-
   @Test
   public void givenTwoBoxerButNotDateThenIsInvalid() {
-    expectedEx.expect(InvalidFightException.class);
-    expectedEx.expectMessage("happenAt is mandatory");
-
     RegisterFightParameters parameters = new RegisterFightParameters(ALI, FOREMAN, null, aPlace,
         numberOfRounds);
 
-    registerFight.execute(parameters);
+    registerFight.execute(primaryPort, parameters);
+
+    Errors errors = getErrors();
+    assertTrue(errors.hasError("happenAt"));
+    assertTrue(errors.hasMessage("happenAt is mandatory"));
   }
 
   @Test
   public void givenFirstBoxerIsNotPresentThenIsInvalid() {
-    expectedEx.expect(InvalidFightException.class);
-    expectedEx.expectMessage("firstBoxer is mandatory");
-
     RegisterFightParameters parameters = new RegisterFightParameters(null, FOREMAN, aDate, aPlace,
         numberOfRounds);
 
-    registerFight.execute(parameters);
+    registerFight.execute(primaryPort, parameters);
+
+    Errors errors = getErrors();
+    assertTrue(errors.hasError("firstBoxer"));
+    assertTrue(errors.hasMessage("firstBoxer is mandatory"));
   }
 
   @Test
   public void givenFirstBoxerIsNotExistingThenIsInvalid() {
-    expectedEx.expect(BoxerNotFoundException.class);
-    expectedEx.expectMessage(NON_EXISTING_BOXER.toString() + " not found");
-
     RegisterFightParameters parameters = new RegisterFightParameters(NON_EXISTING_BOXER, FOREMAN,
         aDate, aPlace,
         numberOfRounds);
 
-    registerFight.execute(parameters);
+    registerFight.execute(primaryPort, parameters);
+
+    Errors errors = getErrors();
+    assertEquals("Boxer: " + NON_EXISTING_BOXER + " not found", errors.getMessagesContentFor("firstBoxer"));
   }
 
   @Test
   public void givenSecondBoxerIsNotPresentThenIsInvalid() {
-    expectedEx.expect(InvalidFightException.class);
-    expectedEx.expectMessage("secondBoxer is mandatory");
-
     RegisterFightParameters parameters = new RegisterFightParameters(ALI, null, aDate, aPlace,
         numberOfRounds);
 
-    registerFight.execute(parameters);
+    registerFight.execute(primaryPort, parameters);
+
+    Errors errors = getErrors();
+    assertTrue(errors.hasError("secondBoxer"));
+    assertTrue(errors.hasMessage("secondBoxer is mandatory"));
   }
 
   @Test
   public void givenSecondBoxerIsNotExistingThenIsInvalid() {
-    expectedEx.expect(BoxerNotFoundException.class);
-    expectedEx.expectMessage(NON_EXISTING_BOXER.toString() + " not found");
-
     RegisterFightParameters parameters = new RegisterFightParameters(ALI, NON_EXISTING_BOXER, aDate,
         aPlace,
         numberOfRounds);
 
-    registerFight.execute(parameters);
+    registerFight.execute(primaryPort, parameters);
+
+    Errors errors = getErrors();
+    assertEquals("Boxer: " + NON_EXISTING_BOXER + " not found", errors.getMessagesContentFor("secondBoxer"));
   }
 
   @Test
   public void givenFirstAndSecondBoxersAreTheSameThenIsInvalid() {
-    expectedEx.expect(InvalidFightException.class);
-    expectedEx.expectMessage("firstBoxer and secondBoxer should be different");
-
     RegisterFightParameters parameters = new RegisterFightParameters(ALI, ALI, aDate, aPlace,
         numberOfRounds);
 
-    registerFight.execute(parameters);
+    registerFight.execute(primaryPort, parameters);
+
+    Errors errors = getErrors();
+    assertTrue(errors.hasMessage("firstBoxer and secondBoxer should be different"));
   }
 
   @Test
   public void givenNumberOfRoundsIsNotPresentThenIsInvalid() {
-    expectedEx.expect(InvalidFightException.class);
-    expectedEx.expectMessage("numberOfRounds is mandatory");
-
     RegisterFightParameters parameters = new RegisterFightParameters(ALI, NON_EXISTING_BOXER, aDate,
         aPlace,
         null);
 
-    registerFight.execute(parameters);
+    registerFight.execute(primaryPort, parameters);
+
+    Errors errors = getErrors();
+    assertTrue(errors.hasError("numberOfRounds"));
+    assertTrue(errors.hasMessage("numberOfRounds is mandatory"));
   }
 
   @Test
   public void givenLessThanThreeNumberOfRoundsThenIsInvalid() {
-    expectedEx.expect(InvalidFightException.class);
-    expectedEx.expectMessage("numberOfRounds is less than three");
-
     RegisterFightParameters parameters = new RegisterFightParameters(ALI, NON_EXISTING_BOXER, aDate,
         aPlace,
         2);
 
-    registerFight.execute(parameters);
+    registerFight.execute(primaryPort, parameters);
+
+    Errors errors = getErrors();
+    assertTrue(errors.hasError("numberOfRounds"));
+    assertTrue(errors.hasMessage("numberOfRounds is less than three"));
   }
 
   @Test
   public void givenMoreThanTwelveNumberOfRoundsThenIsInvalid() {
-    expectedEx.expect(InvalidFightException.class);
-    expectedEx.expectMessage("numberOfRounds is more than twelve");
-
     RegisterFightParameters parameters = new RegisterFightParameters(ALI, NON_EXISTING_BOXER, aDate,
         aPlace,
         13);
 
-    registerFight.execute(parameters);
+    registerFight.execute(primaryPort, parameters);
+
+    Errors errors = getErrors();
+    assertTrue(errors.hasError("numberOfRounds"));
+    assertTrue(errors.hasMessage("numberOfRounds is more than twelve"));
   }
 }

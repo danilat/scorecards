@@ -4,20 +4,27 @@ import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
-import com.danilat.scorecards.core.domain.fight.FightNotFoundException;
+import com.danilat.scorecards.core.domain.fight.FightNotFoundError;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
-import com.danilat.scorecards.core.domain.score.BoxerIsNotInFightException;
-import com.danilat.scorecards.core.domain.score.RoundOutOfIntervalException;
+import com.danilat.scorecards.core.domain.score.BoxerIsNotInFightError;
+import com.danilat.scorecards.core.domain.score.RoundOutOfIntervalError;
 import com.danilat.scorecards.core.domain.score.ScoreCard;
 import com.danilat.scorecards.core.domain.score.ScoreCardId;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.core.domain.score.events.RoundScored;
 import com.danilat.scorecards.core.usecases.Auth;
+import com.danilat.scorecards.core.usecases.ConstraintValidatorToErrorMapper;
+import com.danilat.scorecards.core.usecases.scores.ScoreRound.ScoreFightParameters;
 import com.danilat.scorecards.shared.Clock;
+import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 
+import com.danilat.scorecards.shared.UseCase;
+import com.danilat.scorecards.shared.domain.Error;
+import com.danilat.scorecards.shared.domain.Errors;
 import com.danilat.scorecards.shared.events.DomainEventId;
 import com.danilat.scorecards.shared.events.EventBus;
+import java.util.Optional;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -27,7 +34,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
-public class ScoreRound {
+public class ScoreRound implements UseCase<ScoreCard, ScoreFightParameters> {
 
   private final ScoreCardRepository scoreCardRepository;
   private final FightRepository fightRepository;
@@ -35,6 +42,7 @@ public class ScoreRound {
   private final Auth auth;
   private final EventBus eventBus;
   private final Clock clock;
+  private Errors errors;
 
   public ScoreRound(ScoreCardRepository scoreCardRepository, FightRepository fightRepository,
       UniqueIdGenerator uniqueIdGenerator, Auth auth, EventBus eventBus, Clock clock) {
@@ -46,46 +54,61 @@ public class ScoreRound {
     this.clock = clock;
   }
 
-  public ScoreCard execute(ScoreFightParameters params) {
-    validate(params);
+  @Override
+  public void execute(PrimaryPort<ScoreCard> primaryPort, ScoreFightParameters params) {
+    if (!validate(params)) {
+      primaryPort.error(errors);
+      return;
+    }
+
+    ScoreCard scoreCard = getOrCreateScoreCard(params);
+    scoreCard.scoreRound(params.getRound(), params.getFirstBoxerScore(), params.getSecondBoxerScore());
+    this.scoreCardRepository.save(scoreCard);
+    RoundScored roundScored = new RoundScored(scoreCard, clock.now(), new DomainEventId(uniqueIdGenerator.next()));
+    this.eventBus.publish(roundScored);
+    primaryPort.success(scoreCard);
+  }
+
+  private ScoreCard getOrCreateScoreCard(ScoreFightParameters params) {
     AccountId accountId = auth.currentAccount();
-    ScoreCard scoreCard = this.scoreCardRepository.findByFightIdAndAccountId(params.getFightId(), accountId)
+    return this.scoreCardRepository.findByFightIdAndAccountId(params.getFightId(), accountId)
         .orElseGet(() -> {
           ScoreCardId id = new ScoreCardId(uniqueIdGenerator.next());
           return ScoreCard
               .create(id, accountId, params.getFightId(), params.getFirstBoxerId(), params.getSecondBoxerId());
         });
-    scoreCard.scoreRound(params.getRound(), params.getFirstBoxerScore(), params.getSecondBoxerScore());
-    this.scoreCardRepository.save(scoreCard);
-    RoundScored roundScored = new RoundScored(scoreCard, clock.now(), new DomainEventId(uniqueIdGenerator.next()));
-    this.eventBus.publish(roundScored);
-    return scoreCard;
   }
 
-  private void validate(ScoreFightParameters params) {
-    Fight fight = fightRepository.get(params.getFightId())
-        .orElseThrow(() -> new FightNotFoundException(params.getFightId()));
+  private boolean validate(ScoreFightParameters params) {
+    errors = new Errors();
+    errors.addAll(params.validate());
 
-    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-    Validator validator = factory.getValidator();
-    Set<ConstraintViolation<ScoreFightParameters>> violations = validator.validate(params);
-    if (!violations.isEmpty()) {
-      throw new InvalidScoreException(violations);
+    Optional<Fight> optionalFight = fightRepository.get(params.getFightId());
+    if (!optionalFight.isPresent()) {
+      Error error = new FightNotFoundError(params.getFightId());
+      errors.add(error);
+      return false;
     }
-    if (params.getRound() > fight.numberOfRounds()) {
-      throw new RoundOutOfIntervalException(fight.numberOfRounds(), params.getRound());
+
+    Fight fight = optionalFight.get();
+    if (params.getRound() > fight.numberOfRounds() || params.getRound() < 1) {
+      Error error = new RoundOutOfIntervalError(params.getRound(), fight.numberOfRounds());
+      errors.add(error);
     }
-    if (!fight.firstBoxer().equals(params.getFirstBoxerId()) || !fight.secondBoxer()
-        .equals(params.getSecondBoxerId())) {
-      throw new BoxerIsNotInFightException();
+    if (!fight.firstBoxer().equals(params.getFirstBoxerId())) {
+      Error error = new BoxerIsNotInFightError("firstBoxer", params.getFirstBoxerId(), params.getFightId());
+      errors.add(error);
     }
+    if (!fight.secondBoxer().equals(params.getSecondBoxerId())) {
+      Error error = new BoxerIsNotInFightError("secondBoxer", params.getSecondBoxerId(), params.getFightId());
+      errors.add(error);
+    }
+    return errors.size() == 0;
   }
 
   public static class ScoreFightParameters {
 
     private final FightId fightId;
-    @Min(value = 1, message = "round interval is between 1 and 12")
-    @Max(value = 12, message = "round interval is between 1 and 12")
     private final Integer round;
     private final BoxerId firstBoxerId;
     @NotNull(message = "firstBoxerScore is mandatory")
@@ -132,5 +155,12 @@ public class ScoreRound {
       return secondBoxerScore;
     }
 
+    public Errors validate() {
+      ConstraintValidatorToErrorMapper constraintValidatorToErrorMapper = new ConstraintValidatorToErrorMapper<ScoreFightParameters>();
+      ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+      Validator validator = factory.getValidator();
+      Set<ConstraintViolation<ScoreFightParameters>> violations = validator.validate(this);
+      return constraintValidatorToErrorMapper.mapConstraintViolationsToErrors(violations);
+    }
   }
 }

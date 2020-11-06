@@ -7,6 +7,8 @@ import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.usecases.boxers.RetrieveAllBoxers;
+import com.danilat.scorecards.shared.PrimaryPort;
+import com.danilat.scorecards.shared.domain.Errors;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -21,7 +23,11 @@ public class BoxerSteps {
   @Autowired
   private RetrieveAllBoxers retrieveAllBoxers;
 
-  private Map<BoxerId, Boxer> boxers;
+  private Map<BoxerId, Boxer> retrievedBoxers;
+
+  private PrimaryPort<Map<BoxerId, Boxer>> primaryPortDouble() {
+    return boxers -> retrievedBoxers = boxers;
+  }
 
   @Given("an existing boxer called {string}")
   public void anExistingBoxerIs(String name) {
@@ -32,12 +38,12 @@ public class BoxerSteps {
 
   @When("I retrieve all the boxers")
   public void iRetrieveAllTheBoxers() {
-    boxers = retrieveAllBoxers.execute();
+    retrieveAllBoxers.execute(primaryPortDouble());
   }
 
   @Then("the boxer called {string} is present")
   public void theBoxerCalledIsPresent(String name) {
     BoxerId boxerId = new BoxerId(name);
-    assertNotNull(boxers.get(boxerId));
+    assertNotNull(retrievedBoxers.get(boxerId));
   }
 }
