@@ -4,9 +4,10 @@ import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.usecases.boxers.RetrieveAllBoxers;
-import com.danilat.scorecards.core.usecases.fights.InvalidFightException;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
+import com.danilat.scorecards.shared.PrimaryPort;
+import com.danilat.scorecards.shared.domain.Errors;
 import java.time.LocalDate;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +21,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping(value = "/editor/fights")
-public class EditorFightsController {
+public class EditorFightsController implements PrimaryPort<Fight> {
 
   @Autowired
   private RetrieveAllBoxers retrieveAllBoxers;
 
   @Autowired
   private RegisterFight registerFight;
+  private Model model;
+  private FightForm fightForm;
+  private String createResult;
 
   @GetMapping("new")
   public String createForm(Model model) {
@@ -40,18 +44,26 @@ public class EditorFightsController {
 
   @PostMapping("")
   public String create(Model model, @ModelAttribute FightForm fightForm) {
-    try {
-      RegisterFightParameters parameters = new RegisterFightParameters(
-          new BoxerId(fightForm.getFirstBoxer()),
-          new BoxerId(fightForm.getSecondBoxer()), fightForm.getHappenAt(), fightForm.getPlace(),
-          fightForm.getNumberOfRounds());
-      Fight fight = registerFight.execute(parameters);
-      return "redirect:/fights/" + fight.id().value();
-    } catch (InvalidFightException e) {
-      model.addAttribute("errors", e.getErrors());
-      model.addAttribute("fight", fightForm);
-      return createForm(model);
-    }
+    this.model = model;
+    this.fightForm = fightForm;
+    RegisterFightParameters parameters = new RegisterFightParameters(
+        new BoxerId(fightForm.getFirstBoxer()),
+        new BoxerId(fightForm.getSecondBoxer()), fightForm.getHappenAt(), fightForm.getPlace(),
+        fightForm.getNumberOfRounds());
+    registerFight.execute(this, parameters);
+    return createResult;
+  }
+
+  @Override
+  public void success(Fight fight) {
+    createResult = "redirect:/fights/" + fight.id().value();
+  }
+
+  @Override
+  public void error(Errors errors) {
+    model.addAttribute("errors", errors);
+    model.addAttribute("fight", fightForm);
+    createResult = createForm(model);
   }
 
   private class FightForm {

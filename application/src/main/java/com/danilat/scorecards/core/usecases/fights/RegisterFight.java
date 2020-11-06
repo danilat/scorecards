@@ -1,8 +1,6 @@
 package com.danilat.scorecards.core.usecases.fights;
 
-import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
-import com.danilat.scorecards.core.domain.boxer.BoxerNotFoundException;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.Event;
 import com.danilat.scorecards.core.domain.fight.Fight;
@@ -11,8 +9,11 @@ import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.domain.fight.events.FightCreated;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import com.danilat.scorecards.shared.Clock;
+import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 import com.danilat.scorecards.shared.UseCase;
+import com.danilat.scorecards.shared.domain.Error;
+import com.danilat.scorecards.shared.domain.Errors;
 import com.danilat.scorecards.shared.events.DomainEventId;
 import com.danilat.scorecards.shared.events.EventBus;
 import java.time.LocalDate;
@@ -33,6 +34,7 @@ public class RegisterFight implements UseCase<RegisterFightParameters> {
   private final EventBus eventBus;
   private final Clock clock;
   private final UniqueIdGenerator uniqueIdGenerator;
+  private Errors errors;
 
   public RegisterFight(FightRepository fightRepository, BoxerRepository boxerRepository,
       EventBus eventBus, Clock clock,
@@ -46,27 +48,52 @@ public class RegisterFight implements UseCase<RegisterFightParameters> {
 
   @Override
   public Fight execute(RegisterFightParameters parameters) {
-    validate(parameters);
-    Boxer firstBoxer = this.boxerRepository.get(parameters.getFirstBoxer())
-        .orElseThrow(() -> new BoxerNotFoundException(parameters.getFirstBoxer()));
-    Boxer secondBoxer = this.boxerRepository.get(parameters.getSecondBoxer())
-        .orElseThrow(() -> new BoxerNotFoundException(parameters.getSecondBoxer()));
-    Event event = new Event(parameters.getHappenAt(), parameters.getPlace());
+    return null;
+  }
 
-    Fight fight = new Fight(new FightId(uniqueIdGenerator.next()), firstBoxer.id(),
-        secondBoxer.id(),
+  public void execute(PrimaryPort<Fight> primaryPort, RegisterFightParameters parameters) {
+    if (!validate(parameters)) {
+      primaryPort.error(errors);
+      return;
+    }
+
+    Event event = new Event(parameters.getHappenAt(), parameters.getPlace());
+    Fight fight = new Fight(new FightId(uniqueIdGenerator.next()), parameters.getFirstBoxer(),
+        parameters.getSecondBoxer(),
         event, parameters.getNumberOfRounds());
     fightRepository.save(fight);
     eventBus.publish(new FightCreated(fight, clock.now(), new DomainEventId(uniqueIdGenerator.next())));
-    return fight;
+    primaryPort.success(fight);
   }
 
-  private void validate(RegisterFightParameters parameters) {
+  private boolean validate(RegisterFightParameters parameters) {
+    errors = new Errors();
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     Validator validator = factory.getValidator();
     Set<ConstraintViolation<RegisterFightParameters>> violations = validator.validate(parameters);
     if (!violations.isEmpty()) {
-      throw new InvalidFightException(violations);
+      violations.forEach(violation -> {
+        Error error = mapConstraintViolationToError(violation);
+        errors.add(error);
+      });
+    }
+    boxerExists(parameters.getFirstBoxer(), "firstBoxer");
+    boxerExists(parameters.getSecondBoxer(), "secondBoxer");
+    return errors.size() == 0;
+  }
+
+  private Error mapConstraintViolationToError(ConstraintViolation violation) {
+    String fieldName = violation.getPropertyPath().toString();
+    String message = violation.getMessage();
+    String messageTemplate = violation.getMessageTemplate();
+    Error error = new Error(fieldName, message, messageTemplate);
+    return error;
+  }
+
+  private void boxerExists(BoxerId boxerId, String fieldName) {
+    if (!this.boxerRepository.get(boxerId).isPresent()) {
+      Error error = new Error(fieldName, boxerId + " not found");
+      errors.add(error);
     }
   }
 
