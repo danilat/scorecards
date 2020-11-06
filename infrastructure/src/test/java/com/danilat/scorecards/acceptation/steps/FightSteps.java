@@ -18,7 +18,6 @@ import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightPa
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.domain.Errors;
-import com.danilat.scorecards.shared.domain.ScoreCardsException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -84,7 +83,7 @@ public class FightSteps {
 
   @When("I retrieve the existing fight")
   public void i_retrieve_the_existing_fight() {
-    retrieveAFight.execute(retrieveFightPort, existingFight.id());
+    retrieveAFight.execute(existingFight.id(), retrieveFightPort);
   }
 
   @Then("the fight is present")
@@ -94,7 +93,7 @@ public class FightSteps {
 
   @When("I retrieve a non-existing fight")
   public void i_retrieve_a_non_existing_fight() {
-    retrieveAFight.execute(retrieveFightPort, new FightId("some inexistent id"));
+    retrieveAFight.execute(new FightId("some inexistent id"), retrieveFightPort);
   }
 
   @Then("the fight is not present")
@@ -126,7 +125,7 @@ public class FightSteps {
     RegisterFightParameters parameters = new RegisterFightParameters(firstBoxerId, secondBoxerId,
         aDate, aPlace, numberOfRounds);
 
-    registerFight.execute(getRegisterFightPort(), parameters);
+    registerFight.execute(parameters, getRegisterFightPort());
   }
 
   @When("I register the fight in the event for {string} and {string}")
@@ -136,7 +135,7 @@ public class FightSteps {
     RegisterFightParameters parameters = new RegisterFightParameters(firstBoxerId, secondBoxerId,
         aDate, aPlace, null);
 
-    registerFight.execute(getRegisterFightPort(), parameters);
+    registerFight.execute(parameters, getRegisterFightPort());
   }
 
   @Then("the fight is successfully registered")
@@ -158,6 +157,6 @@ public class FightSteps {
     RegisterFightParameters parameters = new RegisterFightParameters(firstBoxerId, secondBoxerId,
         LocalDate.now(), "irrelevant place", numberOfRounds);
 
-    registerFight.execute(getRegisterFightPort(), parameters);
+    registerFight.execute(parameters, getRegisterFightPort());
   }
 }

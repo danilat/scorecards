@@ -77,7 +77,7 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
     RegisterFightParameters parameters = new RegisterFightParameters(ALI, FOREMAN, aDate, aPlace,
         numberOfRounds);
 
-    registerFight.execute(primaryPort, parameters);
+    registerFight.execute(parameters, primaryPort);
 
     Fight fight = getSuccessEntity();
     assertEquals(ALI, fight.firstBoxer());
@@ -93,7 +93,7 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
     RegisterFightParameters parameters = new RegisterFightParameters(ALI, FOREMAN, aDate, aPlace,
         numberOfRounds);
 
-    registerFight.execute(primaryPort, parameters);
+    registerFight.execute(parameters, primaryPort);
 
     Fight fight = getSuccessEntity();
     verify(fightRepository, times(1)).save(fight);
@@ -107,7 +107,7 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
     RegisterFightParameters parameters = new RegisterFightParameters(ALI, FOREMAN, aDate, aPlace,
         numberOfRounds);
 
-    registerFight.execute(primaryPort, parameters);
+    registerFight.execute(parameters, primaryPort);
 
     Fight fight = getSuccessEntity();
     verify(eventBus, times(1)).publish(fightCreatedArgumentCaptorCaptor.capture());
@@ -122,7 +122,7 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
     RegisterFightParameters parameters = new RegisterFightParameters(ALI, FOREMAN, null, aPlace,
         numberOfRounds);
 
-    registerFight.execute(primaryPort, parameters);
+    registerFight.execute(parameters, primaryPort);
 
     Errors errors = getErrors();
     assertTrue(errors.hasError("happenAt"));
@@ -134,7 +134,7 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
     RegisterFightParameters parameters = new RegisterFightParameters(null, FOREMAN, aDate, aPlace,
         numberOfRounds);
 
-    registerFight.execute(primaryPort, parameters);
+    registerFight.execute(parameters, primaryPort);
 
     Errors errors = getErrors();
     assertTrue(errors.hasError("firstBoxer"));
@@ -147,7 +147,7 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
         aDate, aPlace,
         numberOfRounds);
 
-    registerFight.execute(primaryPort, parameters);
+    registerFight.execute(parameters, primaryPort);
 
     Errors errors = getErrors();
     assertTrue(errors.hasError("firstBoxer"));
@@ -159,7 +159,7 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
     RegisterFightParameters parameters = new RegisterFightParameters(ALI, null, aDate, aPlace,
         numberOfRounds);
 
-    registerFight.execute(primaryPort, parameters);
+    registerFight.execute(parameters, primaryPort);
 
     Errors errors = getErrors();
     assertTrue(errors.hasError("secondBoxer"));
@@ -172,7 +172,7 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
         aPlace,
         numberOfRounds);
 
-    registerFight.execute(primaryPort, parameters);
+    registerFight.execute(parameters, primaryPort);
 
     Errors errors = getErrors();
     assertTrue(errors.hasError("secondBoxer"));
@@ -184,7 +184,7 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
     RegisterFightParameters parameters = new RegisterFightParameters(ALI, ALI, aDate, aPlace,
         numberOfRounds);
 
-    registerFight.execute(primaryPort, parameters);
+    registerFight.execute(parameters, primaryPort);
 
     Errors errors = getErrors();
     assertTrue(errors.hasMessage("firstBoxer and secondBoxer should be different"));
@@ -196,7 +196,7 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
         aPlace,
         null);
 
-    registerFight.execute(primaryPort, parameters);
+    registerFight.execute(parameters, primaryPort);
 
     Errors errors = getErrors();
     assertTrue(errors.hasError("numberOfRounds"));
@@ -209,7 +209,7 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
         aPlace,
         2);
 
-    registerFight.execute(primaryPort, parameters);
+    registerFight.execute(parameters, primaryPort);
 
     Errors errors = getErrors();
     assertTrue(errors.hasError("numberOfRounds"));
@@ -222,7 +222,7 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
         aPlace,
         13);
 
-    registerFight.execute(primaryPort, parameters);
+    registerFight.execute(parameters, primaryPort);
 
     Errors errors = getErrors();
     assertTrue(errors.hasError("numberOfRounds"));

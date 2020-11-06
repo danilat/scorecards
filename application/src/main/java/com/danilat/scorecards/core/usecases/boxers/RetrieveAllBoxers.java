@@ -7,7 +7,7 @@ import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.UseCase;
 import java.util.Map;
 
-public class RetrieveAllBoxers implements UseCase<UseCase.Empty> {
+public class RetrieveAllBoxers implements UseCase<UseCase.Empty, Map<BoxerId, Boxer>> {
 
   private final BoxerRepository boxerRepository;
 
@@ -21,7 +21,7 @@ public class RetrieveAllBoxers implements UseCase<UseCase.Empty> {
   }
 
   @Override
-  public Object execute(Empty parameters) {
-    return null;
+  public void execute(Empty parameters, PrimaryPort<Map<BoxerId, Boxer>> primaryPort) {
+    execute(primaryPort);
   }
 }

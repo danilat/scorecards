@@ -44,14 +44,14 @@ public class RetrieveAFightTest extends UseCaseUnitTest<FightWithBoxers> {
 
   @Test
   public void givenAnExistingFightThenIsRetrieved() {
-    retrieveAFight.execute(primaryPort, AN_ID);
+    retrieveAFight.execute(AN_ID, primaryPort);
 
     assertEquals(existingFightWithBoxers, getSuccessEntity());
   }
 
   @Test
   public void givenAnNonExistingFightThenIsNotRetrieved() {
-    retrieveAFight.execute(primaryPort, new FightId("un-existing id"));
+    retrieveAFight.execute(new FightId("un-existing id"), primaryPort);
 
     assertTrue(getErrors().hasMessage(new FightId("un-existing id") + " not found"));
   }

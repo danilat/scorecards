@@ -14,10 +14,12 @@ import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.core.domain.score.events.RoundScored;
 import com.danilat.scorecards.core.usecases.Auth;
 import com.danilat.scorecards.core.usecases.ConstraintValidatorToErrorMapper;
+import com.danilat.scorecards.core.usecases.scores.ScoreRound.ScoreFightParameters;
 import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 
+import com.danilat.scorecards.shared.UseCase;
 import com.danilat.scorecards.shared.domain.Error;
 import com.danilat.scorecards.shared.domain.Errors;
 import com.danilat.scorecards.shared.events.DomainEventId;
@@ -32,7 +34,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
-public class ScoreRound {
+public class ScoreRound implements UseCase<ScoreFightParameters, ScoreCard> {
 
   private final ScoreCardRepository scoreCardRepository;
   private final FightRepository fightRepository;
@@ -54,7 +56,8 @@ public class ScoreRound {
     constraintValidatorToErrorMapper = new ConstraintValidatorToErrorMapper<ScoreFightParameters>();
   }
 
-  public void execute(PrimaryPort<ScoreCard> primaryPort, ScoreFightParameters params) {
+  @Override
+  public void execute(ScoreFightParameters params, PrimaryPort<ScoreCard> primaryPort) {
     if (!validate(params)) {
       primaryPort.error(errors);
       return;

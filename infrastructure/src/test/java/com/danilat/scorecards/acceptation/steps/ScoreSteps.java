@@ -44,7 +44,7 @@ public class ScoreSteps {
     ScoreRound.ScoreFightParameters params = new ScoreRound.ScoreFightParameters(fight.id(), round, fight.firstBoxer(),
         firstBoxerScore, fight.secondBoxer(), secondBoxerScore);
 
-    scoreRound.execute(scoreCardPrimaryPort, params);
+    scoreRound.execute(params, scoreCardPrimaryPort);
   }
 
   @Then("the round {int} is scored with with {int} and {int}")
@@ -65,7 +65,8 @@ public class ScoreSteps {
     Fight fight = world.getFight();
     ScoreRound.ScoreFightParameters params = new ScoreRound.ScoreFightParameters(fight.id(), round, fight.firstBoxer(),
         firstBoxerScore, fight.secondBoxer(), secondBoxerScore);
-    scoreRound.execute(scoreCardPrimaryPort, params);
+
+    scoreRound.execute(params, scoreCardPrimaryPort);
   }
 
   @When("an aficionado scores the round {int} for the non-existing fight with {int} and {int}")
@@ -75,7 +76,7 @@ public class ScoreSteps {
     ScoreRound.ScoreFightParameters params = new ScoreRound.ScoreFightParameters(nonExistingFightId, round,
         new BoxerId("irrelevant 1"), firstBoxerScore, new BoxerId("irrelevant 2"), secondBoxerScore);
 
-    scoreRound.execute(scoreCardPrimaryPort, params);
+    scoreRound.execute(params, scoreCardPrimaryPort);
   }
 
   @Then("the round is not scored")
@@ -91,7 +92,7 @@ public class ScoreSteps {
     ScoreRound.ScoreFightParameters params = new ScoreRound.ScoreFightParameters(fight.id(), round, fight.firstBoxer(),
         firstBoxerScore, fight.secondBoxer(), null);
 
-    scoreRound.execute(scoreCardPrimaryPort, params);
+    scoreRound.execute(params, scoreCardPrimaryPort);
   }
 
   @When("an aficionado scores the round {int} for the existing fight with {int} for {string} and {int} for {string}")
@@ -101,6 +102,6 @@ public class ScoreSteps {
     ScoreRound.ScoreFightParameters params = new ScoreRound.ScoreFightParameters(fight.id(), round,
         new BoxerId(firstBoxer), firstBoxerScore, new BoxerId(secondBoxer), secondBoxerScore);
 
-    scoreRound.execute(scoreCardPrimaryPort, params);
+    scoreRound.execute(params, scoreCardPrimaryPort);
   }
 }

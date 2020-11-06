@@ -28,7 +28,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-public class RegisterFight implements UseCase<RegisterFightParameters> {
+public class RegisterFight implements UseCase<RegisterFightParameters, Fight> {
 
   private final FightRepository fightRepository;
   private final BoxerRepository boxerRepository;
@@ -50,12 +50,7 @@ public class RegisterFight implements UseCase<RegisterFightParameters> {
     constraintValidatorToErrorMapper = new ConstraintValidatorToErrorMapper<RegisterFightParameters>();
   }
 
-  @Override
-  public Fight execute(RegisterFightParameters parameters) {
-    return null;
-  }
-
-  public void execute(PrimaryPort<Fight> primaryPort, RegisterFightParameters parameters) {
+  public void execute(RegisterFightParameters parameters, PrimaryPort<Fight> primaryPort) {
     if (!validate(parameters)) {
       primaryPort.error(errors);
       return;
