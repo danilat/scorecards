@@ -2,7 +2,7 @@ package com.danilat.scorecards.shared.events;
 
 import static org.junit.Assert.assertTrue;
 
-import java.time.LocalDate;
+import java.time.Instant;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class EventBusTest {
 
   @Test
   public void publishAnEvent() {
-    DomainEvent event = new DomainEvent(LocalDate.now(), "irrelevant id") {
+    DomainEvent event = new DomainEvent(Instant.now(), "irrelevant id") {
     };
     eventBus.publish(event);
     assertTrue(listenerSpy.called);

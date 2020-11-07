@@ -7,7 +7,7 @@ import com.danilat.scorecards.audit.usecases.RegisterDomainEvent;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.events.DomainEvent;
 import com.danilat.scorecards.shared.events.SpringEventBus;
-import java.time.LocalDate;
+import java.time.Instant;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class RegisterAnyDomainEventsSubscriberTest {
 
   @Test
   public void subscriberIsCalledForAllDomainEvents() {
-    DomainEvent event = new DomainEvent(LocalDate.now(), "foobar") {
+    DomainEvent event = new DomainEvent(Instant.now(), "foobar") {
     };
     eventBus.publish(event);
 

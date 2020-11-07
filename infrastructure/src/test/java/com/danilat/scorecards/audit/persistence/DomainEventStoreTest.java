@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import com.danilat.scorecards.audit.domain.DomainEventStore;
 import com.danilat.scorecards.shared.events.DomainEvent;
-import java.time.LocalDate;
+import java.time.Instant;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class DomainEventStoreTest {
 
   @Test
   public void storeAnEvent() {
-    DomainEvent event = new DomainEvent(LocalDate.now(), "foobar") {
+    DomainEvent event = new DomainEvent(Instant.now(), "foobar") {
     };
 
     domainEventStore.save(event);
