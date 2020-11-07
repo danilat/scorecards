@@ -66,16 +66,17 @@ public class RegisterFight implements UseCase<Fight, RegisterFightParameters> {
   private boolean validate(RegisterFightParameters parameters) {
     errors = new Errors();
     errors.addAll(parameters.validate());
-    boxerExists(parameters.getFirstBoxer(), "firstBoxer");
-    boxerExists(parameters.getSecondBoxer(), "secondBoxer");
-    return errors.size() == 0;
+    errors.add(validateBoxer("firstBoxer", parameters.getFirstBoxer()));
+    errors.add(validateBoxer("secondBoxer", parameters.getSecondBoxer()));
+    return errors.isEmpty();
   }
 
-  private void boxerExists(BoxerId boxerId, String fieldName) {
+  private Error validateBoxer(String fieldName, BoxerId boxerId) {
+    Error error = null;
     if (!this.boxerRepository.get(boxerId).isPresent()) {
-      Error error = new BoxerNotFoundError(fieldName, boxerId);
-      errors.add(error);
+      error = new BoxerNotFoundError(fieldName, boxerId);
     }
+    return error;
   }
 
   public static class RegisterFightParameters {

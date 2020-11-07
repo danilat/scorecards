@@ -21,4 +21,13 @@ public class Errors extends ArrayList<Error> {
   public String getMessagesContentFor(String fieldName) {
     return this.getMessagesFor(fieldName).collect(Collectors.joining(". "));
   }
+
+  @Override
+  public boolean add(Error error) {
+    if(error != null){
+      return super.add(error);
+    }else {
+      return false;
+    }
+  }
 }

@@ -5,6 +5,7 @@ import com.danilat.scorecards.core.domain.boxer.BoxerId;
 
 public class Fight extends Entity<FightId> {
 
+  public static final int MIN_NUMBER_OF_ROUNDS_IN_A_FIGHT = 1;
   private final BoxerId firstBoxer;
   private final BoxerId secondBoxer;
   private Event event;
@@ -36,5 +37,17 @@ public class Fight extends Entity<FightId> {
 
   public Integer numberOfRounds() {
     return this.numberOfRounds;
+  }
+
+  public boolean isTheFirstBoxer(BoxerId boxerId){
+    return firstBoxer().equals(boxerId);
+  }
+
+  public boolean isTheSecondBoxer(BoxerId boxerId) {
+    return secondBoxer().equals(boxerId);
+  }
+
+  public boolean isRoundInInterval(int round) {
+    return round <= numberOfRounds() && round >= MIN_NUMBER_OF_ROUNDS_IN_A_FIGHT;
   }
 }

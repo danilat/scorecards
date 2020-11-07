@@ -2,16 +2,14 @@ package com.danilat.scorecards.core.usecases.scores;
 
 import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
-import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
-import com.danilat.scorecards.core.domain.fight.FightNotFoundError;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
-import com.danilat.scorecards.core.domain.score.BoxerIsNotInFightError;
-import com.danilat.scorecards.core.domain.score.RoundOutOfIntervalError;
 import com.danilat.scorecards.core.domain.score.ScoreCard;
 import com.danilat.scorecards.core.domain.score.ScoreCardId;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.core.domain.score.events.RoundScored;
+import com.danilat.scorecards.core.services.ScoringInFightValidator;
+import com.danilat.scorecards.core.services.ScoringInFightValidator.Scoring;
 import com.danilat.scorecards.shared.Auth;
 import com.danilat.scorecards.core.usecases.ConstraintValidatorToErrorMapper;
 import com.danilat.scorecards.core.usecases.scores.ScoreRound.ScoreFightParameters;
@@ -20,11 +18,9 @@ import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 
 import com.danilat.scorecards.shared.usecases.UseCase;
-import com.danilat.scorecards.shared.domain.Error;
 import com.danilat.scorecards.shared.domain.Errors;
 import com.danilat.scorecards.shared.events.DomainEventId;
 import com.danilat.scorecards.shared.events.EventBus;
-import java.util.Optional;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -82,28 +78,9 @@ public class ScoreRound implements UseCase<ScoreCard, ScoreFightParameters> {
   private boolean validate(ScoreFightParameters params) {
     errors = new Errors();
     errors.addAll(params.validate());
-
-    Optional<Fight> optionalFight = fightRepository.get(params.getFightId());
-    if (!optionalFight.isPresent()) {
-      Error error = new FightNotFoundError(params.getFightId());
-      errors.add(error);
-      return false;
-    }
-
-    Fight fight = optionalFight.get();
-    if (params.getRound() > fight.numberOfRounds() || params.getRound() < 1) {
-      Error error = new RoundOutOfIntervalError(params.getRound(), fight.numberOfRounds());
-      errors.add(error);
-    }
-    if (!fight.firstBoxer().equals(params.getFirstBoxerId())) {
-      Error error = new BoxerIsNotInFightError("firstBoxer", params.getFirstBoxerId(), params.getFightId());
-      errors.add(error);
-    }
-    if (!fight.secondBoxer().equals(params.getSecondBoxerId())) {
-      Error error = new BoxerIsNotInFightError("secondBoxer", params.getSecondBoxerId(), params.getFightId());
-      errors.add(error);
-    }
-    return errors.size() == 0;
+    ScoringInFightValidator scoringInFightValidator = new ScoringInFightValidator(fightRepository);
+    errors.addAll(scoringInFightValidator.execute(params.scoring()));
+    return errors.isEmpty();
   }
 
   public static class ScoreFightParameters {
@@ -161,6 +138,10 @@ public class ScoreRound implements UseCase<ScoreCard, ScoreFightParameters> {
       Validator validator = factory.getValidator();
       Set<ConstraintViolation<ScoreFightParameters>> violations = validator.validate(this);
       return constraintValidatorToErrorMapper.mapConstraintViolationsToErrors(violations);
+    }
+
+    public Scoring scoring() {
+      return new Scoring(getFightId(), getFirstBoxerId(), getSecondBoxerId(), getRound());
     }
   }
 }
