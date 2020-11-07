@@ -13,7 +13,7 @@ import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightPa
 import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
-import com.danilat.scorecards.shared.UseCase;
+import com.danilat.scorecards.shared.usecases.UseCase;
 import com.danilat.scorecards.shared.domain.Error;
 import com.danilat.scorecards.shared.domain.Errors;
 import com.danilat.scorecards.shared.events.DomainEventId;

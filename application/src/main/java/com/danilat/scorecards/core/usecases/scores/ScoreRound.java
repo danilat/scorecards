@@ -12,14 +12,14 @@ import com.danilat.scorecards.core.domain.score.ScoreCard;
 import com.danilat.scorecards.core.domain.score.ScoreCardId;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.core.domain.score.events.RoundScored;
-import com.danilat.scorecards.core.usecases.Auth;
+import com.danilat.scorecards.shared.Auth;
 import com.danilat.scorecards.core.usecases.ConstraintValidatorToErrorMapper;
 import com.danilat.scorecards.core.usecases.scores.ScoreRound.ScoreFightParameters;
 import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 
-import com.danilat.scorecards.shared.UseCase;
+import com.danilat.scorecards.shared.usecases.UseCase;
 import com.danilat.scorecards.shared.domain.Error;
 import com.danilat.scorecards.shared.domain.Errors;
 import com.danilat.scorecards.shared.events.DomainEventId;

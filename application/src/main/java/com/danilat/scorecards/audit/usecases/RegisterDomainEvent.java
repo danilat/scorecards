@@ -3,7 +3,7 @@ package com.danilat.scorecards.audit.usecases;
 import com.danilat.scorecards.audit.domain.DomainEventStore;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.events.DomainEvent;
-import com.danilat.scorecards.shared.UseCase;
+import com.danilat.scorecards.shared.usecases.UseCase;
 
 public class RegisterDomainEvent implements UseCase<DomainEvent, DomainEvent> {
 

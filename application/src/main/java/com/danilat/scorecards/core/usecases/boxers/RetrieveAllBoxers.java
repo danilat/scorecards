@@ -4,8 +4,8 @@ import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.shared.PrimaryPort;
-import com.danilat.scorecards.shared.UseCase;
-import com.danilat.scorecards.shared.UseCase.Empty;
+import com.danilat.scorecards.shared.usecases.UseCase;
+import com.danilat.scorecards.shared.usecases.UseCase.Empty;
 import java.util.Map;
 
 public class RetrieveAllBoxers implements UseCase<Map<BoxerId, Boxer>, Empty> {

@@ -1,7 +1,6 @@
 package com.danilat.scorecards.shared;
 
 import com.danilat.scorecards.core.domain.account.AccountId;
-import com.danilat.scorecards.core.usecases.Auth;
 import org.springframework.stereotype.Component;
 
 @Component

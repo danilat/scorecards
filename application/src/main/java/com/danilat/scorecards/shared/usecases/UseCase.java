@@ -1,4 +1,6 @@
-package com.danilat.scorecards.shared;
+package com.danilat.scorecards.shared.usecases;
+
+import com.danilat.scorecards.shared.PrimaryPort;
 
 public interface UseCase<OUTPUT, INPUT> {
 

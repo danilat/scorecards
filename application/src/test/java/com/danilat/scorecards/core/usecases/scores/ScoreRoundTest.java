@@ -9,7 +9,7 @@ import com.danilat.scorecards.core.domain.score.*;
 import com.danilat.scorecards.core.domain.score.events.RoundScored;
 import com.danilat.scorecards.core.mothers.FightMother;
 import com.danilat.scorecards.core.mothers.ScoreCardMother;
-import com.danilat.scorecards.core.usecases.Auth;
+import com.danilat.scorecards.shared.Auth;
 import com.danilat.scorecards.core.usecases.UseCaseUnitTest;
 import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.PrimaryPort;

@@ -4,7 +4,7 @@ import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxers;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersRepository;
 import com.danilat.scorecards.shared.PrimaryPort;
-import com.danilat.scorecards.shared.UseCase;
+import com.danilat.scorecards.shared.usecases.UseCase;
 import com.danilat.scorecards.shared.domain.Error;
 import com.danilat.scorecards.shared.domain.Errors;
 import java.util.Optional;
