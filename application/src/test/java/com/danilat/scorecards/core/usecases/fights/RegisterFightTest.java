@@ -19,6 +19,7 @@ import com.danilat.scorecards.shared.domain.Errors;
 import com.danilat.scorecards.shared.events.EventBus;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Optional;
 import org.junit.Before;
@@ -51,13 +52,13 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
   private static final String AN_ID = "irrelevant id";
   private String aPlace = "Kinsasa, Zaire";
   private Integer numberOfRounds = 12;
-  private LocalDate anHappenedAt;
+  private Instant anHappenedAt;
 
 
   @Before
   public void setup() {
     aDate = LocalDate.now();
-    anHappenedAt = LocalDate.now();
+    anHappenedAt = Instant.now();
     when(uniqueIdGenerator.next()).thenReturn(AN_ID);
     when(boxerRepository.get(ALI)).thenReturn(Optional.of(BoxerMother.aBoxerWithId(ALI)));
     when(boxerRepository.get(FOREMAN)).thenReturn(Optional.of(BoxerMother.aBoxerWithId(FOREMAN)));

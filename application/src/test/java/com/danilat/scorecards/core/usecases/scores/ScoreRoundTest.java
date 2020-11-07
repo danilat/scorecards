@@ -16,7 +16,7 @@ import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 import com.danilat.scorecards.shared.domain.Errors;
 import com.danilat.scorecards.shared.events.EventBus;
-import java.time.LocalDate;
+import java.time.Instant;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -53,7 +53,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
   private EventBus eventBus;
   @Mock
   private Clock clock;
-  private LocalDate anHappenedAt;
+  private Instant anHappenedAt;
   @Mock
   private PrimaryPort<ScoreCard> primaryPort;
 
@@ -64,7 +64,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
 
   @Before
   public void setup() {
-    anHappenedAt = LocalDate.now();
+    anHappenedAt = Instant.now();
     when(uniqueIdGenerator.next()).thenReturn(AN_ID);
     when(auth.currentAccount()).thenReturn(AN_AFICIONADO);
     when(fightRepository.get(A_FIGHT.id())).thenReturn(Optional.of(A_FIGHT));
@@ -111,7 +111,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
   private void givenExistingScoreCardOnFirstRound(Integer previousAliScore, Integer previousForemanScore) {
     ScoreCard existingScorecard = ScoreCardMother
         .aScoreCardWithIdFightIdFirstAndSecondBoxer(AN_SCORECARD_ID, A_FIGHT_ID, FIRST_BOXER, SECOND_BOXER);
-    existingScorecard.scoreRound(1, previousAliScore, previousForemanScore);
+    existingScorecard.scoreRound(1, previousAliScore, previousForemanScore, clock.now());
     when(scoreCardRepository.findByFightIdAndAccountId(A_FIGHT_ID, AN_AFICIONADO))
         .thenReturn(Optional.of(existingScorecard));
   }
@@ -155,7 +155,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
     RoundScored roundScored = roundScoredArgumentCaptor.getValue();
     assertEquals(scoreCard, roundScored.scoreCard());
     assertEquals(anHappenedAt, roundScored.happenedAt());
-    assertEquals(AN_ID, roundScored.eventId().value());
+    assertEquals(AN_ID , roundScored.eventId().value());
   }
 
   @Test

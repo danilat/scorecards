@@ -1,10 +1,10 @@
 package com.danilat.scorecards.shared;
 
-import java.time.LocalDate;
+import java.time.Instant;
 
 public class Clock {
 
-  public LocalDate now() {
-    return LocalDate.now();
+  public Instant now() {
+    return Instant.now();
   }
 }

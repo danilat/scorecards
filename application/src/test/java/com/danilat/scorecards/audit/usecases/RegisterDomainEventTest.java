@@ -7,6 +7,7 @@ import com.danilat.scorecards.audit.domain.DomainEventStore;
 import com.danilat.scorecards.core.usecases.UseCaseUnitTest;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.events.DomainEvent;
+import java.time.Instant;
 import java.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +34,7 @@ public class RegisterDomainEventTest extends UseCaseUnitTest<DomainEvent> {
 
   @Test
   public void givenADomainEventThenIsPersisted() {
-    DomainEvent domainEvent = new DomainEvent(LocalDate.now(), "an id") {
+    DomainEvent domainEvent = new DomainEvent(Instant.now(), "an id") {
     };
 
     registerDomainEvent.execute(primaryPort, domainEvent);
