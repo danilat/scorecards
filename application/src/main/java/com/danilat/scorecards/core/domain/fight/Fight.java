@@ -1,7 +1,9 @@
 package com.danilat.scorecards.core.domain.fight;
 
+import com.danilat.scorecards.core.domain.fight.events.FightCreated;
 import com.danilat.scorecards.shared.domain.Entity;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
+import java.time.Instant;
 
 public class Fight extends Entity<FightId> {
 
@@ -39,7 +41,7 @@ public class Fight extends Entity<FightId> {
     return this.numberOfRounds;
   }
 
-  public boolean isTheFirstBoxer(BoxerId boxerId){
+  public boolean isTheFirstBoxer(BoxerId boxerId) {
     return firstBoxer().equals(boxerId);
   }
 
@@ -49,5 +51,12 @@ public class Fight extends Entity<FightId> {
 
   public boolean isRoundInInterval(int round) {
     return round <= numberOfRounds() && round >= MIN_NUMBER_OF_ROUNDS_IN_A_FIGHT;
+  }
+
+  public static Fight create(FightId id, BoxerId firstBoxer, BoxerId secondBoxer, Event event, Integer numberOfRounds,
+      Instant happenedAt) {
+    Fight fight = new Fight(id, firstBoxer, secondBoxer, event, numberOfRounds);
+    fight.addDomainEvent(FightCreated.create(fight, happenedAt));
+    return fight;
   }
 }

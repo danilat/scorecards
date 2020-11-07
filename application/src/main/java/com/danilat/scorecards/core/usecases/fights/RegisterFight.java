@@ -7,7 +7,6 @@ import com.danilat.scorecards.core.domain.fight.Event;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
-import com.danilat.scorecards.core.domain.fight.events.FightCreated;
 import com.danilat.scorecards.core.usecases.ConstraintValidatorToErrorMapper;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import com.danilat.scorecards.shared.Clock;
@@ -16,7 +15,6 @@ import com.danilat.scorecards.shared.UniqueIdGenerator;
 import com.danilat.scorecards.shared.usecases.UseCase;
 import com.danilat.scorecards.shared.domain.Error;
 import com.danilat.scorecards.shared.domain.Errors;
-import com.danilat.scorecards.shared.events.DomainEventId;
 import com.danilat.scorecards.shared.events.EventBus;
 import java.time.LocalDate;
 import java.util.Set;
@@ -55,11 +53,11 @@ public class RegisterFight implements UseCase<Fight, RegisterFightParameters> {
     }
 
     Event event = new Event(parameters.getHappenAt(), parameters.getPlace());
-    Fight fight = new Fight(new FightId(uniqueIdGenerator.next()), parameters.getFirstBoxer(),
+    Fight fight = Fight.create(new FightId(uniqueIdGenerator.next()), parameters.getFirstBoxer(),
         parameters.getSecondBoxer(),
-        event, parameters.getNumberOfRounds());
+        event, parameters.getNumberOfRounds(), clock.now());
     fightRepository.save(fight);
-    eventBus.publish(new FightCreated(fight, clock.now(), new DomainEventId(uniqueIdGenerator.next())));
+    eventBus.publish(fight.domainEvents());
     primaryPort.success(fight);
   }
 

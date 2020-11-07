@@ -28,6 +28,7 @@ import com.danilat.scorecards.core.usecases.scores.ScoreRound.ScoreFightParamete
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
 public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
@@ -155,7 +156,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
     RoundScored roundScored = roundScoredArgumentCaptor.getValue();
     assertEquals(scoreCard, roundScored.scoreCard());
     assertEquals(anHappenedAt, roundScored.happenedAt());
-    assertEquals(AN_ID , roundScored.eventId().value());
+    assertNotNull(roundScored.eventId().value());
   }
 
   @Test

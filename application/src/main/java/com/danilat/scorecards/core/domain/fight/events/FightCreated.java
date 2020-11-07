@@ -18,5 +18,7 @@ public class FightCreated extends DomainEvent {
     return fight;
   }
 
-
+  public static FightCreated create(Fight fight, Instant happenedAt){
+    return new FightCreated(fight, happenedAt, new DomainEventId(fight.id().value() + happenedAt));
+  }
 }

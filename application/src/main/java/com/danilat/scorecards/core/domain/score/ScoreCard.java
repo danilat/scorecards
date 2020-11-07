@@ -3,8 +3,9 @@ package com.danilat.scorecards.core.domain.score;
 import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.fight.FightId;
+import com.danilat.scorecards.core.domain.score.events.RoundScored;
 import com.danilat.scorecards.shared.domain.Entity;
-
+import java.time.Instant;
 import java.util.HashMap;
 
 public class ScoreCard extends Entity<ScoreCardId> {
@@ -69,8 +70,9 @@ public class ScoreCard extends Entity<ScoreCardId> {
     return secondBoxerScores.get(round);
   }
 
-  public void scoreRound(int round, int firstBoxerScore, int secondBoxerScore) {
+  public void scoreRound(int round, int firstBoxerScore, int secondBoxerScore, Instant scoredAt) {
     firstBoxerScores.put(round, firstBoxerScore);
     secondBoxerScores.put(round, secondBoxerScore);
+    addDomainEvent(RoundScored.create(this, scoredAt));
   }
 }

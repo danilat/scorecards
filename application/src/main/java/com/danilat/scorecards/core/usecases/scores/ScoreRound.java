@@ -7,7 +7,6 @@ import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.domain.score.ScoreCard;
 import com.danilat.scorecards.core.domain.score.ScoreCardId;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
-import com.danilat.scorecards.core.domain.score.events.RoundScored;
 import com.danilat.scorecards.core.services.ScoringInFightValidator;
 import com.danilat.scorecards.core.services.ScoringInFightValidator.Scoring;
 import com.danilat.scorecards.shared.Auth;
@@ -16,10 +15,8 @@ import com.danilat.scorecards.core.usecases.scores.ScoreRound.ScoreFightParamete
 import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
-
 import com.danilat.scorecards.shared.usecases.UseCase;
 import com.danilat.scorecards.shared.domain.Errors;
-import com.danilat.scorecards.shared.events.DomainEventId;
 import com.danilat.scorecards.shared.events.EventBus;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -58,10 +55,9 @@ public class ScoreRound implements UseCase<ScoreCard, ScoreFightParameters> {
     }
 
     ScoreCard scoreCard = getOrCreateScoreCard(params);
-    scoreCard.scoreRound(params.getRound(), params.getFirstBoxerScore(), params.getSecondBoxerScore());
+    scoreCard.scoreRound(params.getRound(), params.getFirstBoxerScore(), params.getSecondBoxerScore(), clock.now());
     this.scoreCardRepository.save(scoreCard);
-    RoundScored roundScored = new RoundScored(scoreCard, clock.now(), new DomainEventId(uniqueIdGenerator.next()));
-    this.eventBus.publish(roundScored);
+    this.eventBus.publish(scoreCard.domainEvents());
     primaryPort.success(scoreCard);
   }
 

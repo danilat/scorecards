@@ -1,6 +1,7 @@
 package com.danilat.scorecards.core.usecases.fights;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -114,8 +115,8 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
     verify(eventBus, times(1)).publish(fightCreatedArgumentCaptorCaptor.capture());
     FightCreated fightCreated = fightCreatedArgumentCaptorCaptor.getValue();
     assertEquals(fight, fightCreated.fight());
-    assertEquals(AN_ID, fightCreated.eventId().value());
     assertEquals(anHappenedAt, fightCreated.happenedAt());
+    assertNotNull(fightCreated.eventId().value());
   }
 
   @Test
