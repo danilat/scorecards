@@ -34,8 +34,8 @@ public class InMemoryFightWithBoxersRepository implements
     Boxer firstBoxer = boxerRepository.get(fight.firstBoxer()).get();
     Boxer secondBoxer = boxerRepository.get(fight.secondBoxer()).get();
 
-    FightWithBoxers fightWithBoxers = new FightWithBoxers(fight.id(), firstBoxer.name(),
-        secondBoxer.name(), fight.event().place(), fight.event().happenAt(),
+    FightWithBoxers fightWithBoxers = new FightWithBoxers(fight.id(), fight.firstBoxer(), firstBoxer.name(),
+        fight.secondBoxer(), secondBoxer.name(), fight.event().place(), fight.event().happenAt(),
         fight.numberOfRounds());
     return Optional.ofNullable(fightWithBoxers);
   }

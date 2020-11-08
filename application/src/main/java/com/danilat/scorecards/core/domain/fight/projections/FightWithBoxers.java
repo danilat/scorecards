@@ -1,21 +1,28 @@
 package com.danilat.scorecards.core.domain.fight.projections;
 
+import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.shared.domain.Entity;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import java.time.LocalDate;
 
 public class FightWithBoxers extends Entity<FightId> {
 
+  private final BoxerId firstBoxerId;
   private final String firstBoxerName;
+  private final BoxerId secondBoxerId;
   private final String secondBoxerName;
   private final String place;
   private final LocalDate happenAt;
   private final Integer numberOfRounds;
 
-  public FightWithBoxers(FightId id, String firstBoxerName, String secondBoxerName, String place,
+  public FightWithBoxers(FightId id, BoxerId firstBoxerId,
+      String firstBoxerName, BoxerId secondBoxerId, String secondBoxerName,
+      String place,
       LocalDate happenAt, Integer numberOfRounds) {
     super(id);
+    this.firstBoxerId = firstBoxerId;
     this.firstBoxerName = firstBoxerName;
+    this.secondBoxerId = secondBoxerId;
     this.secondBoxerName = secondBoxerName;
     this.place = place;
     this.happenAt = happenAt;
@@ -30,8 +37,16 @@ public class FightWithBoxers extends Entity<FightId> {
     return id.value();
   }
 
+  public BoxerId getFirstBoxerId() {
+    return firstBoxerId;
+  }
+
   public String getFirstBoxerName() {
     return firstBoxerName;
+  }
+
+  public BoxerId getSecondBoxerId() {
+    return secondBoxerId;
   }
 
   public String getSecondBoxerName() {

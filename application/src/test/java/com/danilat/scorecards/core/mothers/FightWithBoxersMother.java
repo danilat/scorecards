@@ -1,5 +1,6 @@
 package com.danilat.scorecards.core.mothers;
 
+import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxers;
 import java.time.LocalDate;
@@ -12,7 +13,7 @@ public class FightWithBoxersMother {
     LocalDate happenAt = LocalDate.now();
     String place = "Kinsasa, Zaire";
     Integer numberOfRounds = 12;
-    return new FightWithBoxers(id, firstBoxerName, secondBoxerName, place, happenAt,
+    return new FightWithBoxers(id, new BoxerId(firstBoxerName), firstBoxerName, new BoxerId(secondBoxerName), secondBoxerName, place, happenAt,
         numberOfRounds);
   }
 }
