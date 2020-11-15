@@ -9,7 +9,7 @@ import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightPa
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.domain.Errors;
 import java.time.LocalDate;
-import java.util.Map;
+import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -31,19 +31,19 @@ public class EditorFightsController {
   private Model model;
   private FightForm fightForm;
   private String createResult;
-  private Map<BoxerId, Boxer> retrievedBoxers;
+  private Collection<Boxer> retrievedBoxers;
 
   @GetMapping("new")
   public String createForm(Model model) {
     retrieveAllBoxers.execute(retrieveAllBoxersPort());
-    model.addAttribute("boxers", retrievedBoxers.values());
+    model.addAttribute("boxers", retrievedBoxers);
     if (!model.containsAttribute("fight")) {
       model.addAttribute("fight", new FightForm());
     }
     return "editor/fights/new";
   }
 
-  private PrimaryPort<Map<BoxerId, Boxer>> retrieveAllBoxersPort() {
+  private PrimaryPort<Collection<Boxer>> retrieveAllBoxersPort() {
     return boxers -> retrievedBoxers = boxers;
   }
 

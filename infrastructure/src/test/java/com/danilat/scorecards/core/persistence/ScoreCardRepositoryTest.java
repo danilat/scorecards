@@ -5,6 +5,7 @@ import com.danilat.scorecards.core.domain.score.ScoreCard;
 import com.danilat.scorecards.core.domain.score.ScoreCardId;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.core.mothers.ScoreCardMother;
+import java.util.Collection;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -39,7 +40,7 @@ public class ScoreCardRepositoryTest {
     ScoreCard aScoreCard = ScoreCardMother.aScoreCardWithId(scoreCardId);
     scoreCardRepository.save(aScoreCard);
 
-    Map<ScoreCardId, ScoreCard> scoreCards = scoreCardRepository.all();
+    Collection<ScoreCard> scoreCards = scoreCardRepository.all().values();
 
     assertEquals(1, scoreCards.size());
   }
@@ -52,9 +53,9 @@ public class ScoreCardRepositoryTest {
     AccountId secondAccountId = new AccountId("secondAccountId");
     scoreCardRepository.save(ScoreCardMother.aScoreCardWithIdAndAccount(ScoreCardMother.nextId(), secondAccountId));
 
-    Map<ScoreCardId, ScoreCard> scoreCards = scoreCardRepository.findAllByAccountId(firstAccountId);
+    Collection<ScoreCard> scoreCards = scoreCardRepository.findAllByAccountId(firstAccountId).values();
 
     assertEquals(1, scoreCards.size());
-    assertTrue(scoreCards.containsValue(firstAccountScoreCard));
+    assertTrue(scoreCards.contains(firstAccountScoreCard));
   }
 }

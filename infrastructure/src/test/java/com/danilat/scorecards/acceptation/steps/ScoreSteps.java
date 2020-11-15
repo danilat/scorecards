@@ -52,10 +52,10 @@ public class ScoreSteps {
   @Autowired
   private RetrieveScoreCards retrieveScoreCards;
   private Collection<ScoreCard> scoreCards;
-  private PrimaryPort<Map<ScoreCardId, ScoreCard>> retrieveScoreCardsPrimaryPort = new PrimaryPort<Map<ScoreCardId, ScoreCard>>() {
+  private PrimaryPort<Collection<ScoreCard>> retrieveScoreCardsPrimaryPort = new PrimaryPort<Collection<ScoreCard>>() {
     @Override
-    public void success(Map<ScoreCardId, ScoreCard> response) {
-      scoreCards = response.values();
+    public void success(Collection<ScoreCard> response) {
+      scoreCards = response;
     }
   };
 
@@ -130,7 +130,8 @@ public class ScoreSteps {
   @Given("{string} account has scored {int} fights")
   public void accountHasScoredFights(String account, Integer numberOfScorecards) {
     IntStream.range(0, numberOfScorecards).forEach(index ->
-        scoreCardRepository.save(ScoreCardMother.aScoreCardWithIdAndAccount(ScoreCardMother.nextId(), new AccountId(account)))
+        scoreCardRepository
+            .save(ScoreCardMother.aScoreCardWithIdAndAccount(ScoreCardMother.nextId(), new AccountId(account)))
     );
   }
 

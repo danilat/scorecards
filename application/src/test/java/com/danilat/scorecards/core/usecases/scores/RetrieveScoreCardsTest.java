@@ -10,17 +10,17 @@ import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.core.mothers.ScoreCardMother;
 import com.danilat.scorecards.core.usecases.UseCaseUnitTest;
 import com.danilat.scorecards.shared.PrimaryPort;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-public class RetrieveScoreCardsTest extends UseCaseUnitTest<Map<ScoreCardId, ScoreCard>> {
+public class RetrieveScoreCardsTest extends UseCaseUnitTest<Collection<ScoreCard>> {
 
   @Mock
-  private PrimaryPort<Map<ScoreCardId, ScoreCard>> primaryPort;
+  private PrimaryPort<Collection<ScoreCard>> primaryPort;
   @Mock
   private ScoreCardRepository scoreCardRepository;
   private AccountId anAccount = new AccountId("some name");
@@ -33,7 +33,7 @@ public class RetrieveScoreCardsTest extends UseCaseUnitTest<Map<ScoreCardId, Sco
   }
 
   @Before
-  public void setUp(){
+  public void setUp() {
     existingScorecards = new HashMap<>();
     when(scoreCardRepository.findAllByAccountId(anAccount)).thenReturn(existingScorecards);
     retrieveScoreCards = new RetrieveScoreCards(scoreCardRepository);
@@ -43,7 +43,7 @@ public class RetrieveScoreCardsTest extends UseCaseUnitTest<Map<ScoreCardId, Sco
   public void givenNoneScoreCardByAnAccountThenIsEmpty() {
     retrieveScoreCards.execute(primaryPort, anAccount);
 
-    Map<ScoreCardId, ScoreCard> scoreCards = getSuccessEntity();
+    Collection<ScoreCard> scoreCards = getSuccessEntity();
     assertEquals(0, scoreCards.size());
   }
 
@@ -55,7 +55,7 @@ public class RetrieveScoreCardsTest extends UseCaseUnitTest<Map<ScoreCardId, Sco
 
     retrieveScoreCards.execute(primaryPort, anAccount);
 
-    Map<ScoreCardId, ScoreCard> scoreCards = getSuccessEntity();
+    Collection<ScoreCard> scoreCards = getSuccessEntity();
     assertEquals(1, scoreCards.size());
   }
 }

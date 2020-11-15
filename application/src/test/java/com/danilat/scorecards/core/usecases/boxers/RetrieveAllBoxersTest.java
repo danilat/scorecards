@@ -10,18 +10,19 @@ import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.usecases.UseCaseUnitTest;
 import com.danilat.scorecards.shared.PrimaryPort;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.Test;
 import org.mockito.Mock;
 
-public class RetrieveAllBoxersTest extends UseCaseUnitTest<Map<BoxerId, Boxer>> {
+public class RetrieveAllBoxersTest extends UseCaseUnitTest<Collection<Boxer>> {
 
   @Mock
   private BoxerRepository boxerRepository;
 
   @Mock
-  PrimaryPort<Map<BoxerId, Boxer>> primaryPort;
+  PrimaryPort<Collection<Boxer>> primaryPort;
 
   @Override
   public PrimaryPort getPrimaryPort() {
@@ -35,7 +36,7 @@ public class RetrieveAllBoxersTest extends UseCaseUnitTest<Map<BoxerId, Boxer>> 
 
     retrieveAllBoxers.execute(primaryPort);
 
-    Map<BoxerId, Boxer> boxers = getSuccessEntity();
+    Collection<Boxer> boxers = getSuccessEntity();
     assertEquals(0, boxers.size());
   }
 
@@ -49,7 +50,7 @@ public class RetrieveAllBoxersTest extends UseCaseUnitTest<Map<BoxerId, Boxer>> 
 
     retrieveAllBoxers.execute(primaryPort);
 
-    Map<BoxerId, Boxer> boxers = getSuccessEntity();
-    assertEquals(existingBoxers, boxers);
+    Collection<Boxer> boxers = getSuccessEntity();
+    assertEquals(existingBoxers.values(), boxers);
   }
 }
