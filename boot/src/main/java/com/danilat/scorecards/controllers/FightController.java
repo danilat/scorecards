@@ -7,6 +7,7 @@ import com.danilat.scorecards.core.domain.score.ScoreCard;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
 import com.danilat.scorecards.core.usecases.scores.ScoreRound;
 import com.danilat.scorecards.core.usecases.scores.ScoreRound.ScoreFightParameters;
+import com.danilat.scorecards.shared.Auth;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.domain.Errors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +64,8 @@ public class FightController {
   private PrimaryPort<ScoreCard> scoreRoundPort = new PrimaryPort<ScoreCard>() {
     @Override
     public void success(ScoreCard scoreCard) {
-      scoreResult = "redirect:/fights/" + scoreCard.fightId().value();
+      String accountHandler = scoreCard.accountId().value();
+      scoreResult = "redirect:/" + accountHandler + "/scorecards";
     }
 
     @Override

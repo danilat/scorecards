@@ -8,12 +8,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.mothers.FightMother;
+import com.danilat.scorecards.shared.Auth;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +66,7 @@ public class FightControllerTest extends BaseControllerTest {
         .param("secondBoxerScore", "10")
         .param("round", "1"))
         .andExpect(status().is3xxRedirection())
-        .andExpect(redirectedUrlPattern("/fights/{id}"));
+        .andExpect(redirectedUrlPattern("/{accountId}/scorecards"));
   }
 
   @Test
