@@ -17,6 +17,6 @@ public class RetrieveScoreCards implements UseCase<Collection<ScoreCard>, Accoun
 
   @Override
   public void execute(PrimaryPort<Collection<ScoreCard>> primaryPort, AccountId accountId) {
-    primaryPort.success(scoreCardRepository.findAllByAccountId(accountId).values());
+    primaryPort.success(scoreCardRepository.findAllByAccountId(accountId));
   }
 }

@@ -5,14 +5,13 @@ import static org.mockito.Mockito.when;
 
 import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.score.ScoreCard;
-import com.danilat.scorecards.core.domain.score.ScoreCardId;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.core.mothers.ScoreCardMother;
 import com.danilat.scorecards.core.usecases.UseCaseUnitTest;
 import com.danilat.scorecards.shared.PrimaryPort;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -25,7 +24,7 @@ public class RetrieveScoreCardsTest extends UseCaseUnitTest<Collection<ScoreCard
   private ScoreCardRepository scoreCardRepository;
   private AccountId anAccount = new AccountId("some name");
   private RetrieveScoreCards retrieveScoreCards;
-  Map<ScoreCardId, ScoreCard> existingScorecards;
+  Collection<ScoreCard> existingScorecards;
 
   @Override
   public PrimaryPort getPrimaryPort() {
@@ -34,7 +33,7 @@ public class RetrieveScoreCardsTest extends UseCaseUnitTest<Collection<ScoreCard
 
   @Before
   public void setUp() {
-    existingScorecards = new HashMap<>();
+    existingScorecards = new ArrayList<>();
     when(scoreCardRepository.findAllByAccountId(anAccount)).thenReturn(existingScorecards);
     retrieveScoreCards = new RetrieveScoreCards(scoreCardRepository);
   }
@@ -51,7 +50,7 @@ public class RetrieveScoreCardsTest extends UseCaseUnitTest<Collection<ScoreCard
   public void givenScoreCardsByAnAccountThenArePresent() {
     ScoreCard scoreCard = ScoreCardMother.aScoreCardWithIdAndAccount("an scoreCardId",
         anAccount.value());
-    existingScorecards.put(scoreCard.id(), scoreCard);
+    existingScorecards.add(scoreCard);
 
     retrieveScoreCards.execute(primaryPort, anAccount);
 

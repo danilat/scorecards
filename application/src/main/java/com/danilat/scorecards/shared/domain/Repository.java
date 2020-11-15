@@ -1,6 +1,6 @@
 package com.danilat.scorecards.shared.domain;
 
-import java.util.Map;
+import java.util.Collection;
 import java.util.Optional;
 
 public interface Repository<E extends Entity, I extends Id> {
@@ -9,5 +9,5 @@ public interface Repository<E extends Entity, I extends Id> {
 
   Optional<E> get(I id);
 
-  Map<I, E> all();
+  Collection<E> all();
 }

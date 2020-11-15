@@ -10,6 +10,7 @@ import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.usecases.UseCaseUnitTest;
 import com.danilat.scorecards.shared.PrimaryPort;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +32,7 @@ public class RetrieveAllBoxersTest extends UseCaseUnitTest<Collection<Boxer>> {
 
   @Test
   public void givenNoBoxersThenIsEmpty() {
-    when(boxerRepository.all()).thenReturn(new HashMap());
+    when(boxerRepository.all()).thenReturn(new ArrayList<>());
     RetrieveAllBoxers retrieveAllBoxers = new RetrieveAllBoxers(boxerRepository);
 
     retrieveAllBoxers.execute(primaryPort);
@@ -43,14 +44,14 @@ public class RetrieveAllBoxersTest extends UseCaseUnitTest<Collection<Boxer>> {
   @Test
   public void givenSomeBoxerTheAreRetrieved() {
     Boxer aBoxer = BoxerMother.aBoxerWithId("Pacquiao");
-    Map<BoxerId, Boxer> existingBoxers = new HashMap<>();
-    existingBoxers.put(aBoxer.id(), aBoxer);
+    Collection<Boxer> existingBoxers = new ArrayList<>();
+    existingBoxers.add(aBoxer);
     when(boxerRepository.all()).thenReturn(existingBoxers);
     RetrieveAllBoxers retrieveAllBoxers = new RetrieveAllBoxers(boxerRepository);
 
     retrieveAllBoxers.execute(primaryPort);
 
     Collection<Boxer> boxers = getSuccessEntity();
-    assertEquals(existingBoxers.values(), boxers);
+    assertEquals(existingBoxers, boxers);
   }
 }

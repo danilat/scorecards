@@ -8,7 +8,6 @@ import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.mothers.FightMother;
 import java.util.Collection;
-import java.util.Map;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +37,7 @@ public class FightRepositoryTest {
     Fight aFight = FightMother.aFightWithId(fightId);
     fightRepository.save(aFight);
 
-    Collection<Fight> fights = fightRepository.all().values();
+    Collection<Fight> fights = fightRepository.all();
 
     assertEquals(1, fights.size());
   }

@@ -17,7 +17,7 @@ public class RetrieveAllBoxers implements UseCase<Collection<Boxer>, Empty> {
   }
 
   public void execute(PrimaryPort<Collection<Boxer>> primaryPort) {
-    primaryPort.success(boxerRepository.all().values());
+    primaryPort.success(boxerRepository.all());
   }
 
   @Override

@@ -8,8 +8,6 @@ import com.danilat.scorecards.core.mothers.ScoreCardMother;
 import java.util.Collection;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -40,7 +38,7 @@ public class ScoreCardRepositoryTest {
     ScoreCard aScoreCard = ScoreCardMother.aScoreCardWithId(scoreCardId);
     scoreCardRepository.save(aScoreCard);
 
-    Collection<ScoreCard> scoreCards = scoreCardRepository.all().values();
+    Collection<ScoreCard> scoreCards = scoreCardRepository.all();
 
     assertEquals(1, scoreCards.size());
   }
@@ -48,12 +46,13 @@ public class ScoreCardRepositoryTest {
   @Test
   public void findAllScoreCardsByAccount() {
     AccountId firstAccountId = new AccountId("firstAccountId");
-    ScoreCard firstAccountScoreCard = ScoreCardMother.aScoreCardWithIdAndAccount(ScoreCardMother.nextId(), firstAccountId);
+    ScoreCard firstAccountScoreCard = ScoreCardMother
+        .aScoreCardWithIdAndAccount(ScoreCardMother.nextId(), firstAccountId);
     scoreCardRepository.save(firstAccountScoreCard);
     AccountId secondAccountId = new AccountId("secondAccountId");
     scoreCardRepository.save(ScoreCardMother.aScoreCardWithIdAndAccount(ScoreCardMother.nextId(), secondAccountId));
 
-    Collection<ScoreCard> scoreCards = scoreCardRepository.findAllByAccountId(firstAccountId).values();
+    Collection<ScoreCard> scoreCards = scoreCardRepository.findAllByAccountId(firstAccountId);
 
     assertEquals(1, scoreCards.size());
     assertTrue(scoreCards.contains(firstAccountScoreCard));

@@ -6,7 +6,7 @@ import com.danilat.scorecards.core.domain.score.ScoreCard;
 import com.danilat.scorecards.core.domain.score.ScoreCardId;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.shared.persistence.InMemoryRepository;
-import java.util.Map;
+import java.util.Collection;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Repository;
 
@@ -25,9 +25,9 @@ public class InMemoryScoreCardRepository extends InMemoryRepository<ScoreCard, S
   }
 
   @Override
-  public Map<ScoreCardId, ScoreCard> findAllByAccountId(AccountId accountId) {
-    return entities.entrySet().stream()
-        .filter(entry -> entry.getValue().accountId().equals(accountId))
-        .collect(Collectors.toMap(entry -> entry.getValue().id(), entry -> entry.getValue()));
+  public Collection<ScoreCard> findAllByAccountId(AccountId accountId) {
+    return entities.values().stream()
+        .filter(entry -> entry.accountId().equals(accountId))
+        .collect(Collectors.toList());
   }
 }
