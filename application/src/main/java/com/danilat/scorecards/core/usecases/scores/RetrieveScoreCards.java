@@ -4,6 +4,8 @@ import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.score.ScoreCard;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.shared.PrimaryPort;
+import com.danilat.scorecards.shared.domain.Sort;
+import com.danilat.scorecards.shared.domain.Sort.Direction;
 import com.danilat.scorecards.shared.usecases.UseCase;
 import java.util.Collection;
 
@@ -17,6 +19,6 @@ public class RetrieveScoreCards implements UseCase<Collection<ScoreCard>, Accoun
 
   @Override
   public void execute(PrimaryPort<Collection<ScoreCard>> primaryPort, AccountId accountId) {
-    primaryPort.success(scoreCardRepository.findAllByAccountId(accountId));
+    primaryPort.success(scoreCardRepository.findAllByAccountId(accountId, new Sort("scoredAt", Direction.DESC)));
   }
 }

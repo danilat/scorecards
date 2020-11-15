@@ -6,6 +6,7 @@ import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.score.ScoreCard;
 import com.danilat.scorecards.core.domain.score.ScoreCardId;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
+import java.time.Instant;
 
 public class ScoreCardMother {
 
@@ -19,13 +20,17 @@ public class ScoreCardMother {
   }
 
   public static ScoreCard aScoreCardWithIdAndAccount(ScoreCardId scoreCardId, AccountId account) {
-    return ScoreCard.create(scoreCardId, account, new FightId("1"), new BoxerId("ALI"),
+    ScoreCard scoreCard = ScoreCard.create(scoreCardId, account, new FightId("1"), new BoxerId("ALI"),
         new BoxerId("FOREMAN"));
+    scoreCard.scoreRound(1, 10, 9, Instant.now());
+    return scoreCard;
   }
 
   public static ScoreCard aScoreCardWithIdFightIdFirstAndSecondBoxer(ScoreCardId scoreCardId, FightId fightId,
       BoxerId firstBoxer, BoxerId secondBoxer) {
-    return ScoreCard.create(scoreCardId, new AccountId("foo"), fightId, firstBoxer, secondBoxer);
+    ScoreCard scoreCard =  ScoreCard.create(scoreCardId, new AccountId("foo"), fightId, firstBoxer, secondBoxer);
+    scoreCard.scoreRound(1, 10, 9, Instant.now());
+    return scoreCard;
   }
 
   public static ScoreCardId nextId() {

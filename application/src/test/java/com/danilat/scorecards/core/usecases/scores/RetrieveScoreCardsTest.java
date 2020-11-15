@@ -1,6 +1,7 @@
 package com.danilat.scorecards.core.usecases.scores;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 import com.danilat.scorecards.core.domain.account.AccountId;
@@ -9,9 +10,10 @@ import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.core.mothers.ScoreCardMother;
 import com.danilat.scorecards.core.usecases.UseCaseUnitTest;
 import com.danilat.scorecards.shared.PrimaryPort;
+import com.danilat.scorecards.shared.domain.Sort.Direction;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import com.danilat.scorecards.shared.domain.Sort;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -25,6 +27,7 @@ public class RetrieveScoreCardsTest extends UseCaseUnitTest<Collection<ScoreCard
   private AccountId anAccount = new AccountId("some name");
   private RetrieveScoreCards retrieveScoreCards;
   Collection<ScoreCard> existingScorecards;
+  private Sort sortByStoredAt = new Sort("scoredAt", Direction.DESC);
 
   @Override
   public PrimaryPort getPrimaryPort() {
@@ -34,7 +37,7 @@ public class RetrieveScoreCardsTest extends UseCaseUnitTest<Collection<ScoreCard
   @Before
   public void setUp() {
     existingScorecards = new ArrayList<>();
-    when(scoreCardRepository.findAllByAccountId(anAccount)).thenReturn(existingScorecards);
+    when(scoreCardRepository.findAllByAccountId(eq(anAccount), eq(sortByStoredAt))).thenReturn(existingScorecards);
     retrieveScoreCards = new RetrieveScoreCards(scoreCardRepository);
   }
 

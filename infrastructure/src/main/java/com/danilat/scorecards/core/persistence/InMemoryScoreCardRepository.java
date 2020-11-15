@@ -5,8 +5,11 @@ import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.score.ScoreCard;
 import com.danilat.scorecards.core.domain.score.ScoreCardId;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
+import com.danilat.scorecards.shared.domain.Sort;
+import com.danilat.scorecards.shared.domain.Sort.Direction;
 import com.danilat.scorecards.shared.persistence.InMemoryRepository;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Repository;
 
@@ -25,9 +28,22 @@ public class InMemoryScoreCardRepository extends InMemoryRepository<ScoreCard, S
   }
 
   @Override
-  public Collection<ScoreCard> findAllByAccountId(AccountId accountId) {
+  public Collection<ScoreCard> findAllByAccountId(AccountId accountId, Sort sort) {
     return entities.values().stream()
         .filter(entry -> entry.accountId().equals(accountId))
+        .sorted(sortCriteria(sort))
         .collect(Collectors.toList());
   }
+
+  private Comparator<ScoreCard> sortCriteria(Sort sort) {
+    Comparator<ScoreCard> comparator = Comparator.comparing(scoreCard -> scoreCard.id().value());
+    if ("scoredAt" == sort.field()) {
+      comparator = Comparator.comparing(scoreCard -> scoreCard.scoredAt());
+    }
+    if(sort.direction().equals(Direction.DESC)){
+      comparator = comparator.reversed();
+    }
+    return comparator;
+  }
+
 }
