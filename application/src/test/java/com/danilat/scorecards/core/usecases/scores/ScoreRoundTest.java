@@ -138,6 +138,20 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
     assertEquals((previousForemanScore + foremanScore), scoreCard.secondBoxerScore().intValue());
   }
 
+  @Test
+  public void givenAFightScoresARoundThenTheScoredAtIsUpdated() {
+    int round = 1;
+    int aliScore = 10;
+    int foremanScore = 9;
+    ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, aliScore, SECOND_BOXER,
+        foremanScore);
+
+    scoreRound.execute(primaryPort, params);
+
+    ScoreCard scoreCard = getSuccessEntity();
+    assertEquals(anHappenedAt, scoreCard.scoredAt());
+  }
+
   @Captor
   ArgumentCaptor<RoundScored> roundScoredArgumentCaptor;
 

@@ -16,6 +16,7 @@ public class ScoreCard extends Entity<ScoreCardId> {
   private final HashMap<Integer, Integer> firstBoxerScores;
   private final HashMap<Integer, Integer> secondBoxerScores;
   private final AccountId accountId;
+  private Instant scoredAt;
 
   public ScoreCard(ScoreCardId id, AccountId accountId, FightId fightId, BoxerId firstBoxerId, BoxerId secondBoxerId,
       HashMap<Integer, Integer> firstBoxerScores, HashMap<Integer, Integer> secondBoxerScores) {
@@ -73,6 +74,11 @@ public class ScoreCard extends Entity<ScoreCardId> {
   public void scoreRound(int round, int firstBoxerScore, int secondBoxerScore, Instant scoredAt) {
     firstBoxerScores.put(round, firstBoxerScore);
     secondBoxerScores.put(round, secondBoxerScore);
+    this.scoredAt = scoredAt;
     addDomainEvent(RoundScored.create(this, scoredAt));
+  }
+
+  public Instant scoredAt() {
+    return scoredAt;
   }
 }

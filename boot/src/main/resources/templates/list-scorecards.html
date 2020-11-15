@@ -4,8 +4,10 @@
 
 <ul th:if="${scorecards}">
   <li th:each="scorecard : ${scorecards}">
+    <span th:text=${scorecard.scoredAt()}></span> | <a th:href="@{/fights/{id}(id=${scorecard.fightId().value()})}">
     <span th:text=${scorecard.firstBoxerId()}></span>: <span th:text=${scorecard.firstBoxerScore()}></span> /
     <span th:text=${scorecard.secondBoxerId()}></span>: <span th:text=${scorecard.secondBoxerScore()}></span>
+    </a>
   </li>
 </ul>
 </body>
