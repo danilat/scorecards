@@ -1,15 +1,20 @@
 package com.danilat.scorecards.acceptation.steps;
 
+import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.score.ScoreCard;
+import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
+import com.danilat.scorecards.core.mothers.ScoreCardMother;
 import com.danilat.scorecards.core.usecases.scores.ScoreRound;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.domain.Errors;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.List;
+import java.util.stream.IntStream;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.*;
@@ -20,8 +25,11 @@ public class ScoreSteps {
   private ScoreRound scoreRound;
   @Autowired
   private World world;
+  @Autowired
+  private ScoreCardRepository scoreCardRepository;
 
   private ScoreCard scoreCard;
+  private List<ScoreCard> scoreCards;
   private Errors someErrors;
   private PrimaryPort<ScoreCard> scoreCardPrimaryPort = new PrimaryPort<ScoreCard>() {
     @Override
@@ -103,5 +111,30 @@ public class ScoreSteps {
         new BoxerId(firstBoxer), firstBoxerScore, new BoxerId(secondBoxer), secondBoxerScore);
 
     scoreRound.execute(scoreCardPrimaryPort, params);
+  }
+
+  @Given("{string} account has scored {int} fights")
+  public void accountHasScoredFights(String account, Integer numberOfScorecards) {
+    IntStream.range(0, numberOfScorecards).forEach(index ->
+        scoreCardRepository.save(ScoreCardMother.aScoreCardWithIdAndAccount(String.valueOf(index), account))
+    );
+  }
+
+  @When("I retrieve the scorecards for {string}")
+  public void iRetrieveTheScorecardsFor(String account) {
+    // Write code here that turns the phrase above into concrete actions
+    //throw new io.cucumber.java.PendingException();
+  }
+
+  @Then("scorecards that {string} did are present")
+  public void scorecardsThatDidArePresent(String account) {
+    boolean allAreForTheAccount = scoreCards.stream().allMatch(scoreCard -> scoreCard.accountId() == new AccountId(account));
+    assertTrue(allAreForTheAccount);
+  }
+
+  @Then("scorecards that {string} did are not present")
+  public void scorecardsThatDidAreNotPresent(String account) {
+    boolean noneAreForTheAccount = !scoreCards.stream().anyMatch(scoreCard -> scoreCard.accountId() == new AccountId(account));
+    assertFalse(noneAreForTheAccount);
   }
 }
