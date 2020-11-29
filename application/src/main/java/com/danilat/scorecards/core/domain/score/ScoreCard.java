@@ -71,6 +71,14 @@ public class ScoreCard extends Entity<ScoreCardId> {
     return secondBoxerScores.get(round);
   }
 
+  public HashMap<Integer, Integer> firstBoxerScores() {
+    return firstBoxerScores;
+  }
+
+  public HashMap<Integer, Integer> secondBoxerScores() {
+    return secondBoxerScores;
+  }
+
   public void scoreRound(int round, int firstBoxerScore, int secondBoxerScore, Instant scoredAt) {
     firstBoxerScores.put(round, firstBoxerScore);
     secondBoxerScores.put(round, secondBoxerScore);

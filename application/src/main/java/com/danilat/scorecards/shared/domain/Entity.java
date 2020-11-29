@@ -14,7 +14,9 @@ public abstract class Entity<I extends Id> {
     domainEvents = new ArrayList<>();
   }
 
-  public abstract I id();
+  public I id(){
+    return id;
+  };
 
   @Override
   public String toString() {
