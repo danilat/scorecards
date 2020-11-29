@@ -24,9 +24,7 @@ public class RetrieveAFight implements UseCase<FightWithBoxers, FightId> {
     if (optionalFightWithBoxers.isPresent()) {
       primaryPort.success(optionalFightWithBoxers.get());
     } else {
-      Error error = new Error("fightId", id + " not found");
-      Errors errors = new Errors();
-      errors.add(error);
+      Errors errors = Errors.newWithError(new Error("fightId", id + " not found"));
       primaryPort.error(errors);
     }
   }

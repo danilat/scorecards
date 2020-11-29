@@ -6,6 +6,12 @@ import java.util.stream.Stream;
 
 public class Errors extends ArrayList<Error> {
 
+  public static Errors newWithError(Error error){
+    Errors errors = new Errors();
+    errors.add(error);
+    return errors;
+  }
+
   public boolean hasError(String fieldName) {
     return this.stream().anyMatch(error -> error.getFieldName().equals(fieldName));
   }

@@ -19,12 +19,10 @@ public class RetrieveAScoreCard implements UseCase<ScoreCard, ScoreCardId> {
 
   public void execute(PrimaryPort<ScoreCard> primaryPort, ScoreCardId id) {
     Optional<ScoreCard> optionalScoreCard = this.scoreCardRepository.get(id);
-    if(optionalScoreCard.isPresent()){
+    if (optionalScoreCard.isPresent()) {
       primaryPort.success(optionalScoreCard.get());
     } else {
-      Error error = new Error("scoreCardId", id + " not found");
-      Errors errors = new Errors();
-      errors.add(error);
+      Errors errors = Errors.newWithError(new Error("scoreCardId", id + " not found"));
       primaryPort.error(errors);
     }
   }
