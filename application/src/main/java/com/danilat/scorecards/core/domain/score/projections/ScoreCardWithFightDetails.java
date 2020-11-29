@@ -23,7 +23,9 @@ public class ScoreCardWithFightDetails extends Entity<ScoreCardId> {
   private final BoxerId secondBoxerId;
   private final String secondBoxerName;
   private final HashMap<Integer, Integer> firstBoxerScores;
+  private final Integer firstBoxerScore;
   private final HashMap<Integer, Integer> secondBoxerScores;
+  private final Integer secondBoxerScore;
   private final AccountId accountId;
   private final Instant scoredAt;
 
@@ -38,14 +40,12 @@ public class ScoreCardWithFightDetails extends Entity<ScoreCardId> {
     this.secondBoxerId = scoreCard.secondBoxerId();
     this.secondBoxerName = secondBoxer.name();
     this.firstBoxerScores = scoreCard.firstBoxerScores();
+    this.firstBoxerScore = scoreCard.firstBoxerScore();
     this.secondBoxerScores = scoreCard.secondBoxerScores();
+    this.secondBoxerScore = scoreCard.secondBoxerScore();
     this.accountId = scoreCard.accountId();
     this.scoredAt = scoreCard.scoredAt();
-  }
 
-  @Override
-  public ScoreCardId id() {
-    return id;
   }
 
   public FightId getFightId() {
@@ -84,8 +84,16 @@ public class ScoreCardWithFightDetails extends Entity<ScoreCardId> {
     return firstBoxerScores;
   }
 
+  public Integer getFirstBoxerScore() {
+    return firstBoxerScore;
+  }
+
   public HashMap<Integer, Integer> getSecondBoxerScores() {
     return secondBoxerScores;
+  }
+
+  public Integer getSecondBoxerScore() {
+    return secondBoxerScore;
   }
 
   public AccountId getAccountId() {

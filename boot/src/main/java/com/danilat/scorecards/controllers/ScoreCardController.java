@@ -1,7 +1,7 @@
 package com.danilat.scorecards.controllers;
 
 import com.danilat.scorecards.core.domain.account.AccountId;
-import com.danilat.scorecards.core.domain.score.ScoreCard;
+import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDetails;
 import com.danilat.scorecards.core.usecases.scores.RetrieveScoreCards;
 import com.danilat.scorecards.shared.PrimaryPort;
 import java.util.Collection;
@@ -17,9 +17,9 @@ public class ScoreCardController {
   private Model model;
   @Autowired
   private RetrieveScoreCards retrieveScoreCards;
-  private PrimaryPort<Collection<ScoreCard>> retrieveScoreCardsPrimaryPort = new PrimaryPort<Collection<ScoreCard>>() {
+  private PrimaryPort<Collection<ScoreCardWithFightDetails>> retrieveScoreCardsPrimaryPort = new PrimaryPort<Collection<ScoreCardWithFightDetails>>() {
     @Override
-    public void success(Collection<ScoreCard> response) {
+    public void success(Collection<ScoreCardWithFightDetails> response) {
       model.addAttribute("scorecards", response);
     }
   };

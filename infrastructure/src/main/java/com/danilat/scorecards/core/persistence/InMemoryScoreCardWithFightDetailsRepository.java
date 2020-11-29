@@ -12,7 +12,9 @@ import com.danilat.scorecards.shared.domain.Sort;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class InMemoryScoreCardWithFightDetailsRepository implements ScoreCardWithFightDetailsRepository {
 
   private final ScoreCardRepository scoreCardRepository;

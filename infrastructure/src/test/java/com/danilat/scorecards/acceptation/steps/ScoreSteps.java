@@ -2,11 +2,15 @@ package com.danilat.scorecards.acceptation.steps;
 
 import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
+import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
+import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.domain.score.ScoreCard;
-import com.danilat.scorecards.core.domain.score.ScoreCardId;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
+import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDetails;
+import com.danilat.scorecards.core.mothers.BoxerMother;
+import com.danilat.scorecards.core.mothers.FightMother;
 import com.danilat.scorecards.core.mothers.ScoreCardMother;
 import com.danilat.scorecards.core.usecases.scores.RetrieveScoreCards;
 import com.danilat.scorecards.core.usecases.scores.ScoreRound;
@@ -16,9 +20,6 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.stream.IntStream;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -30,6 +31,10 @@ public class ScoreSteps {
   private World world;
   @Autowired
   private ScoreCardRepository scoreCardRepository;
+  @Autowired
+  private BoxerRepository boxerRepository;
+  @Autowired
+  private FightRepository fightRepository;
 
   @Autowired
   private ScoreRound scoreRound;
@@ -51,11 +56,11 @@ public class ScoreSteps {
 
   @Autowired
   private RetrieveScoreCards retrieveScoreCards;
-  private Collection<ScoreCard> scoreCards;
-  private PrimaryPort<Collection<ScoreCard>> retrieveScoreCardsPrimaryPort = new PrimaryPort<Collection<ScoreCard>>() {
+  private Collection<ScoreCardWithFightDetails> scoreCardWithFightDetails;
+  private PrimaryPort<Collection<ScoreCardWithFightDetails>> retrieveScoreCardsPrimaryPort = new PrimaryPort<Collection<ScoreCardWithFightDetails>>() {
     @Override
-    public void success(Collection<ScoreCard> response) {
-      scoreCards = response;
+    public void success(Collection<ScoreCardWithFightDetails> response) {
+      scoreCardWithFightDetails = response;
     }
   };
 
@@ -129,10 +134,16 @@ public class ScoreSteps {
 
   @Given("{string} account has scored {int} fights")
   public void accountHasScoredFights(String account, Integer numberOfScorecards) {
-    IntStream.range(0, numberOfScorecards).forEach(index ->
-        scoreCardRepository
-            .save(ScoreCardMother.aScoreCardWithIdAndAccount(ScoreCardMother.nextId(), new AccountId(account)))
-    );
+    IntStream.range(0, numberOfScorecards).forEach(index -> {
+      ScoreCard scoreCard = ScoreCardMother.aScoreCardWithIdAndAccount(ScoreCardMother.nextId(), new AccountId(account));
+      boxerRepository.save(BoxerMother.aBoxerWithId(scoreCard.firstBoxerId()));
+      boxerRepository.save(BoxerMother.aBoxerWithId(scoreCard.secondBoxerId()));
+      fightRepository.save(FightMother
+          .aFightWithIdAndBoxers(scoreCard.fightId(), scoreCard.firstBoxerId(),
+              scoreCard.secondBoxerId()));
+      scoreCardRepository
+          .save(scoreCard);
+    });
   }
 
   @When("I retrieve the scorecards for {string}")
@@ -142,15 +153,15 @@ public class ScoreSteps {
 
   @Then("scorecards that {string} did are present")
   public void scorecardsThatDidArePresent(String account) {
-    boolean allAreForTheAccount = scoreCards.stream()
-        .allMatch(scoreCard -> scoreCard.accountId().equals(new AccountId(account)));
+    boolean allAreForTheAccount = scoreCardWithFightDetails.stream()
+        .allMatch(scoreCard -> scoreCard.getAccountId().equals(new AccountId(account)));
     assertTrue(allAreForTheAccount);
   }
 
   @Then("scorecards that {string} did are not present")
   public void scorecardsThatDidAreNotPresent(String account) {
-    boolean someIsForTheAccount = scoreCards.stream()
-        .anyMatch(scoreCard -> scoreCard.accountId().equals(new AccountId(account)));
+    boolean someIsForTheAccount = scoreCardWithFightDetails.stream()
+        .anyMatch(scoreCard -> scoreCard.getAccountId().equals(new AccountId(account)));
     assertFalse(someIsForTheAccount);
   }
 }

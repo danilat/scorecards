@@ -5,8 +5,14 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 import com.danilat.scorecards.core.domain.account.AccountId;
+import com.danilat.scorecards.core.domain.boxer.Boxer;
+import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.score.ScoreCard;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
+import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDetails;
+import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDetailsRepository;
+import com.danilat.scorecards.core.mothers.BoxerMother;
+import com.danilat.scorecards.core.mothers.FightMother;
 import com.danilat.scorecards.core.mothers.ScoreCardMother;
 import com.danilat.scorecards.core.usecases.UseCaseUnitTest;
 import com.danilat.scorecards.shared.PrimaryPort;
@@ -21,12 +27,12 @@ import org.mockito.Mock;
 public class RetrieveScoreCardsTest extends UseCaseUnitTest<Collection<ScoreCard>> {
 
   @Mock
-  private PrimaryPort<Collection<ScoreCard>> primaryPort;
+  private PrimaryPort<Collection<ScoreCardWithFightDetails>> primaryPort;
   @Mock
-  private ScoreCardRepository scoreCardRepository;
+  private ScoreCardWithFightDetailsRepository scoreCardRepository;
   private AccountId anAccount = new AccountId("some name");
   private RetrieveScoreCards retrieveScoreCards;
-  Collection<ScoreCard> existingScorecards;
+  Collection<ScoreCardWithFightDetails> existingScorecards;
   private Sort sortByStoredAt = new Sort("scoredAt", Direction.DESC);
 
   @Override
@@ -53,7 +59,10 @@ public class RetrieveScoreCardsTest extends UseCaseUnitTest<Collection<ScoreCard
   public void givenScoreCardsByAnAccountThenArePresent() {
     ScoreCard scoreCard = ScoreCardMother.aScoreCardWithIdAndAccount("an scoreCardId",
         anAccount.value());
-    existingScorecards.add(scoreCard);
+    Fight fight = FightMother.aFightWithId(scoreCard.fightId());
+    Boxer boxer = BoxerMother.aBoxerWithId(scoreCard.firstBoxerId());
+    ScoreCardWithFightDetails scoreCardWithFightDetails= new ScoreCardWithFightDetails(scoreCard, fight, boxer, boxer);
+    existingScorecards.add(scoreCardWithFightDetails);
 
     retrieveScoreCards.execute(primaryPort, anAccount);
 

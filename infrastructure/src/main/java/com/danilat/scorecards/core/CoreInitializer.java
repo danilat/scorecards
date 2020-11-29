@@ -4,6 +4,7 @@ import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersRepository;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
+import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDetailsRepository;
 import com.danilat.scorecards.core.usecases.scores.RetrieveScoreCards;
 import com.danilat.scorecards.shared.Auth;
 import com.danilat.scorecards.core.usecases.boxers.RetrieveAllBoxers;
@@ -47,6 +48,9 @@ public class CoreInitializer {
   private ScoreCardRepository scoreCardRepository;
 
   @Autowired
+  private ScoreCardWithFightDetailsRepository scoreCardWithFightDetailsRepository;
+
+  @Autowired
   private Auth auth;
 
   @Bean
@@ -71,7 +75,7 @@ public class CoreInitializer {
 
   @Bean
   public RetrieveScoreCards retrieveScoreCards() {
-    return new RetrieveScoreCards(scoreCardRepository);
+    return new RetrieveScoreCards(scoreCardWithFightDetailsRepository);
   }
 }
 
