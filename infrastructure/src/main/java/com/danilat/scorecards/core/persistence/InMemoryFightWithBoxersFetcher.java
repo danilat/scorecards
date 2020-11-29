@@ -6,19 +6,19 @@ import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxers;
-import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersRepository;
+import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersFetcher;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class InMemoryFightWithBoxersRepository implements
-    FightWithBoxersRepository {
+public class InMemoryFightWithBoxersFetcher implements
+    FightWithBoxersFetcher {
 
   private FightRepository fightRepository;
   private BoxerRepository boxerRepository;
 
-  public InMemoryFightWithBoxersRepository(@Autowired FightRepository fightRepository,
+  public InMemoryFightWithBoxersFetcher(@Autowired FightRepository fightRepository,
       @Autowired BoxerRepository boxerRepository) {
     this.fightRepository = fightRepository;
     this.boxerRepository = boxerRepository;

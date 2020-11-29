@@ -2,7 +2,7 @@ package com.danilat.scorecards.core.usecases.fights;
 
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxers;
-import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersRepository;
+import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersFetcher;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.usecases.UseCase;
 import com.danilat.scorecards.shared.domain.Error;
@@ -11,16 +11,16 @@ import java.util.Optional;
 
 public class RetrieveAFight implements UseCase<FightWithBoxers, FightId> {
 
-  private final FightWithBoxersRepository fightWithBoxersRepository;
+  private final FightWithBoxersFetcher fightWithBoxersFetcher;
 
   public RetrieveAFight(
-      FightWithBoxersRepository fightWithBoxersRepository) {
-    this.fightWithBoxersRepository = fightWithBoxersRepository;
+      FightWithBoxersFetcher fightWithBoxersFetcher) {
+    this.fightWithBoxersFetcher = fightWithBoxersFetcher;
   }
 
   public void execute(
       PrimaryPort<FightWithBoxers> primaryPort, FightId id) {
-    Optional<FightWithBoxers> optionalFightWithBoxers = fightWithBoxersRepository.get(id);
+    Optional<FightWithBoxers> optionalFightWithBoxers = fightWithBoxersFetcher.get(id);
     if (optionalFightWithBoxers.isPresent()) {
       primaryPort.success(optionalFightWithBoxers.get());
     } else {

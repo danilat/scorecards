@@ -6,7 +6,7 @@ import static org.mockito.Mockito.when;
 
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxers;
-import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersRepository;
+import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersFetcher;
 import com.danilat.scorecards.core.mothers.FightWithBoxersMother;
 import com.danilat.scorecards.core.usecases.UseCaseUnitTest;
 import com.danilat.scorecards.shared.PrimaryPort;
@@ -18,7 +18,7 @@ import org.mockito.Mock;
 public class RetrieveAFightTest extends UseCaseUnitTest<FightWithBoxers> {
 
   @Mock
-  private FightWithBoxersRepository fightWithBoxersRepository;
+  private FightWithBoxersFetcher fightWithBoxersFetcher;
 
   private static final FightId AN_ID = new FightId("irrelevant id");
   private FightWithBoxers existingFightWithBoxers;
@@ -36,10 +36,10 @@ public class RetrieveAFightTest extends UseCaseUnitTest<FightWithBoxers> {
   @Before
   public void setup() {
     existingFightWithBoxers = FightWithBoxersMother.aFightWithBoxersWithId(AN_ID);
-    when(fightWithBoxersRepository.get(AN_ID)).thenReturn(Optional.of(
+    when(fightWithBoxersFetcher.get(AN_ID)).thenReturn(Optional.of(
         existingFightWithBoxers));
 
-    retrieveAFight = new RetrieveAFight(fightWithBoxersRepository);
+    retrieveAFight = new RetrieveAFight(fightWithBoxersFetcher);
   }
 
   @Test

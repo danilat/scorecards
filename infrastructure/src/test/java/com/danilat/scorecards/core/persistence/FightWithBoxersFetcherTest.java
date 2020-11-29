@@ -9,25 +9,25 @@ import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxers;
-import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersRepository;
+import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersFetcher;
 import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.mothers.FightMother;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 
-public class FightWithBoxersRepositoryTest {
+public class FightWithBoxersFetcherTest {
 
   private FightRepository fightRepository;
   private BoxerRepository boxerRepository;
-  private FightWithBoxersRepository fightWithBoxersRepository;
+  private FightWithBoxersFetcher fightWithBoxersFetcher;
   private FightId fightId = new FightId("some irrelevant id");
 
   @Before
   public void setup() {
     fightRepository = new InMemoryFightRepository();
     boxerRepository = new InMemoryBoxerRepository();
-    fightWithBoxersRepository = new InMemoryFightWithBoxersRepository(fightRepository,
+    fightWithBoxersFetcher = new InMemoryFightWithBoxersFetcher(fightRepository,
         boxerRepository);
   }
 
@@ -41,7 +41,7 @@ public class FightWithBoxersRepositoryTest {
     Boxer secondBoxer = BoxerMother.aBoxerWithId("foreman");
     boxerRepository.save(secondBoxer);
 
-    Optional<FightWithBoxers> retrieved = fightWithBoxersRepository.get(fightId);
+    Optional<FightWithBoxers> retrieved = fightWithBoxersFetcher.get(fightId);
     assertTrue(retrieved.isPresent());
     FightWithBoxers fightWithBoxers = retrieved.get();
     assertEquals(fight.id(), fightWithBoxers.id());

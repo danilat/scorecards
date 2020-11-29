@@ -2,7 +2,7 @@ package com.danilat.scorecards.core;
 
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
-import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersRepository;
+import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersFetcher;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDetailsRepository;
 import com.danilat.scorecards.core.usecases.scores.RetrieveScoreCards;
@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Import;
 public class CoreInitializer {
 
   @Autowired
-  private FightWithBoxersRepository fightWithBoxersRepository;
+  private FightWithBoxersFetcher fightWithBoxersFetcher;
 
   @Autowired
   private FightRepository fightRepository;
@@ -55,7 +55,7 @@ public class CoreInitializer {
 
   @Bean
   public RetrieveAFight retrieveAFight() {
-    return new RetrieveAFight(fightWithBoxersRepository);
+    return new RetrieveAFight(fightWithBoxersFetcher);
   }
 
   @Bean
