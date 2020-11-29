@@ -43,7 +43,8 @@ public class RetrieveAScoreCardTest extends UseCaseUnitTest<ScoreCard> {
   public void givenAnNonExistingFightThenIsNotRetrieved() {
     retrieveAScoreCard.execute(primaryPort, new ScoreCardId("un-existing-id"));
 
-    assertTrue(getErrors().hasMessage(new ScoreCardId("un-existing-id") + " not found"));
+    assertEquals("ScoreCard: " + new ScoreCardId("un-existing-id") + " not found",
+        getErrors().getMessagesContentFor("scoreCardId"));
   }
 
   @Override
