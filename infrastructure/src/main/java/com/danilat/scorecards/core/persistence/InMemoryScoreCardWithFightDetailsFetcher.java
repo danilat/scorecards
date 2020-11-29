@@ -7,7 +7,7 @@ import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDetails;
-import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDetailsRepository;
+import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDetailsFetcher;
 import com.danilat.scorecards.shared.domain.Sort;
 import java.util.Collection;
 import java.util.Optional;
@@ -15,13 +15,13 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class InMemoryScoreCardWithFightDetailsRepository implements ScoreCardWithFightDetailsRepository {
+public class InMemoryScoreCardWithFightDetailsFetcher implements ScoreCardWithFightDetailsFetcher {
 
   private final ScoreCardRepository scoreCardRepository;
   private final FightRepository fightRepository;
   private final BoxerRepository boxerRepository;
 
-  public InMemoryScoreCardWithFightDetailsRepository(ScoreCardRepository scoreCardRepository,
+  public InMemoryScoreCardWithFightDetailsFetcher(ScoreCardRepository scoreCardRepository,
       FightRepository fightRepository, BoxerRepository boxerRepository) {
     this.scoreCardRepository = scoreCardRepository;
     this.fightRepository = fightRepository;

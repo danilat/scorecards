@@ -8,7 +8,7 @@ import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.domain.score.ScoreCard;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDetails;
-import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDetailsRepository;
+import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDetailsFetcher;
 import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.mothers.FightMother;
 import com.danilat.scorecards.core.mothers.ScoreCardMother;
@@ -21,19 +21,19 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ScoreCardWithFightDetailsRepositoryTest {
+public class ScoreCardWithFightDetailsFetcherTest {
 
   private FightRepository fightRepository;
   private BoxerRepository boxerRepository;
   private ScoreCardRepository scoreCardRepository;
-  private ScoreCardWithFightDetailsRepository scoreCardWithFightDetailsRepository;
+  private ScoreCardWithFightDetailsFetcher scoreCardWithFightDetailsFetcher;
 
   @Before
   public void setup() {
     fightRepository = new InMemoryFightRepository();
     boxerRepository = new InMemoryBoxerRepository();
     scoreCardRepository = new InMemoryScoreCardRepository();
-    scoreCardWithFightDetailsRepository = new InMemoryScoreCardWithFightDetailsRepository(scoreCardRepository,
+    scoreCardWithFightDetailsFetcher = new InMemoryScoreCardWithFightDetailsFetcher(scoreCardRepository,
         fightRepository, boxerRepository);
   }
 
@@ -51,7 +51,7 @@ public class ScoreCardWithFightDetailsRepositoryTest {
     AccountId secondAccountId = new AccountId("secondAccountId");
     scoreCardRepository.save(ScoreCardMother.aScoreCardWithIdAndAccount(ScoreCardMother.nextId(), secondAccountId));
 
-    Collection<ScoreCardWithFightDetails> scoreCardsCollection = scoreCardWithFightDetailsRepository
+    Collection<ScoreCardWithFightDetails> scoreCardsCollection = scoreCardWithFightDetailsFetcher
         .findAllByAccountId(firstAccountId, Sort.DEFAULT);
 
     assertEquals(1, scoreCardsCollection.size());
@@ -77,7 +77,7 @@ public class ScoreCardWithFightDetailsRepositoryTest {
     scoreCardRepository.save(secondScoreCard);
 
     Sort sort = new Sort("scoredAt", Direction.ASC);
-    Collection<ScoreCardWithFightDetails> scoreCards = scoreCardWithFightDetailsRepository
+    Collection<ScoreCardWithFightDetails> scoreCards = scoreCardWithFightDetailsFetcher
         .findAllByAccountId(accountId, sort);
 
     assertEquals(2, scoreCards.size());

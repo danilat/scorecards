@@ -2,7 +2,7 @@ package com.danilat.scorecards.core.usecases.scores;
 
 import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDetails;
-import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDetailsRepository;
+import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDetailsFetcher;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.domain.Sort;
 import com.danilat.scorecards.shared.domain.Sort.Direction;
@@ -11,9 +11,9 @@ import java.util.Collection;
 
 public class RetrieveScoreCards implements UseCase<Collection<ScoreCardWithFightDetails>, AccountId> {
 
-  private final ScoreCardWithFightDetailsRepository scoreCardRepository;
+  private final ScoreCardWithFightDetailsFetcher scoreCardRepository;
 
-  public RetrieveScoreCards(ScoreCardWithFightDetailsRepository scoreCardRepository) {
+  public RetrieveScoreCards(ScoreCardWithFightDetailsFetcher scoreCardRepository) {
     this.scoreCardRepository = scoreCardRepository;
   }
 

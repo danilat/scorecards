@@ -8,9 +8,8 @@ import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.score.ScoreCard;
-import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDetails;
-import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDetailsRepository;
+import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDetailsFetcher;
 import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.mothers.FightMother;
 import com.danilat.scorecards.core.mothers.ScoreCardMother;
@@ -29,7 +28,7 @@ public class RetrieveScoreCardsTest extends UseCaseUnitTest<Collection<ScoreCard
   @Mock
   private PrimaryPort<Collection<ScoreCardWithFightDetails>> primaryPort;
   @Mock
-  private ScoreCardWithFightDetailsRepository scoreCardRepository;
+  private ScoreCardWithFightDetailsFetcher scoreCardRepository;
   private AccountId anAccount = new AccountId("some name");
   private RetrieveScoreCards retrieveScoreCards;
   Collection<ScoreCardWithFightDetails> existingScorecards;
