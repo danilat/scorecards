@@ -7,11 +7,13 @@ import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.domain.score.ScoreCard;
+import com.danilat.scorecards.core.domain.score.ScoreCardId;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDetails;
 import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.mothers.FightMother;
 import com.danilat.scorecards.core.mothers.ScoreCardMother;
+import com.danilat.scorecards.core.usecases.scores.RetrieveAScoreCard;
 import com.danilat.scorecards.core.usecases.scores.RetrieveScoreCards;
 import com.danilat.scorecards.core.usecases.scores.ScoreRound;
 import com.danilat.scorecards.shared.PrimaryPort;
@@ -61,6 +63,22 @@ public class ScoreSteps {
     @Override
     public void success(Collection<ScoreCardWithFightDetails> response) {
       scoreCardWithFightDetails = response;
+    }
+  };
+
+  @Autowired
+  private RetrieveAScoreCard retrieveAScoreCard;
+  private ScoreCardId existingScoreCardId;
+  private PrimaryPort<ScoreCard> retrieveAScoreCardPrimaryPort = new PrimaryPort<ScoreCard>() {
+    @Override
+    public void success(ScoreCard response) {
+      scoreCard = response;
+    }
+
+    @Override
+    public void error(Errors errors) {
+      someErrors = errors;
+      scoreCard = null;
     }
   };
 
@@ -135,7 +153,8 @@ public class ScoreSteps {
   @Given("{string} account has scored {int} fights")
   public void accountHasScoredFights(String account, Integer numberOfScorecards) {
     IntStream.range(0, numberOfScorecards).forEach(index -> {
-      ScoreCard scoreCard = ScoreCardMother.aScoreCardWithIdAndAccount(ScoreCardMother.nextId(), new AccountId(account));
+      ScoreCard scoreCard = ScoreCardMother
+          .aScoreCardWithIdAndAccount(ScoreCardMother.nextId(), new AccountId(account));
       boxerRepository.save(BoxerMother.aBoxerWithId(scoreCard.firstBoxerId()));
       boxerRepository.save(BoxerMother.aBoxerWithId(scoreCard.secondBoxerId()));
       fightRepository.save(FightMother
@@ -163,5 +182,34 @@ public class ScoreSteps {
     boolean someIsForTheAccount = scoreCardWithFightDetails.stream()
         .anyMatch(scoreCard -> scoreCard.getAccountId().equals(new AccountId(account)));
     assertFalse(someIsForTheAccount);
+  }
+
+  @Given("an existing scorecard")
+  public void anExistingScorecard() {
+    existingScoreCardId = ScoreCardMother.nextId();
+    ScoreCard scoreCard = ScoreCardMother.aScoreCardWithId(existingScoreCardId);
+    scoreCardRepository.save(scoreCard);
+  }
+
+  @When("I retrieve the existing scorecard")
+  public void iRetrieveTheExistingScorecard() {
+    retrieveAScoreCard.execute(retrieveAScoreCardPrimaryPort, existingScoreCardId);
+  }
+
+  @Then("the scorecard is present")
+  public void theScorecardIsPresent() {
+    assertNotNull(scoreCard);
+    assertNull(someErrors);
+  }
+
+  @When("I retrieve a non-existing scorecard")
+  public void iRetrieveANonExistingScorecard() {
+    retrieveAScoreCard.execute(retrieveAScoreCardPrimaryPort, new ScoreCardId("foobar"));
+  }
+
+  @Then("the scorecard is not present")
+  public void theScorecardIsNotPresent() {
+    assertNull(scoreCard);
+    assertNotNull(someErrors);
   }
 }
