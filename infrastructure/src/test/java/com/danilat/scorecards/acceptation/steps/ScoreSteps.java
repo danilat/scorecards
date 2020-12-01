@@ -14,6 +14,7 @@ import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.mothers.FightMother;
 import com.danilat.scorecards.core.mothers.ScoreCardMother;
 import com.danilat.scorecards.core.usecases.scores.RetrieveAScoreCard;
+import com.danilat.scorecards.core.usecases.scores.RetrieveAScoreCard.RetrieveAScoreCardParameters;
 import com.danilat.scorecards.core.usecases.scores.RetrieveScoreCards;
 import com.danilat.scorecards.core.usecases.scores.ScoreRound;
 import com.danilat.scorecards.shared.PrimaryPort;
@@ -69,6 +70,7 @@ public class ScoreSteps {
   @Autowired
   private RetrieveAScoreCard retrieveAScoreCard;
   private ScoreCardId existingScoreCardId;
+  private ScoreCard existingScoreCard;
   private PrimaryPort<ScoreCard> retrieveAScoreCardPrimaryPort = new PrimaryPort<ScoreCard>() {
     @Override
     public void success(ScoreCard response) {
@@ -187,13 +189,14 @@ public class ScoreSteps {
   @Given("an existing scorecard")
   public void anExistingScorecard() {
     existingScoreCardId = ScoreCardMother.nextId();
-    ScoreCard scoreCard = ScoreCardMother.aScoreCardWithId(existingScoreCardId);
-    scoreCardRepository.save(scoreCard);
+    existingScoreCard = ScoreCardMother.aScoreCardWithId(existingScoreCardId);
+    scoreCardRepository.save(existingScoreCard);
   }
 
   @When("I retrieve the existing scorecard")
   public void iRetrieveTheExistingScorecard() {
-    retrieveAScoreCard.execute(retrieveAScoreCardPrimaryPort, existingScoreCardId);
+    retrieveAScoreCard.execute(retrieveAScoreCardPrimaryPort,
+        new RetrieveAScoreCardParameters(existingScoreCard.fightId(), existingScoreCard.accountId()));
   }
 
   @Then("the scorecard is present")
@@ -204,7 +207,8 @@ public class ScoreSteps {
 
   @When("I retrieve a non-existing scorecard")
   public void iRetrieveANonExistingScorecard() {
-    retrieveAScoreCard.execute(retrieveAScoreCardPrimaryPort, new ScoreCardId("foobar"));
+    retrieveAScoreCard.execute(retrieveAScoreCardPrimaryPort,
+        new RetrieveAScoreCardParameters(new FightId("foo"), new AccountId("bar")));
   }
 
   @Then("the scorecard is not present")

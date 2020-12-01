@@ -15,6 +15,13 @@ public class ScoreCardMother {
         new BoxerId("FOREMAN"));
   }
 
+  public static ScoreCard aScoreCardWithFightIdAndAccountId(FightId fightId, AccountId accountId) {
+    ScoreCard scoreCard =  ScoreCard.create(nextId(), new AccountId("foo"), fightId, new BoxerId("ALI"),
+        new BoxerId("FOREMAN"));
+    scoreCard.scoreRound(1, 10, 9, Instant.now());
+    return scoreCard;
+  }
+
   public static ScoreCard aScoreCardWithIdAndAccount(String scoreCardId, String account) {
     return aScoreCardWithIdAndAccount(new ScoreCardId(scoreCardId), new AccountId(account));
   }

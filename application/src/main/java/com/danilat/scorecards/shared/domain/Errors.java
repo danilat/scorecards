@@ -1,5 +1,6 @@
 package com.danilat.scorecards.shared.domain;
 
+import com.danilat.scorecards.core.domain.score.ScoreCardNotFoundError;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -18,6 +19,10 @@ public class Errors extends ArrayList<Error> {
 
   public boolean hasMessage(String message) {
     return this.stream().anyMatch(error -> error.getMessage().equals(message));
+  }
+
+  public boolean hasError(Class<ScoreCardNotFoundError> scoreCardNotFoundErrorClass) {
+    return this.stream().anyMatch(error -> error.getClass().equals(scoreCardNotFoundErrorClass));
   }
 
   public Stream<String> getMessagesFor(String fieldName) {
