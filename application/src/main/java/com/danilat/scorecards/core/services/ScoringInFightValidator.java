@@ -23,21 +23,21 @@ public class ScoringInFightValidator {
     FieldErrors errors = new FieldErrors();
     Optional<Fight> optionalFight = fightRepository.get(scoring.getFightId());
     if (!optionalFight.isPresent()) {
-      FieldError error = new FightNotFoundError(scoring.getFightId());
+      FieldError error = new FieldError("fightId", new FightNotFoundError(scoring.getFightId()));
       errors.add(error);
       return errors;
     }
     Fight fight = optionalFight.get();
     if (!fight.isRoundInInterval(scoring.getRound())) {
-      FieldError error = new RoundOutOfIntervalError(scoring.getRound(), fight.numberOfRounds());
+      FieldError error = new FieldError("round", new RoundOutOfIntervalError(scoring.getRound(), fight.numberOfRounds()));
       errors.add(error);
     }
     if (!fight.isTheFirstBoxer(scoring.getFirstBoxerId())) {
-      FieldError error = new BoxerIsNotInFightError("firstBoxer", scoring.getFirstBoxerId(), scoring.getFightId());
+      FieldError error = new FieldError("firstBoxer", new BoxerIsNotInFightError(scoring.getFirstBoxerId(), scoring.getFightId()));
       errors.add(error);
     }
     if (!fight.isTheSecondBoxer(scoring.getSecondBoxerId())) {
-      FieldError error = new BoxerIsNotInFightError("secondBoxer", scoring.getSecondBoxerId(), scoring.getFightId());
+      FieldError error = new FieldError("secondBoxer", new BoxerIsNotInFightError(scoring.getSecondBoxerId(), scoring.getFightId()));
       errors.add(error);
     }
     return errors;

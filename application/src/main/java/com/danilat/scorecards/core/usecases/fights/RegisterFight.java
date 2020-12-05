@@ -72,7 +72,7 @@ public class RegisterFight implements UseCase<Fight, RegisterFightParameters> {
   private FieldError validateBoxer(String fieldName, BoxerId boxerId) {
     FieldError error = null;
     if (!this.boxerRepository.get(boxerId).isPresent()) {
-      error = new BoxerNotFoundError(fieldName, boxerId);
+      error = new FieldError(fieldName, new BoxerNotFoundError(boxerId));
     }
     return error;
   }

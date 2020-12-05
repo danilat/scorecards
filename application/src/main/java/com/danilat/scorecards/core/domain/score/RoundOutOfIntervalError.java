@@ -1,10 +1,10 @@
 package com.danilat.scorecards.core.domain.score;
 
-import com.danilat.scorecards.shared.domain.FieldError;
+import com.danilat.scorecards.shared.domain.Error;
 
-public class RoundOutOfIntervalError extends FieldError {
+public class RoundOutOfIntervalError extends Error {
 
   public RoundOutOfIntervalError(Integer round, Integer maxNumberOfRounds) {
-    super("round", round + " is out of the interval between 1 and " + maxNumberOfRounds);
+    super(round + " is out of the interval between 1 and " + maxNumberOfRounds);
   }
 }

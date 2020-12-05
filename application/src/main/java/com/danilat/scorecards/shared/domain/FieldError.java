@@ -15,6 +15,11 @@ public class FieldError {
     this.error = new Error(message, message);
   }
 
+  public FieldError(String fieldName, Error error) {
+    this.fieldName = fieldName;
+    this.error = error;
+  }
+
   public String getFieldName() {
     return fieldName;
   }
