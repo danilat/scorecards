@@ -1,5 +1,6 @@
 package com.danilat.scorecards.core.usecases;
 
+import com.danilat.scorecards.shared.domain.Error;
 import com.danilat.scorecards.shared.domain.FieldError;
 import com.danilat.scorecards.shared.domain.FieldErrors;
 import java.util.Set;
@@ -11,7 +12,7 @@ public class ConstraintValidatorToErrorMapper<T> {
     String fieldName = violation.getPropertyPath().toString();
     String message = violation.getMessage();
     String messageTemplate = violation.getMessageTemplate();
-    FieldError error = new FieldError(fieldName, message, messageTemplate);
+    FieldError error = new FieldError(fieldName, new Error(message, messageTemplate));
     return error;
   }
 

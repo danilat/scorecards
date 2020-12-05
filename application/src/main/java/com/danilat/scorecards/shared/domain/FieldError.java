@@ -5,16 +5,6 @@ public class FieldError {
   private final String fieldName;
   private final Error error;
 
-  public FieldError(String fieldName, String message, String messageTemplate) {
-    this.fieldName = fieldName;
-    this.error = new Error(message, messageTemplate);
-  }
-
-  public FieldError(String fieldName, String message) {
-    this.fieldName = fieldName;
-    this.error = new Error(message, message);
-  }
-
   public FieldError(String fieldName, Error error) {
     this.fieldName = fieldName;
     this.error = error;
@@ -26,9 +16,5 @@ public class FieldError {
 
   public String getMessage() {
     return error.getMessage();
-  }
-
-  public String getMessageTemplate() {
-    return error.getMessageTemplate();
   }
 }
