@@ -18,7 +18,7 @@ import com.danilat.scorecards.core.usecases.scores.RetrieveAScoreCard.RetrieveAS
 import com.danilat.scorecards.core.usecases.scores.RetrieveScoreCards;
 import com.danilat.scorecards.core.usecases.scores.ScoreRound;
 import com.danilat.scorecards.shared.PrimaryPort;
-import com.danilat.scorecards.shared.domain.Errors;
+import com.danilat.scorecards.shared.domain.FieldErrors;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -42,7 +42,7 @@ public class ScoreSteps {
   @Autowired
   private ScoreRound scoreRound;
   private ScoreCard scoreCard;
-  private Errors someErrors;
+  private FieldErrors someErrors;
   private PrimaryPort<ScoreCard> scoreRoundPrimaryPort = new PrimaryPort<ScoreCard>() {
     @Override
     public void success(ScoreCard entity) {
@@ -51,7 +51,7 @@ public class ScoreSteps {
     }
 
     @Override
-    public void error(Errors errors) {
+    public void error(FieldErrors errors) {
       someErrors = errors;
       scoreCard = null;
     }
@@ -78,7 +78,7 @@ public class ScoreSteps {
     }
 
     @Override
-    public void error(Errors errors) {
+    public void error(FieldErrors errors) {
       someErrors = errors;
       scoreCard = null;
     }

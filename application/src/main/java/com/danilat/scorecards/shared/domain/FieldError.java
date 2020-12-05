@@ -3,19 +3,16 @@ package com.danilat.scorecards.shared.domain;
 public class FieldError {
 
   private final String fieldName;
-  private final String message;
-  private final String messageTemplate;
+  private final Error error;
 
   public FieldError(String fieldName, String message, String messageTemplate) {
     this.fieldName = fieldName;
-    this.message = message;
-    this.messageTemplate = messageTemplate;
+    this.error = new Error(message, messageTemplate);
   }
 
   public FieldError(String fieldName, String message) {
     this.fieldName = fieldName;
-    this.message = message;
-    this.messageTemplate = message;
+    this.error = new Error(message, message);
   }
 
   public String getFieldName() {
@@ -23,10 +20,10 @@ public class FieldError {
   }
 
   public String getMessage() {
-    return message;
+    return error.getMessage();
   }
 
   public String getMessageTemplate() {
-    return messageTemplate;
+    return error.getMessageTemplate();
   }
 }

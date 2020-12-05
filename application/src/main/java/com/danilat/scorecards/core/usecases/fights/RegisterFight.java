@@ -14,7 +14,7 @@ import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 import com.danilat.scorecards.shared.usecases.UseCase;
 import com.danilat.scorecards.shared.domain.FieldError;
-import com.danilat.scorecards.shared.domain.Errors;
+import com.danilat.scorecards.shared.domain.FieldErrors;
 import com.danilat.scorecards.shared.events.EventBus;
 import java.time.LocalDate;
 import java.util.Set;
@@ -34,7 +34,7 @@ public class RegisterFight implements UseCase<Fight, RegisterFightParameters> {
   private final EventBus eventBus;
   private final Clock clock;
   private final UniqueIdGenerator uniqueIdGenerator;
-  private Errors errors;
+  private FieldErrors errors;
 
   public RegisterFight(FightRepository fightRepository, BoxerRepository boxerRepository,
       EventBus eventBus, Clock clock,
@@ -62,7 +62,7 @@ public class RegisterFight implements UseCase<Fight, RegisterFightParameters> {
   }
 
   private boolean validate(RegisterFightParameters parameters) {
-    errors = new Errors();
+    errors = new FieldErrors();
     errors.addAll(parameters.validate());
     errors.add(validateBoxer("firstBoxer", parameters.getFirstBoxer()));
     errors.add(validateBoxer("secondBoxer", parameters.getSecondBoxer()));
@@ -130,7 +130,7 @@ public class RegisterFight implements UseCase<Fight, RegisterFightParameters> {
       this.numberOfRounds = numberOfRounds;
     }
 
-    public Errors validate() {
+    public FieldErrors validate() {
       ConstraintValidatorToErrorMapper constraintValidatorToErrorMapper = new ConstraintValidatorToErrorMapper<RegisterFightParameters>();
       ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
       Validator validator = factory.getValidator();

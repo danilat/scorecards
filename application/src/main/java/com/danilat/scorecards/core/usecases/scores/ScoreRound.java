@@ -16,7 +16,7 @@ import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 import com.danilat.scorecards.shared.usecases.UseCase;
-import com.danilat.scorecards.shared.domain.Errors;
+import com.danilat.scorecards.shared.domain.FieldErrors;
 import com.danilat.scorecards.shared.events.EventBus;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -35,7 +35,7 @@ public class ScoreRound implements UseCase<ScoreCard, ScoreFightParameters> {
   private final Auth auth;
   private final EventBus eventBus;
   private final Clock clock;
-  private Errors errors;
+  private FieldErrors errors;
 
   public ScoreRound(ScoreCardRepository scoreCardRepository, FightRepository fightRepository,
       UniqueIdGenerator uniqueIdGenerator, Auth auth, EventBus eventBus, Clock clock) {
@@ -72,7 +72,7 @@ public class ScoreRound implements UseCase<ScoreCard, ScoreFightParameters> {
   }
 
   private boolean validate(ScoreFightParameters params) {
-    errors = new Errors();
+    errors = new FieldErrors();
     errors.addAll(params.validate());
     ScoringInFightValidator scoringInFightValidator = new ScoringInFightValidator(fightRepository);
     errors.addAll(scoringInFightValidator.execute(params.scoring()));
@@ -128,7 +128,7 @@ public class ScoreRound implements UseCase<ScoreCard, ScoreFightParameters> {
       return secondBoxerScore;
     }
 
-    public Errors validate() {
+    public FieldErrors validate() {
       ConstraintValidatorToErrorMapper constraintValidatorToErrorMapper = new ConstraintValidatorToErrorMapper<ScoreFightParameters>();
       ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
       Validator validator = factory.getValidator();

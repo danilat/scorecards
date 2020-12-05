@@ -1,7 +1,7 @@
 package com.danilat.scorecards.core.usecases;
 
 import com.danilat.scorecards.shared.domain.FieldError;
-import com.danilat.scorecards.shared.domain.Errors;
+import com.danilat.scorecards.shared.domain.FieldErrors;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 
@@ -15,8 +15,8 @@ public class ConstraintValidatorToErrorMapper<T> {
     return error;
   }
 
-  public Errors mapConstraintViolationsToErrors(Set<ConstraintViolation<T>> violations) {
-    Errors errors = new Errors();
+  public FieldErrors mapConstraintViolationsToErrors(Set<ConstraintViolation<T>> violations) {
+    FieldErrors errors = new FieldErrors();
     if (!violations.isEmpty()) {
       violations.forEach(violation -> {
         FieldError error = mapConstraintViolationToError(violation);

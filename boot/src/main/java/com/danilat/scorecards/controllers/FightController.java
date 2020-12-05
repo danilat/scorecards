@@ -8,7 +8,7 @@ import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
 import com.danilat.scorecards.core.usecases.scores.ScoreRound;
 import com.danilat.scorecards.core.usecases.scores.ScoreRound.ScoreFightParameters;
 import com.danilat.scorecards.shared.PrimaryPort;
-import com.danilat.scorecards.shared.domain.Errors;
+import com.danilat.scorecards.shared.domain.FieldErrors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -47,7 +47,7 @@ public class FightController {
     }
 
     @Override
-    public void error(Errors errors) {
+    public void error(FieldErrors errors) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, errors.toString());
     }
   };
@@ -68,7 +68,7 @@ public class FightController {
     }
 
     @Override
-    public void error(Errors errors) {
+    public void error(FieldErrors errors) {
       model.addAttribute("errors", errors);
       scoreResult = findById(id, model);
     }

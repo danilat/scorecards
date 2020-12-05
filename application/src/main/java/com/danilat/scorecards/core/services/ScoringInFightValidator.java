@@ -8,7 +8,7 @@ import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.domain.score.BoxerIsNotInFightError;
 import com.danilat.scorecards.core.domain.score.RoundOutOfIntervalError;
 import com.danilat.scorecards.shared.domain.FieldError;
-import com.danilat.scorecards.shared.domain.Errors;
+import com.danilat.scorecards.shared.domain.FieldErrors;
 import java.util.Optional;
 
 public class ScoringInFightValidator {
@@ -19,8 +19,8 @@ public class ScoringInFightValidator {
     this.fightRepository = fightRepository;
   }
 
-  public Errors execute(Scoring scoring) {
-    Errors errors = new Errors();
+  public FieldErrors execute(Scoring scoring) {
+    FieldErrors errors = new FieldErrors();
     Optional<Fight> optionalFight = fightRepository.get(scoring.getFightId());
     if (!optionalFight.isPresent()) {
       FieldError error = new FightNotFoundError(scoring.getFightId());

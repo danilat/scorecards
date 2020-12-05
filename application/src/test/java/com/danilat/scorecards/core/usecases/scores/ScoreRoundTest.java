@@ -14,7 +14,7 @@ import com.danilat.scorecards.core.usecases.UseCaseUnitTest;
 import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
-import com.danilat.scorecards.shared.domain.Errors;
+import com.danilat.scorecards.shared.domain.FieldErrors;
 import com.danilat.scorecards.shared.events.EventBus;
 import java.time.Instant;
 import org.junit.Before;
@@ -181,7 +181,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
 
     scoreRound.execute(primaryPort, params);
 
-    Errors errors = getErrors();
+    FieldErrors errors = getErrors();
     assertEquals("Fight: " + nonExistingFightId + " not found", errors.getMessagesContentFor("fightId"));
   }
 
@@ -192,7 +192,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
 
     scoreRound.execute(primaryPort, params);
 
-    Errors errors = getErrors();
+    FieldErrors errors = getErrors();
     assertEquals(round + " is out of the interval between 1 and 12", errors.getMessagesContentFor("round"));
   }
 
@@ -203,7 +203,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
 
     scoreRound.execute(primaryPort, params);
 
-    Errors errors = getErrors();
+    FieldErrors errors = getErrors();
     assertEquals(round + " is out of the interval between 1 and 12", errors.getMessagesContentFor("round"));
   }
 
@@ -217,7 +217,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
 
     scoreRound.execute(primaryPort, params);
 
-    Errors errors = getErrors();
+    FieldErrors errors = getErrors();
     assertEquals(roundOutOfInterval + " is out of the interval between 1 and " + fight.numberOfRounds(),
         errors.getMessagesContentFor("round"));
   }
@@ -229,7 +229,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
 
     scoreRound.execute(primaryPort, params);
 
-    Errors errors = getErrors();
+    FieldErrors errors = getErrors();
     assertEquals("secondBoxerScore is mandatory", errors.getMessagesContentFor("secondBoxerScore"));
   }
 
@@ -240,7 +240,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
 
     scoreRound.execute(primaryPort, params);
 
-    Errors errors = getErrors();
+    FieldErrors errors = getErrors();
     assertEquals("scores interval is between 1 and 10", errors.getMessagesContentFor("secondBoxerScore"));
   }
 
@@ -251,7 +251,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
 
     scoreRound.execute(primaryPort, params);
 
-    Errors errors = getErrors();
+    FieldErrors errors = getErrors();
     assertEquals("scores interval is between 1 and 10", errors.getMessagesContentFor("firstBoxerScore"));
   }
 
@@ -261,7 +261,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
     ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, 1, tyson, 10, SECOND_BOXER, 10);
 
     scoreRound.execute(primaryPort, params);
-    Errors errors = getErrors();
+    FieldErrors errors = getErrors();
     assertEquals(tyson + " is not in the fight" + A_FIGHT_ID, errors.getMessagesContentFor("firstBoxer"));
   }
 
@@ -271,7 +271,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
     ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, 1, FIRST_BOXER, 10, tyson, 10);
 
     scoreRound.execute(primaryPort, params);
-    Errors errors = getErrors();
+    FieldErrors errors = getErrors();
     assertEquals(tyson + " is not in the fight" + A_FIGHT_ID, errors.getMessagesContentFor("secondBoxer"));
   }
 }

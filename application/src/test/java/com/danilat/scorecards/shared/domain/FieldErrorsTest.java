@@ -5,11 +5,11 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-public class ErrorsTest {
+public class FieldErrorsTest {
 
   @Test
   public void givenAnExistingFieldNameThenHasError() {
-    Errors errors = new Errors();
+    FieldErrors errors = new FieldErrors();
     FieldError error = new FieldError("a field", "a default message", "a message template");
     errors.add(error);
 
@@ -18,7 +18,7 @@ public class ErrorsTest {
 
   @Test
   public void givenAnNonExistingFieldNameThenDoNotHasError() {
-    Errors errors = new Errors();
+    FieldErrors errors = new FieldErrors();
 
     assertFalse(errors.hasError(FieldError.class));
   }

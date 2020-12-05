@@ -16,7 +16,7 @@ import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.usecases.UseCaseUnitTest;
 import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.PrimaryPort;
-import com.danilat.scorecards.shared.domain.Errors;
+import com.danilat.scorecards.shared.domain.FieldErrors;
 import com.danilat.scorecards.shared.events.EventBus;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
@@ -126,7 +126,7 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
 
     registerFight.execute(primaryPort, parameters);
 
-    Errors errors = getErrors();
+    FieldErrors errors = getErrors();
     assertTrue(errors.hasMessage("happenAt is mandatory"));
   }
 
@@ -137,7 +137,7 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
 
     registerFight.execute(primaryPort, parameters);
 
-    Errors errors = getErrors();
+    FieldErrors errors = getErrors();
     assertTrue(errors.hasMessage("firstBoxer is mandatory"));
   }
 
@@ -149,7 +149,7 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
 
     registerFight.execute(primaryPort, parameters);
 
-    Errors errors = getErrors();
+    FieldErrors errors = getErrors();
     assertEquals("Boxer: " + NON_EXISTING_BOXER + " not found", errors.getMessagesContentFor("firstBoxer"));
   }
 
@@ -160,7 +160,7 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
 
     registerFight.execute(primaryPort, parameters);
 
-    Errors errors = getErrors();
+    FieldErrors errors = getErrors();
     assertTrue(errors.hasMessage("secondBoxer is mandatory"));
   }
 
@@ -172,7 +172,7 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
 
     registerFight.execute(primaryPort, parameters);
 
-    Errors errors = getErrors();
+    FieldErrors errors = getErrors();
     assertEquals("Boxer: " + NON_EXISTING_BOXER + " not found", errors.getMessagesContentFor("secondBoxer"));
   }
 
@@ -183,7 +183,7 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
 
     registerFight.execute(primaryPort, parameters);
 
-    Errors errors = getErrors();
+    FieldErrors errors = getErrors();
     assertTrue(errors.hasMessage("firstBoxer and secondBoxer should be different"));
   }
 
@@ -195,7 +195,7 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
 
     registerFight.execute(primaryPort, parameters);
 
-    Errors errors = getErrors();
+    FieldErrors errors = getErrors();
     assertTrue(errors.hasMessage("numberOfRounds is mandatory"));
   }
 
@@ -207,7 +207,7 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
 
     registerFight.execute(primaryPort, parameters);
 
-    Errors errors = getErrors();
+    FieldErrors errors = getErrors();
     assertTrue(errors.hasMessage("numberOfRounds is less than three"));
   }
 
@@ -219,7 +219,7 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
 
     registerFight.execute(primaryPort, parameters);
 
-    Errors errors = getErrors();
+    FieldErrors errors = getErrors();
     assertTrue(errors.hasMessage("numberOfRounds is more than twelve"));
   }
 }

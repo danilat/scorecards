@@ -6,7 +6,7 @@ import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxers;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersFetcher;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.usecases.UseCase;
-import com.danilat.scorecards.shared.domain.Errors;
+import com.danilat.scorecards.shared.domain.FieldErrors;
 import java.util.Optional;
 
 public class RetrieveAFight implements UseCase<FightWithBoxers, FightId> {
@@ -24,7 +24,7 @@ public class RetrieveAFight implements UseCase<FightWithBoxers, FightId> {
     if (optionalFightWithBoxers.isPresent()) {
       primaryPort.success(optionalFightWithBoxers.get());
     } else {
-      Errors errors = Errors.newWithError(new FightNotFoundError(id));
+      FieldErrors errors = FieldErrors.newWithError(new FightNotFoundError(id));
       primaryPort.error(errors);
     }
   }

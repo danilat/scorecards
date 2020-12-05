@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Errors extends ArrayList<FieldError> {
+public class FieldErrors extends ArrayList<FieldError> {
 
-  public static Errors newWithError(FieldError error){
-    Errors errors = new Errors();
+  public static FieldErrors newWithError(FieldError error){
+    FieldErrors errors = new FieldErrors();
     errors.add(error);
     return errors;
   }
