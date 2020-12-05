@@ -13,7 +13,7 @@ import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 import com.danilat.scorecards.shared.usecases.UseCase;
-import com.danilat.scorecards.shared.domain.Error;
+import com.danilat.scorecards.shared.domain.FieldError;
 import com.danilat.scorecards.shared.domain.Errors;
 import com.danilat.scorecards.shared.events.EventBus;
 import java.time.LocalDate;
@@ -69,8 +69,8 @@ public class RegisterFight implements UseCase<Fight, RegisterFightParameters> {
     return errors.isEmpty();
   }
 
-  private Error validateBoxer(String fieldName, BoxerId boxerId) {
-    Error error = null;
+  private FieldError validateBoxer(String fieldName, BoxerId boxerId) {
+    FieldError error = null;
     if (!this.boxerRepository.get(boxerId).isPresent()) {
       error = new BoxerNotFoundError(fieldName, boxerId);
     }

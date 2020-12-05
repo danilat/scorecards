@@ -127,7 +127,6 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
     registerFight.execute(primaryPort, parameters);
 
     Errors errors = getErrors();
-    assertTrue(errors.hasError("happenAt"));
     assertTrue(errors.hasMessage("happenAt is mandatory"));
   }
 
@@ -139,7 +138,6 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
     registerFight.execute(primaryPort, parameters);
 
     Errors errors = getErrors();
-    assertTrue(errors.hasError("firstBoxer"));
     assertTrue(errors.hasMessage("firstBoxer is mandatory"));
   }
 
@@ -163,7 +161,6 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
     registerFight.execute(primaryPort, parameters);
 
     Errors errors = getErrors();
-    assertTrue(errors.hasError("secondBoxer"));
     assertTrue(errors.hasMessage("secondBoxer is mandatory"));
   }
 
@@ -199,7 +196,6 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
     registerFight.execute(primaryPort, parameters);
 
     Errors errors = getErrors();
-    assertTrue(errors.hasError("numberOfRounds"));
     assertTrue(errors.hasMessage("numberOfRounds is mandatory"));
   }
 
@@ -212,7 +208,6 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
     registerFight.execute(primaryPort, parameters);
 
     Errors errors = getErrors();
-    assertTrue(errors.hasError("numberOfRounds"));
     assertTrue(errors.hasMessage("numberOfRounds is less than three"));
   }
 
@@ -225,7 +220,6 @@ public class RegisterFightTest extends UseCaseUnitTest<Fight> {
     registerFight.execute(primaryPort, parameters);
 
     Errors errors = getErrors();
-    assertTrue(errors.hasError("numberOfRounds"));
     assertTrue(errors.hasMessage("numberOfRounds is more than twelve"));
   }
 }

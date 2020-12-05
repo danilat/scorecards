@@ -10,17 +10,17 @@ public class ErrorsTest {
   @Test
   public void givenAnExistingFieldNameThenHasError() {
     Errors errors = new Errors();
-    Error error = new Error("a field", "a default message", "a message template");
+    FieldError error = new FieldError("a field", "a default message", "a message template");
     errors.add(error);
 
-    assertTrue(errors.hasError(error.getFieldName()));
+    assertTrue(errors.hasError(FieldError.class));
   }
 
   @Test
   public void givenAnNonExistingFieldNameThenDoNotHasError() {
     Errors errors = new Errors();
 
-    assertFalse(errors.hasError("foobar"));
+    assertFalse(errors.hasError(FieldError.class));
   }
 
 }

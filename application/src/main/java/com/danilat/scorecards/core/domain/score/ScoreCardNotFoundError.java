@@ -2,9 +2,9 @@ package com.danilat.scorecards.core.domain.score;
 
 import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.fight.FightId;
-import com.danilat.scorecards.shared.domain.Error;
+import com.danilat.scorecards.shared.domain.FieldError;
 
-public class ScoreCardNotFoundError extends Error {
+public class ScoreCardNotFoundError extends FieldError {
 
   public ScoreCardNotFoundError(ScoreCardId id) {
     super("scoreCardId", "ScoreCard: " + id + " not found");
