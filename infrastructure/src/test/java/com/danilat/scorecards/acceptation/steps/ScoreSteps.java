@@ -193,8 +193,8 @@ public class ScoreSteps {
     scoreCardRepository.save(existingScoreCard);
   }
 
-  @When("I retrieve the existing scorecard")
-  public void iRetrieveTheExistingScorecard() {
+  @When("I retrieve the existing scorecard by it's fight and account")
+  public void iRetrieveTheExistingScorecardByTheFightAndTheAccount() {
     retrieveAScoreCard.execute(retrieveAScoreCardPrimaryPort,
         new RetrieveAScoreCardParameters(existingScoreCard.fightId(), existingScoreCard.accountId()));
   }
@@ -205,8 +205,8 @@ public class ScoreSteps {
     assertNull(someErrors);
   }
 
-  @When("I retrieve a non-existing scorecard")
-  public void iRetrieveANonExistingScorecard() {
+  @When("I retrieve a scorecard by a fight and account that not exist")
+  public void iRetrieveAScorecardByAFightAndAccountThatNotExist() {
     retrieveAScoreCard.execute(retrieveAScoreCardPrimaryPort,
         new RetrieveAScoreCardParameters(new FightId("foo"), new AccountId("bar")));
   }
