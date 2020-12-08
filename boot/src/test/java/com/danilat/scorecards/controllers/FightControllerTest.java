@@ -66,7 +66,7 @@ public class FightControllerTest extends BaseControllerTest {
         .param("secondBoxerScore", "10")
         .param("round", "1"))
         .andExpect(status().is3xxRedirection())
-        .andExpect(redirectedUrlPattern("/{accountId}/scorecards"));
+        .andExpect(redirectedUrlPattern("/fights/{fightId}"));
   }
 
   @Test

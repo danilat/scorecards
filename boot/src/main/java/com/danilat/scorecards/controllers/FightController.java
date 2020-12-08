@@ -63,8 +63,8 @@ public class FightController {
   private PrimaryPort<ScoreCard> scoreRoundPort = new PrimaryPort<ScoreCard>() {
     @Override
     public void success(ScoreCard scoreCard) {
-      String accountHandler = scoreCard.accountId().value();
-      scoreResult = "redirect:/" + accountHandler + "/scorecards";
+      String fightId = scoreCard.fightId().value();
+      scoreResult = "redirect:/fights/" + fightId;
     }
 
     @Override
