@@ -89,4 +89,8 @@ public class ScoreCard extends Entity<ScoreCardId> {
   public Instant scoredAt() {
     return scoredAt;
   }
+
+  public boolean isRoundScored(int round) {
+    return firstBoxerScore(round) != null && secondBoxerScore(round) != null;
+  }
 }
