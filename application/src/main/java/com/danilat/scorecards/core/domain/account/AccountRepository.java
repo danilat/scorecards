@@ -5,5 +5,9 @@ import java.util.Optional;
 public interface AccountRepository {
   void save(Account account);
 
-  Optional get(AccountId accountId);
+  Optional<Account> get(AccountId accountId);
+
+  Optional<Account> findByUsername(String username);
+
+  Optional<Account> findByEmail(String email);
 }

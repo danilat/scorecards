@@ -2,20 +2,24 @@ package com.danilat.scorecards.core.usecases.accounts;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.danilat.scorecards.core.domain.account.Account;
 import com.danilat.scorecards.core.domain.account.AccountCreated;
+import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.account.AccountRepository;
+import com.danilat.scorecards.core.mothers.AccountMother;
 import com.danilat.scorecards.core.usecases.UseCaseUnitTest;
 import com.danilat.scorecards.core.usecases.accounts.RegisterAccount.RegisterAccountParameters;
 import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.PrimaryPort;
+import com.danilat.scorecards.shared.domain.FieldErrors;
 import com.danilat.scorecards.shared.events.EventBus;
 import java.time.Instant;
-import javax.lang.model.util.Types;
+import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -102,5 +106,59 @@ public class RegisterAccountTest extends UseCaseUnitTest<Account> {
     assertEquals(account, accountCreated.account());
     assertEquals(anHappenedAt, accountCreated.happenedAt());
     assertNotNull(accountCreated.eventId());
+  }
+
+  @Test
+  public void givenNameEmailPictureButNotUsernameThenIsInvalid() {
+    RegisterAccountParameters parameters = new RegisterAccountParameters(null, A_NAME, AN_EMAIL, A_PICTURE_URL);
+
+    registerAccount.execute(primaryPort, parameters);
+
+    FieldErrors errors = getErrors();
+    assertTrue(errors.hasMessage("username is mandatory"));
+  }
+
+  @Test
+  public void givenUsernameNamePictureButNotEmailThenIsInvalid() {
+    RegisterAccountParameters parameters = new RegisterAccountParameters(AN_USERNAME, A_NAME, null, A_PICTURE_URL);
+
+    registerAccount.execute(primaryPort, parameters);
+
+    FieldErrors errors = getErrors();
+    assertTrue(errors.hasMessage("email is mandatory"));
+  }
+
+  @Test
+  public void givenUsernameEmailPictureButNotNameThenIsInvalid() {
+    RegisterAccountParameters parameters = new RegisterAccountParameters(AN_USERNAME, null, AN_EMAIL, A_PICTURE_URL);
+
+    registerAccount.execute(primaryPort, parameters);
+
+    FieldErrors errors = getErrors();
+    assertTrue(errors.hasMessage("name is mandatory"));
+  }
+
+  @Test
+  public void givenUsernameNameEmailAndPictureButUsernameIsAlreadyUsedThenIsInvalid() {
+    Account existingAccount = AccountMother.anAccountWithUsername(AN_USERNAME);
+    when(accountRepository.findByUsername(existingAccount.username())).thenReturn(Optional.of(existingAccount));
+    RegisterAccountParameters parameters = new RegisterAccountParameters(existingAccount.username(), A_NAME, AN_EMAIL, A_PICTURE_URL);
+
+    registerAccount.execute(primaryPort, parameters);
+
+    FieldErrors errors = getErrors();
+    assertTrue(errors.hasMessage("The username is already used"));
+  }
+
+  @Test
+  public void givenUsernameNameEmailAndPictureButEmailIsAlreadyUsedThenIsInvalid() {
+    Account existingAccount = AccountMother.anAccountWithEmail(AN_EMAIL);
+    when(accountRepository.findByEmail(existingAccount.email())).thenReturn(Optional.of(existingAccount));
+    RegisterAccountParameters parameters = new RegisterAccountParameters(AN_USERNAME, A_NAME, existingAccount.email(), A_PICTURE_URL);
+
+    registerAccount.execute(primaryPort, parameters);
+
+    FieldErrors errors = getErrors();
+    assertTrue(errors.hasMessage("The email is already used"));
   }
 }
