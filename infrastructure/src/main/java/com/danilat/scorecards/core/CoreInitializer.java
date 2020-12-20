@@ -1,10 +1,12 @@
 package com.danilat.scorecards.core;
 
+import com.danilat.scorecards.core.domain.account.AccountRepository;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersFetcher;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDetailsFetcher;
+import com.danilat.scorecards.core.usecases.accounts.RegisterAccount;
 import com.danilat.scorecards.core.usecases.scores.RetrieveAScoreCard;
 import com.danilat.scorecards.core.usecases.scores.RetrieveScoreCards;
 import com.danilat.scorecards.shared.Auth;
@@ -54,6 +56,9 @@ public class CoreInitializer {
   @Autowired
   private Auth auth;
 
+  @Autowired
+  private AccountRepository accountRepository;
+
   @Bean
   public RetrieveAFight retrieveAFight() {
     return new RetrieveAFight(fightWithBoxersFetcher);
@@ -75,13 +80,18 @@ public class CoreInitializer {
   }
 
   @Bean
-  public RetrieveAScoreCard retrieveAScoreCard(){
-    return  new RetrieveAScoreCard(scoreCardRepository);
+  public RetrieveAScoreCard retrieveAScoreCard() {
+    return new RetrieveAScoreCard(scoreCardRepository);
   }
 
   @Bean
   public RetrieveScoreCards retrieveScoreCards() {
     return new RetrieveScoreCards(scoreCardWithFightDetailsFetcher);
+  }
+
+  @Bean
+  public RegisterAccount registerAccount() {
+    return new RegisterAccount(accountRepository, eventBus, clock);
   }
 }
 
