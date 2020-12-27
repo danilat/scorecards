@@ -28,4 +28,9 @@ public abstract class InMemoryRepository<E extends Entity, I extends Id> impleme
   public Collection<E> all() {
     return entities.values();
   }
+
+  @Override
+  public void clear() {
+    this.entities.clear();
+  }
 }

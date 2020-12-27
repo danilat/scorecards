@@ -48,6 +48,9 @@ public class FightControllerTest extends BaseControllerTest {
 
   @Before
   public void setUp() {
+    scoreCardRepository.clear();
+    fightRepository.clear();
+    boxerRepository.clear();
     scoreCard = ScoreCardMother.aScoreCardWithIdAndAccount(ScoreCardMother.nextId(), auth.currentAccount());
     fightId = scoreCard.fightId();
     Fight fight = FightMother.aFightWithIdAndBoxers(fightId, scoreCard.firstBoxerId(), scoreCard.secondBoxerId());

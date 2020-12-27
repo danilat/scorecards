@@ -10,4 +10,6 @@ public interface Repository<E extends Entity, I extends Id> {
   Optional<E> get(I id);
 
   Collection<E> all();
+
+  void clear();
 }
