@@ -3,9 +3,12 @@ package com.danilat.scorecards.acceptation.steps;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.danilat.scorecards.core.domain.account.Account;
+import com.danilat.scorecards.core.domain.account.AccountRepository;
+import com.danilat.scorecards.core.mothers.AccountMother;
 import com.danilat.scorecards.core.usecases.accounts.RegisterAccount;
 import com.danilat.scorecards.core.usecases.accounts.RegisterAccount.RegisterAccountParameters;
 import com.danilat.scorecards.shared.PrimaryPort;
+import com.danilat.scorecards.shared.domain.FieldErrors;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -19,12 +22,23 @@ public class AccountSteps {
   private String picture;
 
   @Autowired
+  private AccountRepository accountRepository;
+
+  @Autowired
   private RegisterAccount registerAccount;
   private Account account;
+  private FieldErrors fieldErrors;
   private PrimaryPort<Account> primaryPort = new PrimaryPort<Account>() {
     @Override
     public void success(Account response) {
       account = response;
+      fieldErrors = null;
+    }
+
+    @Override
+    public void error(FieldErrors errors){
+      fieldErrors = errors;
+      account = null;
     }
   };
   private RegisterAccountParameters params;
@@ -54,24 +68,25 @@ public class AccountSteps {
   @Then("the account is successfully registered")
   public void theAccountIsSuccessfullyRegistered() {
     assertNotNull(account);
+    assertNull(fieldErrors);
   }
 
   @Then("the account is not registered")
   public void theAccountIsNotRegistered() {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    assertNull(account);
+    assertNotNull(fieldErrors);
   }
 
   @Given("an account with email {string} is present")
   public void anAccountWithEmailIsPresent(String email) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    Account exitingAccount = AccountMother.anAccountWithEmail(email);
+    accountRepository.save(exitingAccount);
   }
 
   @Given("another account with username {string} is present")
   public void anotherAccountWithUsernameIsPresent(String username) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    Account exitingAccount = AccountMother.anAccountWithUsername(username);
+    accountRepository.save(exitingAccount);
   }
 
 }

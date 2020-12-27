@@ -27,4 +27,24 @@ public class AccountRepositoryTest {
     Optional retrieved = accountRepository.get(accountId);
     assertTrue(retrieved.isPresent());
   }
+
+  @Test
+  public void findByEmailFromAnExistingAccount() {
+    Account anAccount = new Account(accountId, "username", "name", "email", "picture");
+    accountRepository.save(anAccount);
+
+    Optional retrieved = accountRepository.findByEmail(anAccount.email());
+
+    assertTrue(retrieved.isPresent());
+  }
+
+  @Test
+  public void findByUsernameFromAnExistingAccount() {
+    Account anAccount = new Account(accountId, "username", "name", "email", "picture");
+    accountRepository.save(anAccount);
+
+    Optional retrieved = accountRepository.findByUsername(anAccount.username());
+
+    assertTrue(retrieved.isPresent());
+  }
 }
