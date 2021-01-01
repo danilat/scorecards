@@ -110,7 +110,7 @@ public class RegisterAccountTest extends UseCaseUnitTest<Account> {
 
   @Test
   public void givenNameEmailPictureButNotUsernameThenIsInvalid() {
-    RegisterAccountParameters parameters = new RegisterAccountParameters(null, A_NAME, AN_EMAIL, A_PICTURE_URL);
+    RegisterAccountParameters parameters = new RegisterAccountParameters("", A_NAME, AN_EMAIL, A_PICTURE_URL);
 
     registerAccount.execute(primaryPort, parameters);
 
@@ -120,7 +120,7 @@ public class RegisterAccountTest extends UseCaseUnitTest<Account> {
 
   @Test
   public void givenUsernameNamePictureButNotEmailThenIsInvalid() {
-    RegisterAccountParameters parameters = new RegisterAccountParameters(AN_USERNAME, A_NAME, null, A_PICTURE_URL);
+    RegisterAccountParameters parameters = new RegisterAccountParameters(AN_USERNAME, A_NAME, "", A_PICTURE_URL);
 
     registerAccount.execute(primaryPort, parameters);
 
@@ -130,7 +130,7 @@ public class RegisterAccountTest extends UseCaseUnitTest<Account> {
 
   @Test
   public void givenUsernameEmailPictureButNotNameThenIsInvalid() {
-    RegisterAccountParameters parameters = new RegisterAccountParameters(AN_USERNAME, null, AN_EMAIL, A_PICTURE_URL);
+    RegisterAccountParameters parameters = new RegisterAccountParameters(AN_USERNAME, "", AN_EMAIL, A_PICTURE_URL);
 
     registerAccount.execute(primaryPort, parameters);
 

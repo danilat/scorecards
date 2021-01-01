@@ -18,7 +18,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
 
 public class RegisterAccount implements UseCase<Account, RegisterAccountParameters> {
 
@@ -64,11 +64,11 @@ public class RegisterAccount implements UseCase<Account, RegisterAccountParamete
 
   public static class RegisterAccountParameters {
 
-    @NotNull(message = "username is mandatory")
+    @NotEmpty(message = "username is mandatory")
     private final String username;
-    @NotNull(message = "name is mandatory")
+    @NotEmpty(message = "name is mandatory")
     private final String name;
-    @NotNull(message = "email is mandatory")
+    @NotEmpty(message = "email is mandatory")
     private final String email;
     private final String pictureUrl;
 
