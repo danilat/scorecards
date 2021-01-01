@@ -1,0 +1,14 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<h1>Create a new account</h1>
+Your email: <p th:text=${email}></p>
+<img th:src=${picture}>
+<form method="post" th:action="@{/accounts}">
+  Name: <input type="text" name="name" th:value="${name}"/>
+  <br>
+  Username: <input type="text" name="username" />
+  <br>
+  <input type="submit" value="Create!"/>
+</form>
+</body>
+</html>
