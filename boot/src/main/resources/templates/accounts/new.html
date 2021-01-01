@@ -1,9 +1,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <h1>Create a new account</h1>
+<ul style="border: 1px solid red;" th:if="${errors}">
+  <li th:each="err : ${errors}">
+    <p th:text="${err.fieldName}"></p>
+    <p th:text="${err.message}"></p>
+  </li>
+</ul>
 Your email: <p th:text=${email}></p>
 <img th:src=${picture}>
-<form method="post" th:action="@{/accounts}">
+<form method="post" th:action="@{/accounts/{idToken}(idToken=${idToken})}" th:object="${account}">
   Name: <input type="text" name="name" th:value="${name}"/>
   <br>
   Username: <input type="text" name="username" />
