@@ -9,7 +9,7 @@
 </ul>
 Your email: <p th:text=${email}></p>
 <img th:src=${picture}>
-<form method="post" th:action="@{/accounts/{idToken}(idToken=${idToken})}" th:object="${account}">
+<form method="post" th:action="@{/accounts/}" th:object="${account}">
   Name: <input type="text" name="name" th:value="${name}"/>
   <br>
   Username: <input type="text" name="username" />

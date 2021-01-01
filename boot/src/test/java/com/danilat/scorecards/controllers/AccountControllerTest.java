@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.danilat.scorecards.core.domain.account.AccountRepository;
 import com.danilat.scorecards.shared.auth.firebase.TokenValidator.Token;
+import javax.servlet.http.Cookie;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,10 @@ public class AccountControllerTest extends BaseControllerTest {
     String theToken = "some_valid_token";
     Token token = new Token("Dani", "dani@email.com", "a picture url");
     when(tokenValidator.validateToken(theToken)).thenReturn(token);
+    Cookie cookie = new Cookie("access_token", theToken);
 
     this.mvc.perform(
-        get("/accounts/new/" + theToken))
+        get("/accounts/new/").cookie(cookie))
         .andExpect(status().isOk());
   }
 
@@ -39,8 +41,9 @@ public class AccountControllerTest extends BaseControllerTest {
     String theToken = "some_valid_token";
     Token token = new Token("Dani", "dani@email.com", "a picture url");
     when(tokenValidator.validateToken(theToken)).thenReturn(token);
+    Cookie cookie = new Cookie("access_token", theToken);
 
-    this.mvc.perform(post("/accounts/" + theToken)
+    this.mvc.perform(post("/accounts/").cookie(cookie)
         .param("name", "Dani")
         .param("username", "danilat"))
         .andExpect(status().is3xxRedirection())
@@ -52,8 +55,9 @@ public class AccountControllerTest extends BaseControllerTest {
     String theToken = "some_valid_token";
     Token token = new Token("Dani", "dani@email.com", "a picture url");
     when(tokenValidator.validateToken(theToken)).thenReturn(token);
+    Cookie cookie = new Cookie("access_token", theToken);
 
-    this.mvc.perform(post("/accounts/" + theToken)
+    this.mvc.perform(post("/accounts/").cookie(cookie)
         .param("name", "Dani")
         .param("username", ""))
         .andExpect(status().isOk())

@@ -60,7 +60,7 @@
                 providerData: providerData
               }, null, '  ');
               document.getElementById('create-account').style.display = '';
-              document.getElementById('create-account').setAttribute('href', '/accounts/new/' + accessToken);
+              document.cookie = "access_token="+accessToken;
             });
           } else {
             // User is signed out.
@@ -82,7 +82,7 @@
 <h1>Welcome to Scorecards</h1>
 <div id="firebaseui-auth-container"></div>
 <div>
-  <a id="create-account" href="" style="display:none">Create new account in ScoreCards</a>
+  <a id="create-account" href="/accounts/new/" style="display:none">Login or create an account in ScoreCards</a>
   <br><br><br>
 </div>
 <div id="sign-in-status"></div>

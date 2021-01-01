@@ -11,9 +11,9 @@ import com.google.firebase.auth.FirebaseAuthException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -27,11 +27,11 @@ public class AccountController {
   @Autowired
   private RegisterAccount registerAccount;
 
-  @GetMapping("new/{idToken}")
-  public String createForm(@PathVariable String idToken, Model model) {
+  @GetMapping("new")
+  public String createForm(@CookieValue(defaultValue = "", name = "access_token") String accessToken, Model model) {
     try {
-      Token token = tokenValidator.validateToken(idToken);
-      model.addAttribute("idToken", idToken);
+      Token token = tokenValidator.validateToken(accessToken);
+      model.addAttribute("idToken", accessToken);
       model.addAttribute("name", token.getName());
       model.addAttribute("email", token.getEmail());
       model.addAttribute("picture", token.getPicture());
@@ -43,7 +43,7 @@ public class AccountController {
 
   private Model model;
   private String createResult;
-  private String idToken;
+  private String accessToken;
 
   private PrimaryPort<Account> registerAccountPrimaryPort = new PrimaryPort<Account>() {
 
@@ -55,16 +55,16 @@ public class AccountController {
     @Override
     public void error(FieldErrors errors) {
       model.addAttribute("errors", errors);
-      createResult = createForm(idToken, model);
+      createResult = createForm(accessToken, model);
     }
   };
 
-  @PostMapping("{idToken}")
-  public String create(@PathVariable String idToken, @ModelAttribute AccountForm accountForm, Model model)
+  @PostMapping("/")
+  public String create(@CookieValue(defaultValue = "", name = "access_token") String accessToken, @ModelAttribute AccountForm accountForm, Model model)
       throws FirebaseAuthException {
-    this.idToken = idToken;
+    this.accessToken = accessToken;
+    Token token = tokenValidator.validateToken(accessToken);
     this.model = model;
-    Token token = tokenValidator.validateToken(idToken);
     RegisterAccountParameters params = new RegisterAccountParameters(accountForm.getUsername(), accountForm.getName(),
         token.getEmail(), token.getPicture());
     registerAccount.execute(registerAccountPrimaryPort, params);
