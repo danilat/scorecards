@@ -1,13 +1,18 @@
 package com.danilat.scorecards.controllers;
 
-import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import com.danilat.scorecards.core.domain.account.AccountId;
+import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
+import com.danilat.scorecards.core.domain.fight.Fight;
+import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.domain.score.ScoreCard;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
@@ -28,16 +33,21 @@ public class ScoreCardControllerTest extends BaseControllerTest {
   @Autowired
   private FightRepository fightRepository;
   private ScoreCard scoreCard;
+  private FightId fightId;
+  private Boxer firstBoxer;
+  private Boxer secondBoxer;
 
   @Before
   public void setUp() {
     scoreCard = ScoreCardMother.aScoreCardWithIdAndAccount(ScoreCardMother.nextId(), new AccountId(accountId));
-    boxerRepository.save(BoxerMother.aBoxerWithId(scoreCard.firstBoxerId()));
-    boxerRepository.save(BoxerMother.aBoxerWithId(scoreCard.secondBoxerId()));
-    fightRepository.save(FightMother
-        .aFightWithIdAndBoxers(scoreCard.fightId(), scoreCard.firstBoxerId(),
-            scoreCard.secondBoxerId()));
+    fightId = scoreCard.fightId();
+    Fight fight = FightMother.aFightWithIdAndBoxers(fightId, scoreCard.firstBoxerId(), scoreCard.secondBoxerId());
+    fightRepository.save(fight);
     scoreCardRepository.save(scoreCard);
+    firstBoxer = BoxerMother.aBoxerWithId(fight.firstBoxer());
+    boxerRepository.save(firstBoxer);
+    secondBoxer = BoxerMother.aBoxerWithId(fight.secondBoxer());
+    boxerRepository.save(secondBoxer);
   }
 
   @Test
@@ -45,5 +55,29 @@ public class ScoreCardControllerTest extends BaseControllerTest {
     this.mvc.perform(get("/" + accountId + "/scorecards/"))
         .andExpect(status().isOk())
         .andExpect(model().attribute("scorecards", notNullValue()));
+  }
+
+  @Test
+  public void postANewScoreWithValidParameters() throws Exception {
+    this.mvc.perform(post("/fights/" + fightId.value() + "/score")
+        .param("firstBoxer", firstBoxer.id().value())
+        .param("firstBoxerScore", "10")
+        .param("secondBoxer", secondBoxer.id().value())
+        .param("secondBoxerScore", "10")
+        .param("round", "1"))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrlPattern("/fights/{fightId}"));
+  }
+
+  @Test
+  public void postANewScoreWithInValidParameters() throws Exception {
+    this.mvc.perform(post("/fights/" + fightId.value() + "/score")
+        .param("firstBoxer", firstBoxer.id().value())
+        .param("firstBoxerScore", "0")
+        .param("secondBoxer", secondBoxer.id().value())
+        .param("secondBoxerScore", "0")
+        .param("round", "1"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("show-fight"));
   }
 }
