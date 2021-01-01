@@ -59,6 +59,8 @@
                 accessToken: accessToken,
                 providerData: providerData
               }, null, '  ');
+              document.getElementById('create-account').style.display = '';
+              document.getElementById('create-account').setAttribute('href', '/accounts/new/' + accessToken);
             });
           } else {
             // User is signed out.
@@ -79,6 +81,10 @@
 <body>
 <h1>Welcome to Scorecards</h1>
 <div id="firebaseui-auth-container"></div>
+<div>
+  <a id="create-account" href="" style="display:none">Create new account in ScoreCards</a>
+  <br><br><br>
+</div>
 <div id="sign-in-status"></div>
 <pre id="account-details"></pre>
 </body>
