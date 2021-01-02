@@ -93,7 +93,8 @@ public class FightController {
   public String findById(@PathVariable String id, Model model) {
     this.model = model;
     retrieveAFight.execute(fightWithBoxersPort, new FightId(id));
-    RetrieveAScoreCardParameters parameters = new RetrieveAScoreCardParameters(new FightId(id), auth.currentAccount());
+    RetrieveAScoreCardParameters parameters = new RetrieveAScoreCardParameters(new FightId(id), auth.currentAccountId(
+        "theToken"));
     retrieveAScoreCard.execute(retrieveScoreCardPort, parameters);
     return findByIdResult;
   }

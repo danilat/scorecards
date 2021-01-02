@@ -28,9 +28,13 @@ public class TokenValidator {
     }
   }
 
-  public Token validateToken(String idToken) throws FirebaseAuthException {
-    FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
-    return new Token(decodedToken.getName(), decodedToken.getEmail(), decodedToken.getPicture());
+  public Token validateToken(String idToken) {
+    try {
+      FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
+      return new Token(decodedToken.getName(), decodedToken.getEmail(), decodedToken.getPicture());
+    } catch (FirebaseAuthException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   public static class Token {

@@ -62,7 +62,7 @@ public class ScoreRound implements UseCase<ScoreCard, ScoreFightParameters> {
   }
 
   private ScoreCard getOrCreateScoreCard(ScoreFightParameters params) {
-    AccountId accountId = auth.currentAccount();
+    AccountId accountId = auth.currentAccountId("theToken");
     return this.scoreCardRepository.findByFightIdAndAccountId(params.getFightId(), accountId)
         .orElseGet(() -> {
           ScoreCardId id = new ScoreCardId(uniqueIdGenerator.next());

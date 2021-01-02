@@ -67,7 +67,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
   public void setup() {
     anHappenedAt = Instant.now();
     when(uniqueIdGenerator.next()).thenReturn(AN_ID);
-    when(auth.currentAccount()).thenReturn(AN_AFICIONADO);
+    when(auth.currentAccountId(anyString())).thenReturn(AN_AFICIONADO);
     when(fightRepository.get(A_FIGHT.id())).thenReturn(Optional.of(A_FIGHT));
     when(clock.now()).thenReturn(anHappenedAt);
     scoreRound = new ScoreRound(scoreCardRepository, fightRepository, uniqueIdGenerator, auth, eventBus, clock);

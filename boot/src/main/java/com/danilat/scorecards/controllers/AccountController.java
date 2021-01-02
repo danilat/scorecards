@@ -29,15 +29,11 @@ public class AccountController {
 
   @GetMapping("new")
   public String createForm(@CookieValue(defaultValue = "", name = "access_token") String accessToken, Model model) {
-    try {
-      Token token = tokenValidator.validateToken(accessToken);
-      model.addAttribute("idToken", accessToken);
-      model.addAttribute("name", token.getName());
-      model.addAttribute("email", token.getEmail());
-      model.addAttribute("picture", token.getPicture());
-    } catch (FirebaseAuthException e) {
-      throw new RuntimeException(e);
-    }
+    Token token = tokenValidator.validateToken(accessToken);
+    model.addAttribute("idToken", accessToken);
+    model.addAttribute("name", token.getName());
+    model.addAttribute("email", token.getEmail());
+    model.addAttribute("picture", token.getPicture());
     return "accounts/new";
   }
 

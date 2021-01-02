@@ -1,6 +1,8 @@
 package com.danilat.scorecards.acceptation.steps;
 
+import com.danilat.scorecards.core.domain.account.Account;
 import com.danilat.scorecards.core.domain.account.AccountId;
+import com.danilat.scorecards.core.domain.account.AccountRepository;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.Fight;
@@ -10,6 +12,7 @@ import com.danilat.scorecards.core.domain.score.ScoreCard;
 import com.danilat.scorecards.core.domain.score.ScoreCardId;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDetails;
+import com.danilat.scorecards.core.mothers.AccountMother;
 import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.mothers.FightMother;
 import com.danilat.scorecards.core.mothers.ScoreCardMother;
@@ -17,7 +20,10 @@ import com.danilat.scorecards.core.usecases.scores.RetrieveAScoreCard;
 import com.danilat.scorecards.core.usecases.scores.RetrieveAScoreCard.RetrieveAScoreCardParameters;
 import com.danilat.scorecards.core.usecases.scores.RetrieveScoreCards;
 import com.danilat.scorecards.core.usecases.scores.ScoreRound;
+import com.danilat.scorecards.shared.Auth;
 import com.danilat.scorecards.shared.PrimaryPort;
+import com.danilat.scorecards.shared.auth.TokenMother;
+import com.danilat.scorecards.shared.auth.firebase.TokenValidator;
 import com.danilat.scorecards.shared.domain.FieldErrors;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -27,6 +33,7 @@ import java.util.stream.IntStream;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
 
 public class ScoreSteps {
 
@@ -38,6 +45,12 @@ public class ScoreSteps {
   private BoxerRepository boxerRepository;
   @Autowired
   private FightRepository fightRepository;
+  @Autowired
+  private AccountRepository accountRepository;
+  @Autowired
+  private Auth auth;
+  @Autowired
+  protected TokenValidator tokenValidator;
 
   @Autowired
   private ScoreRound scoreRound;
@@ -87,6 +100,9 @@ public class ScoreSteps {
   @When("an aficionado scores the round {int} for the existing fight with {int} and {int}")
   public void anAficionadoScoresTheRoundForTheExistingFightWithAnd(Integer round, Integer firstBoxerScore,
       Integer secondBoxerScore) {
+    Account account = AccountMother.anAccountWithUsername("danilat");
+    accountRepository.save(account);
+    when(tokenValidator.validateToken("theToken")).thenReturn(TokenMother.forAccount(account));
     Fight fight = world.getFight();
     ScoreRound.ScoreFightParameters params = new ScoreRound.ScoreFightParameters(fight.id(), round, fight.firstBoxer(),
         firstBoxerScore, fight.secondBoxer(), secondBoxerScore);

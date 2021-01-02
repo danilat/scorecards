@@ -1,4 +1,4 @@
-package com.danilat.scorecards.shared.auth;
+package com.danilat.scorecards.shared.auth.firebase;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
