@@ -33,7 +33,8 @@ public class TokenValidator {
       FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
       return new Token(decodedToken.getName(), decodedToken.getEmail(), decodedToken.getPicture());
     } catch (FirebaseAuthException e) {
-      throw new RuntimeException(e);
+      e.printStackTrace();
+      return null;
     }
   }
 

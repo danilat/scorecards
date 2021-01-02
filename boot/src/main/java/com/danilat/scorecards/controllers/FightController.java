@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +44,7 @@ public class FightController {
 
   private Model model;
   private String id;
+  private String accessToken;
   private String findByIdResult;
 
   private PrimaryPort<FightWithBoxers> fightWithBoxersPort = new PrimaryPort<FightWithBoxers>() {
@@ -90,11 +92,12 @@ public class FightController {
   };
 
   @GetMapping("{id}")
-  public String findById(@PathVariable String id, Model model) {
+  public String findById(@PathVariable String id, Model model,
+      @CookieValue(defaultValue = "", name = "access_token") String accessToken) {
     this.model = model;
     retrieveAFight.execute(fightWithBoxersPort, new FightId(id));
-    RetrieveAScoreCardParameters parameters = new RetrieveAScoreCardParameters(new FightId(id), auth.currentAccountId(
-        "theToken"));
+    RetrieveAScoreCardParameters parameters = new RetrieveAScoreCardParameters(new FightId(id),
+        auth.currentAccountId(accessToken));
     retrieveAScoreCard.execute(retrieveScoreCardPort, parameters);
     return findByIdResult;
   }
@@ -110,17 +113,19 @@ public class FightController {
     @Override
     public void error(FieldErrors errors) {
       model.addAttribute("errors", errors);
-      scoreResult = findById(id, model);
+      scoreResult = findById(id, model, accessToken);
     }
   };
 
   @PostMapping("{id}/score")
-  public String score(@PathVariable String id, Model model, @ModelAttribute ScoreForm scoreForm) {
+  public String score(@PathVariable String id, Model model, @ModelAttribute ScoreForm scoreForm,
+      @CookieValue(defaultValue = "", name = "access_token") String accessToken) {
     this.id = id;
     this.model = model;
+    this.accessToken = accessToken;
     ScoreFightParameters params = new ScoreFightParameters(new FightId(id), scoreForm.getRound(),
         new BoxerId(scoreForm.getFirstBoxer()), scoreForm.getFirstBoxerScore(),
-        new BoxerId(scoreForm.getSecondBoxer()), scoreForm.getSecondBoxerScore());
+        new BoxerId(scoreForm.getSecondBoxer()), scoreForm.getSecondBoxerScore(), accessToken);
     scoreRound.execute(scoreRoundPort, params);
     return scoreResult;
   }

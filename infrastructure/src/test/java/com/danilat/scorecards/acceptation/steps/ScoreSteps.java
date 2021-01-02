@@ -37,6 +37,7 @@ import static org.mockito.Mockito.when;
 
 public class ScoreSteps {
 
+  public static final String AN_ACCESS_TOKEN = "theToken";
   @Autowired
   private World world;
   @Autowired
@@ -102,10 +103,10 @@ public class ScoreSteps {
       Integer secondBoxerScore) {
     Account account = AccountMother.anAccountWithUsername("danilat");
     accountRepository.save(account);
-    when(tokenValidator.validateToken("theToken")).thenReturn(TokenMother.forAccount(account));
+    when(tokenValidator.validateToken(AN_ACCESS_TOKEN)).thenReturn(TokenMother.forAccount(account));
     Fight fight = world.getFight();
     ScoreRound.ScoreFightParameters params = new ScoreRound.ScoreFightParameters(fight.id(), round, fight.firstBoxer(),
-        firstBoxerScore, fight.secondBoxer(), secondBoxerScore);
+        firstBoxerScore, fight.secondBoxer(), secondBoxerScore, AN_ACCESS_TOKEN);
 
     scoreRound.execute(scoreRoundPrimaryPort, params);
   }
@@ -127,7 +128,7 @@ public class ScoreSteps {
       Integer secondBoxerScore) {
     Fight fight = world.getFight();
     ScoreRound.ScoreFightParameters params = new ScoreRound.ScoreFightParameters(fight.id(), round, fight.firstBoxer(),
-        firstBoxerScore, fight.secondBoxer(), secondBoxerScore);
+        firstBoxerScore, fight.secondBoxer(), secondBoxerScore, AN_ACCESS_TOKEN);
 
     scoreRound.execute(scoreRoundPrimaryPort, params);
   }
@@ -137,7 +138,7 @@ public class ScoreSteps {
       Integer secondBoxerScore) {
     FightId nonExistingFightId = new FightId("not-exists");
     ScoreRound.ScoreFightParameters params = new ScoreRound.ScoreFightParameters(nonExistingFightId, round,
-        new BoxerId("irrelevant 1"), firstBoxerScore, new BoxerId("irrelevant 2"), secondBoxerScore);
+        new BoxerId("irrelevant 1"), firstBoxerScore, new BoxerId("irrelevant 2"), secondBoxerScore, "theToken");
 
     scoreRound.execute(scoreRoundPrimaryPort, params);
   }
@@ -153,7 +154,7 @@ public class ScoreSteps {
       Integer firstBoxerScore) {
     Fight fight = world.getFight();
     ScoreRound.ScoreFightParameters params = new ScoreRound.ScoreFightParameters(fight.id(), round, fight.firstBoxer(),
-        firstBoxerScore, fight.secondBoxer(), null);
+        firstBoxerScore, fight.secondBoxer(), null, AN_ACCESS_TOKEN);
 
     scoreRound.execute(scoreRoundPrimaryPort, params);
   }
@@ -163,7 +164,7 @@ public class ScoreSteps {
       String firstBoxer, Integer secondBoxerScore, String secondBoxer) {
     Fight fight = world.getFight();
     ScoreRound.ScoreFightParameters params = new ScoreRound.ScoreFightParameters(fight.id(), round,
-        new BoxerId(firstBoxer), firstBoxerScore, new BoxerId(secondBoxer), secondBoxerScore);
+        new BoxerId(firstBoxer), firstBoxerScore, new BoxerId(secondBoxer), secondBoxerScore, "theToken");
 
     scoreRound.execute(scoreRoundPrimaryPort, params);
   }

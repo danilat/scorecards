@@ -62,7 +62,7 @@ public class ScoreRound implements UseCase<ScoreCard, ScoreFightParameters> {
   }
 
   private ScoreCard getOrCreateScoreCard(ScoreFightParameters params) {
-    AccountId accountId = auth.currentAccountId("theToken");
+    AccountId accountId = auth.currentAccountId(params.getAccessToken());
     return this.scoreCardRepository.findByFightIdAndAccountId(params.getFightId(), accountId)
         .orElseGet(() -> {
           ScoreCardId id = new ScoreCardId(uniqueIdGenerator.next());
@@ -93,15 +93,17 @@ public class ScoreRound implements UseCase<ScoreCard, ScoreFightParameters> {
     @Min(value = 1, message = "scores interval is between 1 and 10")
     @Max(value = 10, message = "scores interval is between 1 and 10")
     private final Integer secondBoxerScore;
+    private String accessToken;
 
     public ScoreFightParameters(FightId fightId, Integer round, BoxerId firstBoxerId, Integer firstBoxerScore,
-        BoxerId secondBoxerId, Integer secondBoxerScore) {
+        BoxerId secondBoxerId, Integer secondBoxerScore, String accessToken) {
       this.fightId = fightId;
       this.round = round;
       this.firstBoxerId = firstBoxerId;
       this.firstBoxerScore = firstBoxerScore;
       this.secondBoxerId = secondBoxerId;
       this.secondBoxerScore = secondBoxerScore;
+      this.accessToken = accessToken;
     }
 
     public FightId getFightId() {
@@ -138,6 +140,10 @@ public class ScoreRound implements UseCase<ScoreCard, ScoreFightParameters> {
 
     public Scoring scoring() {
       return new Scoring(getFightId(), getFirstBoxerId(), getSecondBoxerId(), getRound());
+    }
+
+    public String getAccessToken() {
+      return accessToken;
     }
   }
 }

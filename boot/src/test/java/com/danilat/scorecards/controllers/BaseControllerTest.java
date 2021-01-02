@@ -6,7 +6,6 @@ import com.danilat.scorecards.ScorecardsApplication;
 import com.danilat.scorecards.core.domain.account.Account;
 import com.danilat.scorecards.shared.auth.firebase.TokenValidator;
 import com.danilat.scorecards.shared.auth.firebase.TokenValidator.Token;
-import com.google.firebase.auth.FirebaseAuthException;
 import javax.servlet.http.Cookie;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ public abstract class BaseControllerTest {
   @MockBean
   protected TokenValidator tokenValidator;
 
-  protected Cookie getCookieFor(Account account) throws FirebaseAuthException {
+  protected Cookie getCookieFor(Account account) {
     String theToken = "some_valid_token";
     Token token = new Token(account.name(), account.email(), account.picture());
     when(tokenValidator.validateToken(theToken)).thenReturn(token);

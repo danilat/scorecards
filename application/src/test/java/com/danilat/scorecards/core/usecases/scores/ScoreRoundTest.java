@@ -41,6 +41,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
   private static final String AN_ID = "an id";
   private static final ScoreCardId AN_SCORECARD_ID = new ScoreCardId(AN_ID);
   private static final AccountId AN_AFICIONADO = new AccountId("an account id");
+  private static final String AN_ACCESS_TOKEN = "access token";
 
   @Spy
   private ScoreCardRepository scoreCardRepository;
@@ -79,7 +80,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
     Integer aliScore = 10;
     Integer foremanScore = 9;
     ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, aliScore, SECOND_BOXER,
-        foremanScore);
+        foremanScore, AN_ACCESS_TOKEN);
 
     scoreRound.execute(primaryPort, params);
 
@@ -101,7 +102,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
     int aliScore = 10;
     int foremanScore = 9;
     ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, aliScore, SECOND_BOXER,
-        foremanScore);
+        foremanScore, AN_ACCESS_TOKEN);
 
     scoreRound.execute(primaryPort, params);
 
@@ -126,7 +127,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
     Integer aliScore = 10;
     Integer foremanScore = 9;
     ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, aliScore, SECOND_BOXER,
-        foremanScore);
+        foremanScore, AN_ACCESS_TOKEN);
 
     scoreRound.execute(primaryPort, params);
 
@@ -144,7 +145,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
     int aliScore = 10;
     int foremanScore = 9;
     ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, aliScore, SECOND_BOXER,
-        foremanScore);
+        foremanScore, AN_ACCESS_TOKEN);
 
     scoreRound.execute(primaryPort, params);
 
@@ -161,7 +162,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
     Integer aliScore = 10;
     Integer foremanScore = 9;
     ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, aliScore, SECOND_BOXER,
-        foremanScore);
+        foremanScore, AN_ACCESS_TOKEN);
 
     scoreRound.execute(primaryPort, params);
 
@@ -177,7 +178,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
   public void givenAScoreForUnExistingFightThenFails() {
     FightId nonExistingFightId = new FightId("not-exists");
     ScoreFightParameters params = new ScoreFightParameters(nonExistingFightId, 1, FIRST_BOXER, 10, SECOND_BOXER,
-        9);
+        9, AN_ACCESS_TOKEN);
 
     scoreRound.execute(primaryPort, params);
 
@@ -188,7 +189,8 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
   @Test
   public void givenAScoreForARoundGreaterOfIntervalThenFails() {
     int round = 13;
-    ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, 10, SECOND_BOXER, 9);
+    ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, 10, SECOND_BOXER, 9,
+        AN_ACCESS_TOKEN);
 
     scoreRound.execute(primaryPort, params);
 
@@ -199,7 +201,8 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
   @Test
   public void givenAScoreForARoundLesserOfIntervalThenFails() {
     int round = 0;
-    ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, 10, SECOND_BOXER, 9);
+    ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, 10, SECOND_BOXER, 9,
+        AN_ACCESS_TOKEN);
 
     scoreRound.execute(primaryPort, params);
 
@@ -213,7 +216,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
     when(fightRepository.get(fight.id())).thenReturn(Optional.of(fight));
     int roundOutOfInterval = fight.numberOfRounds() + 1;
     ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, roundOutOfInterval, FIRST_BOXER, 10,
-        SECOND_BOXER, 9);
+        SECOND_BOXER, 9, AN_ACCESS_TOKEN);
 
     scoreRound.execute(primaryPort, params);
 
@@ -225,7 +228,8 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
   @Test
   public void givenAScoreForOnlyABoxerThenFails() {
     int round = 1;
-    ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, 10, SECOND_BOXER, null);
+    ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, 10, SECOND_BOXER, null,
+        AN_ACCESS_TOKEN);
 
     scoreRound.execute(primaryPort, params);
 
@@ -236,7 +240,8 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
   @Test
   public void givenAScoreIsLessThanMinimumTheFails() {
     int round = 1;
-    ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, 10, SECOND_BOXER, 0);
+    ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, 10, SECOND_BOXER, 0,
+        AN_ACCESS_TOKEN);
 
     scoreRound.execute(primaryPort, params);
 
@@ -247,7 +252,8 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
   @Test
   public void givenAScoreIsMoreThanMaximumTheFails() {
     int round = 1;
-    ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, 11, SECOND_BOXER, 9);
+    ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, round, FIRST_BOXER, 11, SECOND_BOXER, 9,
+        AN_ACCESS_TOKEN);
 
     scoreRound.execute(primaryPort, params);
 
@@ -258,7 +264,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
   @Test
   public void givenFirstBoxerScoredIsNotPartOfTheFightTheFails() {
     BoxerId tyson = new BoxerId("tyson");
-    ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, 1, tyson, 10, SECOND_BOXER, 10);
+    ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, 1, tyson, 10, SECOND_BOXER, 10, AN_ACCESS_TOKEN);
 
     scoreRound.execute(primaryPort, params);
     FieldErrors errors = getErrors();
@@ -268,7 +274,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
   @Test
   public void givenSecondBoxerScoredIsNotPartOfTheFightTheFails() {
     BoxerId tyson = new BoxerId("tyson");
-    ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, 1, FIRST_BOXER, 10, tyson, 10);
+    ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, 1, FIRST_BOXER, 10, tyson, 10, AN_ACCESS_TOKEN);
 
     scoreRound.execute(primaryPort, params);
     FieldErrors errors = getErrors();
