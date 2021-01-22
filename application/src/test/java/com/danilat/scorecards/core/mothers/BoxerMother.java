@@ -3,10 +3,10 @@ package com.danilat.scorecards.core.mothers;
 import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 
-public class BoxerMother {
+public class BoxerMother extends BaseMother{
 
   public static Boxer aBoxerWithId(BoxerId id) {
-    return aBoxerWithIdAndName(id, "a boxer name for " + id.value());
+    return aBoxerWithIdAndName(id, faker().rickAndMorty().character());
   }
 
   public static Boxer aBoxerWithIdAndName(BoxerId id, String name) {

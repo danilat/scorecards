@@ -5,13 +5,13 @@ import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxers;
 import java.time.LocalDate;
 
-public class FightWithBoxersMother {
+public class FightWithBoxersMother extends BaseMother {
 
   public static FightWithBoxers aFightWithBoxersWithId(FightId id) {
-    String firstBoxerName = "Ali";
-    String secondBoxerName = "Foreman";
+    String firstBoxerName = faker().rickAndMorty().character();
+    String secondBoxerName = faker().rickAndMorty().character();
     LocalDate happenAt = LocalDate.now();
-    String place = "Kinsasa, Zaire";
+    String place = faker().rickAndMorty().location();
     Integer numberOfRounds = 12;
     return new FightWithBoxers(id, new BoxerId(firstBoxerName), firstBoxerName, new BoxerId(secondBoxerName), secondBoxerName, place, happenAt,
         numberOfRounds);
