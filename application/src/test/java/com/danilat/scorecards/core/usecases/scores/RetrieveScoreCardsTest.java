@@ -15,10 +15,10 @@ import com.danilat.scorecards.core.mothers.FightMother;
 import com.danilat.scorecards.core.mothers.ScoreCardMother;
 import com.danilat.scorecards.core.usecases.UseCaseUnitTest;
 import com.danilat.scorecards.shared.PrimaryPort;
+import com.danilat.scorecards.shared.domain.Sort;
 import com.danilat.scorecards.shared.domain.Sort.Direction;
 import java.util.ArrayList;
 import java.util.Collection;
-import com.danilat.scorecards.shared.domain.Sort;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -60,7 +60,7 @@ public class RetrieveScoreCardsTest extends UseCaseUnitTest<Collection<ScoreCard
         anAccount.value());
     Fight fight = FightMother.aFightWithId(scoreCard.fightId());
     Boxer boxer = BoxerMother.aBoxerWithId(scoreCard.firstBoxerId());
-    ScoreCardWithFightDetails scoreCardWithFightDetails= new ScoreCardWithFightDetails(scoreCard, fight, boxer, boxer);
+    ScoreCardWithFightDetails scoreCardWithFightDetails = new ScoreCardWithFightDetails(scoreCard, fight, boxer, boxer);
     existingScorecards.add(scoreCardWithFightDetails);
 
     retrieveScoreCards.execute(primaryPort, anAccount);

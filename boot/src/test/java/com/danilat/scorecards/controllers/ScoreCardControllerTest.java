@@ -1,7 +1,6 @@
 package com.danilat.scorecards.controllers;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -85,7 +84,6 @@ public class ScoreCardControllerTest extends BaseControllerTest {
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrlPattern("/fights/{fightId}"));
   }
-
 
 
   @Test

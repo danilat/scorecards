@@ -1,6 +1,5 @@
 package com.danilat.scorecards.acceptation.steps;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.danilat.scorecards.core.domain.boxer.Boxer;

@@ -15,6 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 @ContextConfiguration
 @ImportAutoConfiguration
 public class CucumberSpringConfiguration {
+
   @MockBean
   private TokenValidator tokenValidator;
 }

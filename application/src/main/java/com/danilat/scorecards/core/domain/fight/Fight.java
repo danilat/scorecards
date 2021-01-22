@@ -1,8 +1,8 @@
 package com.danilat.scorecards.core.domain.fight;
 
+import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.fight.events.FightCreated;
 import com.danilat.scorecards.shared.domain.Entity;
-import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import java.time.Instant;
 
 public class Fight extends Entity<FightId> {

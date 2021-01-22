@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 
 public class FieldErrors extends ArrayList<FieldError> {
 
-  public static FieldErrors newWithError(FieldError error){
+  public static FieldErrors newWithError(FieldError error) {
     FieldErrors errors = new FieldErrors();
     errors.add(error);
     return errors;
@@ -34,9 +34,9 @@ public class FieldErrors extends ArrayList<FieldError> {
 
   @Override
   public boolean add(FieldError error) {
-    if(error != null){
+    if (error != null) {
       return super.add(error);
-    }else {
+    } else {
       return false;
     }
   }

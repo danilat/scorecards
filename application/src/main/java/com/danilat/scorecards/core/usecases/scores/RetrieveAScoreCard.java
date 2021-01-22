@@ -26,7 +26,8 @@ public class RetrieveAScoreCard implements UseCase<ScoreCard, RetrieveAScoreCard
     if (optionalScoreCard.isPresent()) {
       primaryPort.success(optionalScoreCard.get());
     } else {
-      FieldError fieldError = new FieldError("scoreCardId", new ScoreCardNotFoundError(parameters.getFightId(), parameters.getAccountId()));
+      FieldError fieldError = new FieldError("scoreCardId",
+          new ScoreCardNotFoundError(parameters.getFightId(), parameters.getAccountId()));
       FieldErrors errors = FieldErrors.newWithError(fieldError);
       primaryPort.error(errors);
     }

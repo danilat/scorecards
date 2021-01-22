@@ -16,7 +16,7 @@ public class ScoreCardMother {
   }
 
   public static ScoreCard aScoreCardWithFightIdAndAccountId(FightId fightId, AccountId accountId) {
-    ScoreCard scoreCard =  ScoreCard.create(nextId(), new AccountId("foo"), fightId, new BoxerId("ALI"),
+    ScoreCard scoreCard = ScoreCard.create(nextId(), new AccountId("foo"), fightId, new BoxerId("ALI"),
         new BoxerId("FOREMAN"));
     scoreCard.scoreRound(1, 10, 9, Instant.now());
     return scoreCard;
@@ -35,7 +35,7 @@ public class ScoreCardMother {
 
   public static ScoreCard aScoreCardWithIdFightIdFirstAndSecondBoxer(ScoreCardId scoreCardId, FightId fightId,
       BoxerId firstBoxer, BoxerId secondBoxer) {
-    ScoreCard scoreCard =  ScoreCard.create(scoreCardId, new AccountId("foo"), fightId, firstBoxer, secondBoxer);
+    ScoreCard scoreCard = ScoreCard.create(scoreCardId, new AccountId("foo"), fightId, firstBoxer, secondBoxer);
     scoreCard.scoreRound(1, 10, 9, Instant.now());
     return scoreCard;
   }

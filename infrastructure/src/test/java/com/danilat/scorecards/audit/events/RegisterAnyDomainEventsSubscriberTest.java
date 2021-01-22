@@ -1,6 +1,8 @@
 package com.danilat.scorecards.audit.events;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.danilat.scorecards.audit.usecases.RegisterDomainEvent;

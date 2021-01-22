@@ -8,7 +8,6 @@ import com.danilat.scorecards.core.usecases.UseCaseUnitTest;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.events.DomainEvent;
 import java.time.Instant;
-import java.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

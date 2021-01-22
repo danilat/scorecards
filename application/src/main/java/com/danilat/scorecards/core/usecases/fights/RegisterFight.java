@@ -12,10 +12,10 @@ import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightPa
 import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
-import com.danilat.scorecards.shared.usecases.UseCase;
 import com.danilat.scorecards.shared.domain.FieldError;
 import com.danilat.scorecards.shared.domain.FieldErrors;
 import com.danilat.scorecards.shared.events.EventBus;
+import com.danilat.scorecards.shared.usecases.UseCase;
 import java.time.LocalDate;
 import java.util.Set;
 import javax.validation.ConstraintViolation;

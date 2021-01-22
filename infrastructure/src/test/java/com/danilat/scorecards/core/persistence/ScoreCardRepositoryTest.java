@@ -1,22 +1,22 @@
 package com.danilat.scorecards.core.persistence;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.score.ScoreCard;
 import com.danilat.scorecards.core.domain.score.ScoreCardId;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.core.mothers.ScoreCardMother;
-import com.danilat.scorecards.shared.domain.Sort.Direction;
-import java.util.Collection;
 import com.danilat.scorecards.shared.domain.Sort;
+import com.danilat.scorecards.shared.domain.Sort.Direction;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
-import java.util.Optional;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class ScoreCardRepositoryTest {
 

@@ -9,15 +9,16 @@ import com.danilat.scorecards.core.domain.score.ScoreCardId;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.core.services.ScoringInFightValidator;
 import com.danilat.scorecards.core.services.ScoringInFightValidator.Scoring;
-import com.danilat.scorecards.shared.Auth;
 import com.danilat.scorecards.core.usecases.ConstraintValidatorToErrorMapper;
 import com.danilat.scorecards.core.usecases.scores.ScoreRound.ScoreFightParameters;
+import com.danilat.scorecards.shared.Auth;
 import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
-import com.danilat.scorecards.shared.usecases.UseCase;
 import com.danilat.scorecards.shared.domain.FieldErrors;
 import com.danilat.scorecards.shared.events.EventBus;
+import com.danilat.scorecards.shared.usecases.UseCase;
+import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -25,7 +26,6 @@ import javax.validation.ValidatorFactory;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.Set;
 
 public class ScoreRound implements UseCase<ScoreCard, ScoreFightParameters> {
 

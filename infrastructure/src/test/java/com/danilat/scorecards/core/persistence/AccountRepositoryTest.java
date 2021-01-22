@@ -10,11 +10,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class AccountRepositoryTest {
+
   private AccountRepository accountRepository;
   private AccountId accountId = new AccountId("an account id");
 
   @Before
-  public void setup(){
+  public void setup() {
     accountRepository = new InMemoryAccountRepository();
   }
 

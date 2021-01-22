@@ -17,36 +17,36 @@ Score the fight:
     <p th:text="${err.message}"></p>
   </li>
 </ul>
-  <table>
-    <thead>
-    <tr>
-      <td>Boxers</td>
-      <td th:text=${fight.firstBoxerName}></td>
-      <td th:text=${fight.secondBoxerName}></td>
-      <td></td>
-    </tr>
-    </thead>
-    <tbody>
-      <tr th:each="score: ${scores}">
-        <form method="post" th:action="@{/fights/{id}/score(id=${fight.id})}" th:object="${score}">
-          <td>
-            Score the round <span th:text="*{round}">1</span>
-          </td>
-          <td>
-            <input type="hidden" name="firstBoxer" th:value="*{firstBoxer}"/>
-            <input type="number" name="firstBoxerScore" th:value="*{firstBoxerScore}" />
-          </td>
-          <td>
-            <input type="hidden" name="secondBoxer" th:value="*{secondBoxer}"/>
-            <input type="number" name="secondBoxerScore" th:value="*{secondBoxerScore}"/>
-          </td>
-          <td>
-            <input type="hidden" name="round" th:value="*{round}"/>
-            <input type="submit" value="Score!"/>
-          </td>
-        </form>
-      </tr>
-    </tbody>
-  </table>
+<table>
+  <thead>
+  <tr>
+    <td>Boxers</td>
+    <td th:text=${fight.firstBoxerName}></td>
+    <td th:text=${fight.secondBoxerName}></td>
+    <td></td>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="score: ${scores}">
+    <form method="post" th:action="@{/fights/{id}/score(id=${fight.id})}" th:object="${score}">
+      <td>
+        Score the round <span th:text="*{round}">1</span>
+      </td>
+      <td>
+        <input type="hidden" name="firstBoxer" th:value="*{firstBoxer}"/>
+        <input type="number" name="firstBoxerScore" th:value="*{firstBoxerScore}"/>
+      </td>
+      <td>
+        <input type="hidden" name="secondBoxer" th:value="*{secondBoxer}"/>
+        <input type="number" name="secondBoxerScore" th:value="*{secondBoxerScore}"/>
+      </td>
+      <td>
+        <input type="hidden" name="round" th:value="*{round}"/>
+        <input type="submit" value="Score!"/>
+      </td>
+    </form>
+  </tr>
+  </tbody>
+</table>
 </body>
 </html>

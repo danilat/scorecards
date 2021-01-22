@@ -1,5 +1,12 @@
 package com.danilat.scorecards.acceptation.steps;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
+
 import com.danilat.scorecards.core.domain.account.Account;
 import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.account.AccountRepository;
@@ -31,9 +38,6 @@ import io.cucumber.java.en.When;
 import java.util.Collection;
 import java.util.stream.IntStream;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
 
 public class ScoreSteps {
 

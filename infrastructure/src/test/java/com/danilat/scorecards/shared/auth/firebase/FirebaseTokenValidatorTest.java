@@ -1,10 +1,7 @@
 package com.danilat.scorecards.shared.auth.firebase;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
-import com.danilat.scorecards.shared.auth.firebase.TokenValidator;
 import com.danilat.scorecards.shared.auth.firebase.TokenValidator.Token;
 import com.google.firebase.auth.FirebaseAuthException;
 import org.junit.Ignore;

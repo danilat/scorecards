@@ -6,7 +6,8 @@
   <li th:each="scorecard : ${scorecards}">
     <span th:text=${scorecard.getScoredAt()}></span> |
     <span th:text=${scorecard.firstBoxerName}></span>: <span th:text=${scorecard.firstBoxerScore}></span>
-    <span th:text=${scorecard.secondBoxerName}></span>: <span th:text=${scorecard.secondBoxerScore}></span>. <span th:text=${scorecard.place}></span>, <span th:text=${scorecard.happenAt}></span>
+    <span th:text=${scorecard.secondBoxerName}></span>: <span th:text=${scorecard.secondBoxerScore}></span>. <span
+      th:text=${scorecard.place}></span>, <span th:text=${scorecard.happenAt}></span>
     <br>
     <a th:href="@{/fights/{id}(id=${scorecard.fightId.value()})}">Go to the fight</a>
     <br>

@@ -13,7 +13,8 @@ public class FightWithBoxersMother extends BaseMother {
     LocalDate happenAt = LocalDate.now();
     String place = faker().rickAndMorty().location();
     Integer numberOfRounds = 12;
-    return new FightWithBoxers(id, new BoxerId(firstBoxerName), firstBoxerName, new BoxerId(secondBoxerName), secondBoxerName, place, happenAt,
+    return new FightWithBoxers(id, new BoxerId(firstBoxerName), firstBoxerName, new BoxerId(secondBoxerName),
+        secondBoxerName, place, happenAt,
         numberOfRounds);
   }
 }

@@ -12,7 +12,7 @@ Your email: <p th:text=${email}></p>
 <form method="post" th:action="@{/accounts/}" th:object="${account}">
   Name: <input type="text" name="name" th:value="${name}"/>
   <br>
-  Username: <input type="text" name="username" />
+  Username: <input type="text" name="username"/>
   <br>
   <input type="submit" value="Create!"/>
 </form>

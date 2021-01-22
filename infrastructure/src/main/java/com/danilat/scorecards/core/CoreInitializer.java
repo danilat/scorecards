@@ -7,13 +7,13 @@ import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersFetch
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDetailsFetcher;
 import com.danilat.scorecards.core.usecases.accounts.RegisterAccount;
-import com.danilat.scorecards.core.usecases.scores.RetrieveAScoreCard;
-import com.danilat.scorecards.core.usecases.scores.RetrieveScoreCards;
-import com.danilat.scorecards.shared.Auth;
 import com.danilat.scorecards.core.usecases.boxers.RetrieveAllBoxers;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
+import com.danilat.scorecards.core.usecases.scores.RetrieveAScoreCard;
+import com.danilat.scorecards.core.usecases.scores.RetrieveScoreCards;
 import com.danilat.scorecards.core.usecases.scores.ScoreRound;
+import com.danilat.scorecards.shared.Auth;
 import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.SharedInitializer;
 import com.danilat.scorecards.shared.UniqueIdGenerator;

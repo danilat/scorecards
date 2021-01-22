@@ -56,7 +56,8 @@ public class AccountController {
   };
 
   @PostMapping("/")
-  public String create(@CookieValue(defaultValue = "", name = "access_token") String accessToken, @ModelAttribute AccountForm accountForm, Model model)
+  public String create(@CookieValue(defaultValue = "", name = "access_token") String accessToken,
+      @ModelAttribute AccountForm accountForm, Model model)
       throws FirebaseAuthException {
     this.accessToken = accessToken;
     Token token = tokenValidator.validateToken(accessToken);

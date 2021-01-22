@@ -1,9 +1,8 @@
 package com.danilat.scorecards.shared;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import org.junit.Test;
 
 public class ClockTest {

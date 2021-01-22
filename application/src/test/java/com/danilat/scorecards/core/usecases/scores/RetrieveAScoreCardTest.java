@@ -2,7 +2,6 @@ package com.danilat.scorecards.core.usecases.scores;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 import com.danilat.scorecards.core.domain.account.AccountId;
@@ -38,7 +37,8 @@ public class RetrieveAScoreCardTest extends UseCaseUnitTest<ScoreCard> {
   @Before
   public void setup() {
     parameters = new RetrieveAScoreCardParameters(A_FIGHT_ID, AN_ACCOUNT_ID);
-    when(scoreCardRepository.findByFightIdAndAccountId(A_FIGHT_ID, AN_ACCOUNT_ID)).thenReturn(Optional.of(existingScoreCard));
+    when(scoreCardRepository.findByFightIdAndAccountId(A_FIGHT_ID, AN_ACCOUNT_ID))
+        .thenReturn(Optional.of(existingScoreCard));
     retrieveAScoreCard = new RetrieveAScoreCard(scoreCardRepository);
   }
 

@@ -9,7 +9,6 @@ import static org.mockito.Mockito.when;
 
 import com.danilat.scorecards.core.domain.account.Account;
 import com.danilat.scorecards.core.domain.account.AccountCreated;
-
 import com.danilat.scorecards.core.domain.account.AccountRepository;
 import com.danilat.scorecards.core.mothers.AccountMother;
 import com.danilat.scorecards.core.usecases.UseCaseUnitTest;
@@ -142,7 +141,8 @@ public class RegisterAccountTest extends UseCaseUnitTest<Account> {
   public void givenUsernameNameEmailAndPictureButUsernameIsAlreadyUsedThenIsInvalid() {
     Account existingAccount = AccountMother.anAccountWithUsername(AN_USERNAME);
     when(accountRepository.findByUsername(existingAccount.username())).thenReturn(Optional.of(existingAccount));
-    RegisterAccountParameters parameters = new RegisterAccountParameters(existingAccount.username(), A_NAME, AN_EMAIL, A_PICTURE_URL);
+    RegisterAccountParameters parameters = new RegisterAccountParameters(existingAccount.username(), A_NAME, AN_EMAIL,
+        A_PICTURE_URL);
 
     registerAccount.execute(primaryPort, parameters);
 
@@ -154,7 +154,8 @@ public class RegisterAccountTest extends UseCaseUnitTest<Account> {
   public void givenUsernameNameEmailAndPictureButEmailIsAlreadyUsedThenIsInvalid() {
     Account existingAccount = AccountMother.anAccountWithEmail(AN_EMAIL);
     when(accountRepository.findByEmail(existingAccount.email())).thenReturn(Optional.of(existingAccount));
-    RegisterAccountParameters parameters = new RegisterAccountParameters(AN_USERNAME, A_NAME, existingAccount.email(), A_PICTURE_URL);
+    RegisterAccountParameters parameters = new RegisterAccountParameters(AN_USERNAME, A_NAME, existingAccount.email(),
+        A_PICTURE_URL);
 
     registerAccount.execute(primaryPort, parameters);
 

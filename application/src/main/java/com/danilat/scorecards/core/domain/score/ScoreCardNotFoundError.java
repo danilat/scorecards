@@ -7,6 +7,6 @@ import com.danilat.scorecards.shared.domain.Error;
 public class ScoreCardNotFoundError extends Error {
 
   public ScoreCardNotFoundError(FightId fightId, AccountId accountId) {
-    super("ScoreCard: " + fightId + " and " + accountId +" not found");
+    super("ScoreCard: " + fightId + " and " + accountId + " not found");
   }
 }

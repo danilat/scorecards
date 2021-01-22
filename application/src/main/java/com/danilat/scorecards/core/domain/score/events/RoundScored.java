@@ -18,7 +18,7 @@ public class RoundScored extends DomainEvent {
     return scoreCard;
   }
 
-  public static RoundScored create(ScoreCard scoreCard, Instant happenedAt){
+  public static RoundScored create(ScoreCard scoreCard, Instant happenedAt) {
     return new RoundScored(scoreCard, happenedAt, new DomainEventId(scoreCard.id().value() + happenedAt));
   }
 }

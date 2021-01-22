@@ -6,7 +6,7 @@ import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import java.time.LocalDate;
 
-public class FightMother extends BaseMother{
+public class FightMother extends BaseMother {
 
   public static Fight aFightWithId(String id) {
     return aFightWithId(new FightId(id));

@@ -25,7 +25,7 @@ public abstract class UseCaseUnitTest<SUCCESS_ENTITY> {
     return errorsArgumentCaptor.getValue();
   }
 
-  public SUCCESS_ENTITY getSuccessEntity(){
+  public SUCCESS_ENTITY getSuccessEntity() {
     verify(getPrimaryPort()).success(successArgumentCaptor.capture());
     return successArgumentCaptor.getValue();
   }

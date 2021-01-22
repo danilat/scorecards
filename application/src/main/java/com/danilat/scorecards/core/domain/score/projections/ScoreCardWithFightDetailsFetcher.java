@@ -5,5 +5,6 @@ import com.danilat.scorecards.shared.domain.Sort;
 import java.util.Collection;
 
 public interface ScoreCardWithFightDetailsFetcher {
+
   Collection<ScoreCardWithFightDetails> findAllByAccountId(AccountId anAccount, Sort sort);
 }

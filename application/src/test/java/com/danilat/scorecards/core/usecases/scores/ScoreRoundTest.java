@@ -1,35 +1,39 @@
 package com.danilat.scorecards.core.usecases.scores;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
-import com.danilat.scorecards.core.domain.score.*;
+import com.danilat.scorecards.core.domain.score.ScoreCard;
+import com.danilat.scorecards.core.domain.score.ScoreCardId;
+import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.core.domain.score.events.RoundScored;
 import com.danilat.scorecards.core.mothers.FightMother;
 import com.danilat.scorecards.core.mothers.ScoreCardMother;
-import com.danilat.scorecards.shared.Auth;
 import com.danilat.scorecards.core.usecases.UseCaseUnitTest;
+import com.danilat.scorecards.core.usecases.scores.ScoreRound.ScoreFightParameters;
+import com.danilat.scorecards.shared.Auth;
 import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 import com.danilat.scorecards.shared.domain.FieldErrors;
 import com.danilat.scorecards.shared.events.EventBus;
 import java.time.Instant;
+import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import com.danilat.scorecards.core.usecases.scores.ScoreRound.ScoreFightParameters;
-
-import java.util.Optional;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.*;
 
 public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
 

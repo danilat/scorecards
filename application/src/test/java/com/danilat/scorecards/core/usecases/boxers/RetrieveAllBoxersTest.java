@@ -1,19 +1,15 @@
 package com.danilat.scorecards.core.usecases.boxers;
 
 import static org.junit.Assert.assertEquals;
-
 import static org.mockito.Mockito.when;
 
 import com.danilat.scorecards.core.domain.boxer.Boxer;
-import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.usecases.UseCaseUnitTest;
 import com.danilat.scorecards.shared.PrimaryPort;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import org.junit.Test;
 import org.mockito.Mock;
 

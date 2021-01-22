@@ -1,6 +1,7 @@
 package com.danilat.scorecards.acceptation.steps;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.danilat.scorecards.core.domain.account.Account;
 import com.danilat.scorecards.core.domain.account.AccountRepository;
@@ -36,7 +37,7 @@ public class AccountSteps {
     }
 
     @Override
-    public void error(FieldErrors errors){
+    public void error(FieldErrors errors) {
       fieldErrors = errors;
       account = null;
     }

@@ -1,6 +1,6 @@
 package com.danilat.scorecards.shared;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotEquals;
 
 import org.junit.Test;
 

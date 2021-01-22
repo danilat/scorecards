@@ -14,9 +14,11 @@ public abstract class Entity<I extends Id> {
     domainEvents = new ArrayList<>();
   }
 
-  public I id(){
+  public I id() {
     return id;
-  };
+  }
+
+  ;
 
   @Override
   public String toString() {
@@ -29,7 +31,7 @@ public abstract class Entity<I extends Id> {
     return domainEvents;
   }
 
-  public void addDomainEvent(DomainEvent event){
+  public void addDomainEvent(DomainEvent event) {
     domainEvents.add(event);
   }
 }
