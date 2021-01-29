@@ -9,7 +9,6 @@ import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.persistence.jdbc.JdbcBoxerRepository;
 import com.danilat.scorecards.core.persistence.jdbc.JdbcConfig;
-import com.danilat.scorecards.core.persistence.memory.InMemoryBoxerRepository;
 import java.util.Collection;
 import java.util.Optional;
 import org.junit.Before;
