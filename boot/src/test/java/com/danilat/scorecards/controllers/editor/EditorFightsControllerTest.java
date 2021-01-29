@@ -27,6 +27,7 @@ public class EditorFightsControllerTest extends BaseControllerTest {
 
   @Before
   public void setup() {
+    boxerRepository.clear();
     firstBoxer = BoxerMother.aBoxerWithId("pacquiao");
     boxerRepository.save(firstBoxer);
     secondBoxer = BoxerMother.aBoxerWithId("mayweather");
