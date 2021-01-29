@@ -25,6 +25,8 @@ Now we are starting to work with real persistence using PostgreSQL, you can use 
 
 `mvn install`
 
+`mvn flyway:migrate`
+
 `cb boot/`
 
 `mvn spring-boot:run -Dspring-boot.run.profiles=dev`

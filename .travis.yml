@@ -10,6 +10,7 @@ before_script:
     > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - "./cc-test-reporter before-build"
+  - mvn flyway:migrate
 after_script:
   - "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
   - chmod +x cucumber_studio.sh
