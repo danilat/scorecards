@@ -7,20 +7,23 @@ import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.mothers.BoxerMother;
+import com.danilat.scorecards.core.persistence.memory.InMemoryBoxerRepository;
 import java.util.Collection;
 import java.util.Optional;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
+@SpringBootTest(classes = {InMemoryBoxerRepository.class})
+@RunWith(SpringRunner.class)
 public class BoxerRepositoryTest {
 
+  @Autowired
   private BoxerRepository boxerRepository;
   private BoxerId boxerId = new BoxerId("some irrelevant id");
 
-  @Before
-  public void setup() {
-    boxerRepository = new InMemoryBoxerRepository();
-  }
 
   @Test
   public void saveABoxer() {

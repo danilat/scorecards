@@ -1,11 +1,8 @@
-package com.danilat.scorecards.core.persistence.sql;
+package com.danilat.scorecards.core.persistence.jdbc;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
-import com.danilat.scorecards.acceptation.steps.World;
-import com.danilat.scorecards.core.CoreInitializer;
-import com.danilat.scorecards.core.db.JdbcConfig;
 import java.sql.SQLException;
 import javax.sql.DataSource;
 import org.junit.Test;
@@ -18,11 +15,12 @@ import org.springframework.test.context.junit4.SpringRunner;
     classes = {JdbcConfig.class})
 @RunWith(SpringRunner.class)
 public class DatabaseConnectionTest {
+
   @Autowired
   private DataSource dataSource;
 
   @Test
-  public void shouldConnectToDatabase(){
+  public void shouldConnectToDatabase() {
     try {
       assertNotNull(dataSource.getConnection());
     } catch (SQLException exception) {

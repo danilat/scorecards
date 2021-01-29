@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import com.danilat.scorecards.core.domain.account.Account;
 import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.account.AccountRepository;
+import com.danilat.scorecards.core.persistence.memory.InMemoryAccountRepository;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;

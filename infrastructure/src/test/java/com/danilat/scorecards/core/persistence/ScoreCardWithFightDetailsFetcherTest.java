@@ -12,6 +12,10 @@ import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDe
 import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.mothers.FightMother;
 import com.danilat.scorecards.core.mothers.ScoreCardMother;
+import com.danilat.scorecards.core.persistence.memory.InMemoryBoxerRepository;
+import com.danilat.scorecards.core.persistence.memory.InMemoryFightRepository;
+import com.danilat.scorecards.core.persistence.memory.InMemoryScoreCardRepository;
+import com.danilat.scorecards.core.persistence.memory.InMemoryScoreCardWithFightDetailsFetcher;
 import com.danilat.scorecards.shared.domain.Sort;
 import com.danilat.scorecards.shared.domain.Sort.Direction;
 import java.time.Instant;

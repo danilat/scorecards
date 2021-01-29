@@ -1,4 +1,4 @@
-package com.danilat.scorecards.core.db;
+package com.danilat.scorecards.core.persistence.jdbc;
 
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Value;

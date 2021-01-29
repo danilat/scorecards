@@ -1,4 +1,4 @@
-package com.danilat.scorecards.core.persistence;
+package com.danilat.scorecards.core.persistence.memory;
 
 import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.boxer.Boxer;

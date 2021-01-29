@@ -7,7 +7,7 @@ import static org.mockito.Mockito.when;
 import com.danilat.scorecards.core.domain.account.Account;
 import com.danilat.scorecards.core.domain.account.AccountRepository;
 import com.danilat.scorecards.core.mothers.AccountMother;
-import com.danilat.scorecards.core.persistence.InMemoryAccountRepository;
+import com.danilat.scorecards.core.persistence.memory.InMemoryAccountRepository;
 import com.danilat.scorecards.shared.Auth;
 import com.danilat.scorecards.shared.auth.firebase.FirebaseAuth;
 import com.danilat.scorecards.shared.auth.firebase.TokenValidator;
