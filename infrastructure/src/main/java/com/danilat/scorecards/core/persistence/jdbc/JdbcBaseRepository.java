@@ -1,5 +1,6 @@
 package com.danilat.scorecards.core.persistence.jdbc;
 
+import com.danilat.scorecards.shared.domain.Entity;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -8,7 +9,7 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
-public abstract class JdbcBaseRepository<E> {
+public abstract class JdbcBaseRepository<E extends Entity> {
 
   protected NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
