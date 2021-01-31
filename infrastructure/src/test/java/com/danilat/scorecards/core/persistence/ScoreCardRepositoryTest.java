@@ -8,7 +8,8 @@ import com.danilat.scorecards.core.domain.score.ScoreCard;
 import com.danilat.scorecards.core.domain.score.ScoreCardId;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.core.mothers.ScoreCardMother;
-import com.danilat.scorecards.core.persistence.memory.InMemoryScoreCardRepository;
+import com.danilat.scorecards.core.persistence.jdbc.JdbcConfig;
+import com.danilat.scorecards.core.persistence.jdbc.JdbcScoreCardRepository;
 import com.danilat.scorecards.shared.domain.Sort;
 import com.danilat.scorecards.shared.domain.Sort.Direction;
 import java.time.Instant;
@@ -18,15 +19,22 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
+@SpringBootTest(classes = {JdbcConfig.class, JdbcScoreCardRepository.class})
+@RunWith(SpringRunner.class)
 public class ScoreCardRepositoryTest {
 
+  @Autowired
   private ScoreCardRepository scoreCardRepository;
   private final ScoreCardId scoreCardId = new ScoreCardId("an id");
 
   @Before
   public void setup() {
-    scoreCardRepository = new InMemoryScoreCardRepository();
+    scoreCardRepository.clear();
   }
 
   @Test
@@ -37,6 +45,7 @@ public class ScoreCardRepositoryTest {
 
     Optional<ScoreCard> retrieved = scoreCardRepository.get(scoreCardId);
     assertTrue(retrieved.isPresent());
+    assertEquals(retrieved.get(), aScoreCard);
   }
 
   @Test
@@ -61,7 +70,7 @@ public class ScoreCardRepositoryTest {
     Collection<ScoreCard> scoreCards = scoreCardRepository.findAllByAccountId(firstAccountId, Sort.DEFAULT);
 
     assertEquals(1, scoreCards.size());
-    assertTrue(scoreCards.contains(firstAccountScoreCard));
+    assertEquals(firstAccountScoreCard, scoreCards.toArray()[0]);
   }
 
   @Test

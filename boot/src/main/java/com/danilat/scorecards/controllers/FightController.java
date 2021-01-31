@@ -1,5 +1,6 @@
 package com.danilat.scorecards.controllers;
 
+import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxers;
@@ -96,9 +97,12 @@ public class FightController {
       @CookieValue(defaultValue = "", name = "access_token") String accessToken) {
     this.model = model;
     retrieveAFight.execute(fightWithBoxersPort, new FightId(id));
-    RetrieveAScoreCardParameters parameters = new RetrieveAScoreCardParameters(new FightId(id),
-        auth.currentAccountId(accessToken));
-    retrieveAScoreCard.execute(retrieveScoreCardPort, parameters);
+    AccountId accountId = auth.currentAccountId(accessToken);
+    if (accountId != null) {
+      RetrieveAScoreCardParameters parameters = new RetrieveAScoreCardParameters(new FightId(id),
+          accountId);
+      retrieveAScoreCard.execute(retrieveScoreCardPort, parameters);
+    }
     return findByIdResult;
   }
 

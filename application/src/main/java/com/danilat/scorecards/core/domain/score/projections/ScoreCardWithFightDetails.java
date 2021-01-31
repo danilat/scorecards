@@ -10,7 +10,7 @@ import com.danilat.scorecards.core.domain.score.ScoreCardId;
 import com.danilat.scorecards.shared.domain.Entity;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.HashMap;
+import java.util.Map;
 
 public class ScoreCardWithFightDetails extends Entity<ScoreCardId> {
 
@@ -22,9 +22,9 @@ public class ScoreCardWithFightDetails extends Entity<ScoreCardId> {
   private final String firstBoxerName;
   private final BoxerId secondBoxerId;
   private final String secondBoxerName;
-  private final HashMap<Integer, Integer> firstBoxerScores;
+  private final Map<Integer, Integer> firstBoxerScores;
   private final Integer firstBoxerScore;
-  private final HashMap<Integer, Integer> secondBoxerScores;
+  private final Map<Integer, Integer> secondBoxerScores;
   private final Integer secondBoxerScore;
   private final AccountId accountId;
   private final Instant scoredAt;
@@ -80,7 +80,7 @@ public class ScoreCardWithFightDetails extends Entity<ScoreCardId> {
     return secondBoxerName;
   }
 
-  public HashMap<Integer, Integer> getFirstBoxerScores() {
+  public Map<Integer, Integer> getFirstBoxerScores() {
     return firstBoxerScores;
   }
 
@@ -88,7 +88,7 @@ public class ScoreCardWithFightDetails extends Entity<ScoreCardId> {
     return firstBoxerScore;
   }
 
-  public HashMap<Integer, Integer> getSecondBoxerScores() {
+  public Map<Integer, Integer> getSecondBoxerScores() {
     return secondBoxerScores;
   }
 

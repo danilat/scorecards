@@ -17,6 +17,10 @@ public abstract class JdbcBaseRepository<E extends Entity> {
     namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
   }
 
+  public String toSnakeCase(String field){
+    return field.replaceAll("([a-z])([A-Z])", "$1_$2").toLowerCase();
+  }
+
   protected Optional<E> queryOne(String sql, SqlParameterSource params) {
     List<E> entities = namedParameterJdbcTemplate
         .query(sql, params, (resultSet, rowNum) -> mapRow(resultSet));

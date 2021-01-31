@@ -7,19 +7,21 @@ import com.danilat.scorecards.core.domain.score.events.RoundScored;
 import com.danilat.scorecards.shared.domain.Entity;
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class ScoreCard extends Entity<ScoreCardId> {
 
   private final FightId fightId;
   private final BoxerId firstBoxerId;
   private final BoxerId secondBoxerId;
-  private final HashMap<Integer, Integer> firstBoxerScores;
-  private final HashMap<Integer, Integer> secondBoxerScores;
+  private final Map<Integer, Integer> firstBoxerScores;
+  private final Map<Integer, Integer> secondBoxerScores;
   private final AccountId accountId;
   private Instant scoredAt;
 
   public ScoreCard(ScoreCardId id, AccountId accountId, FightId fightId, BoxerId firstBoxerId, BoxerId secondBoxerId,
-      HashMap<Integer, Integer> firstBoxerScores, HashMap<Integer, Integer> secondBoxerScores) {
+      Map<Integer, Integer> firstBoxerScores, Map<Integer, Integer> secondBoxerScores, Instant scoredAt) {
     super(id);
     this.fightId = fightId;
     this.firstBoxerId = firstBoxerId;
@@ -27,11 +29,12 @@ public class ScoreCard extends Entity<ScoreCardId> {
     this.accountId = accountId;
     this.firstBoxerScores = firstBoxerScores;
     this.secondBoxerScores = secondBoxerScores;
+    this.scoredAt = scoredAt;
   }
 
   public static ScoreCard create(ScoreCardId id, AccountId accountId, FightId fightId, BoxerId firstBoxerId,
       BoxerId secondBoxerId) {
-    return new ScoreCard(id, accountId, fightId, firstBoxerId, secondBoxerId, new HashMap<>(), new HashMap<>());
+    return new ScoreCard(id, accountId, fightId, firstBoxerId, secondBoxerId, new HashMap<>(), new HashMap<>(), null);
   }
 
   @Override
@@ -71,11 +74,11 @@ public class ScoreCard extends Entity<ScoreCardId> {
     return secondBoxerScores.get(round);
   }
 
-  public HashMap<Integer, Integer> firstBoxerScores() {
+  public Map<Integer, Integer> firstBoxerScores() {
     return firstBoxerScores;
   }
 
-  public HashMap<Integer, Integer> secondBoxerScores() {
+  public Map<Integer, Integer> secondBoxerScores() {
     return secondBoxerScores;
   }
 
@@ -92,5 +95,47 @@ public class ScoreCard extends Entity<ScoreCardId> {
 
   public boolean isRoundScored(int round) {
     return firstBoxerScore(round) != null && secondBoxerScore(round) != null;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+    ScoreCard scoreCard = (ScoreCard) o;
+    return Objects.equals(fightId, scoreCard.fightId) &&
+        Objects.equals(firstBoxerId, scoreCard.firstBoxerId) &&
+        Objects.equals(secondBoxerId, scoreCard.secondBoxerId) &&
+        Objects.equals(firstBoxerScores, scoreCard.firstBoxerScores) &&
+        Objects.equals(secondBoxerScores, scoreCard.secondBoxerScores) &&
+        Objects.equals(accountId, scoreCard.accountId) &&
+        Objects.equals(scoredAt, scoreCard.scoredAt);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects
+        .hash(super.hashCode(), fightId, firstBoxerId, secondBoxerId, firstBoxerScores, secondBoxerScores, accountId,
+            scoredAt);
+  }
+
+  @Override
+  public String toString() {
+    return "ScoreCard{" +
+        "fightId=" + fightId +
+        ", firstBoxerId=" + firstBoxerId +
+        ", secondBoxerId=" + secondBoxerId +
+        ", firstBoxerScores=" + firstBoxerScores +
+        ", secondBoxerScores=" + secondBoxerScores +
+        ", accountId=" + accountId +
+        ", scoredAt=" + scoredAt +
+        ", id=" + id +
+        '}';
   }
 }
