@@ -15,7 +15,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -27,7 +26,7 @@ import org.springframework.stereotype.Repository;
 
 @Primary
 @Repository
-public class JdbcScoreCardRepository extends JdbcBaseRepository implements ScoreCardRepository {
+public class JdbcScoreCardRepository extends JdbcBaseRepository<ScoreCard, ScoreCardId> implements ScoreCardRepository {
 
   public JdbcScoreCardRepository(DataSource dataSource) {
     super(dataSource);
@@ -53,6 +52,11 @@ public class JdbcScoreCardRepository extends JdbcBaseRepository implements Score
     return new ScoreCard(new ScoreCardId(resultSet.getString("id")), new AccountId(resultSet.getString("account_id")),
         new FightId(resultSet.getString("fight_id")), new BoxerId(resultSet.getString("first_boxer_id")),
         new BoxerId(resultSet.getString("second_boxer_id")), firstBoxerScores, secondBoxerScores, scoredAt);
+  }
+
+  @Override
+  protected String tableName() {
+    return "scorecards";
   }
 
   @Override
@@ -100,23 +104,5 @@ public class JdbcScoreCardRepository extends JdbcBaseRepository implements Score
           "INSERT INTO scorecards (id, fight_id, account_id, first_boxer_id, second_boxer_id, first_boxer_scores, second_boxer_scores, scored_at) VALUES (:id, :fight_id, :account_id, :first_boxer_id, :second_boxer_id, cast(:first_boxer_scores AS JSON), cast(:second_boxer_scores AS JSON), :scored_at)",
           params);
     }
-  }
-
-  @Override
-  public Optional<ScoreCard> get(ScoreCardId id) {
-    SqlParameterSource params = new MapSqlParameterSource().addValue("id", id.value());
-    return queryOne("SELECT * FROM scorecards WHERE id = :id", params);
-  }
-
-  @Override
-  public Collection<ScoreCard> all() {
-    List<ScoreCard> scorecards = namedParameterJdbcTemplate
-        .query("SELECT * FROM scorecards", (resultSet, rowNum) -> mapRow(resultSet));
-    return scorecards;
-  }
-
-  @Override
-  public void clear() {
-    namedParameterJdbcTemplate.update("DELETE FROM scorecards", new HashMap<>());
   }
 }

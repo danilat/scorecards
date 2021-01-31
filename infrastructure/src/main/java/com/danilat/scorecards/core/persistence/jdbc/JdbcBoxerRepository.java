@@ -5,10 +5,6 @@ import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -18,7 +14,7 @@ import org.springframework.stereotype.Repository;
 
 @Primary
 @Repository
-public class JdbcBoxerRepository extends JdbcBaseRepository implements BoxerRepository {
+public class JdbcBoxerRepository extends JdbcBaseRepository<Boxer, BoxerId> implements BoxerRepository {
 
   @Autowired
   public JdbcBoxerRepository(DataSource dataSource) {
@@ -37,25 +33,12 @@ public class JdbcBoxerRepository extends JdbcBaseRepository implements BoxerRepo
   }
 
   @Override
-  public Optional<Boxer> get(BoxerId id) {
-    SqlParameterSource params = new MapSqlParameterSource().addValue("id", id.value());
-    return queryOne("SELECT * FROM boxers WHERE id = :id", params);
-  }
-
-  @Override
-  public Collection<Boxer> all() {
-    List<Boxer> boxers = namedParameterJdbcTemplate
-        .query("SELECT * FROM boxers", (resultSet, rowNum) -> mapRow(resultSet));
-    return boxers;
-  }
-
-  @Override
   protected Boxer mapRow(ResultSet resultSet) throws SQLException {
     return new Boxer(new BoxerId(resultSet.getString("id")), resultSet.getString("name"));
   }
 
   @Override
-  public void clear() {
-    namedParameterJdbcTemplate.update("DELETE FROM boxers", new HashMap<>());
+  protected String tableName() {
+    return "boxers";
   }
 }

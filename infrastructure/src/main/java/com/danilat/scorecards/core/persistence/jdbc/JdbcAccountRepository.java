@@ -5,9 +5,6 @@ import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.account.AccountRepository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Optional;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +15,7 @@ import org.springframework.stereotype.Repository;
 
 @Primary
 @Repository
-public class JdbcAccountRepository extends JdbcBaseRepository implements AccountRepository {
+public class JdbcAccountRepository extends JdbcBaseRepository<Account, AccountId> implements AccountRepository {
 
   @Autowired
   public JdbcAccountRepository(DataSource dataSource) {
@@ -56,25 +53,13 @@ public class JdbcAccountRepository extends JdbcBaseRepository implements Account
   }
 
   @Override
-  public Optional<Account> get(AccountId id) {
-    SqlParameterSource params = new MapSqlParameterSource().addValue("id", id.value());
-    return queryOne("SELECT * FROM accounts WHERE id = :id", params);
-  }
-
   protected Account mapRow(ResultSet resultSet) throws SQLException {
     return new Account(new AccountId(resultSet.getString("id")), resultSet.getString("username"),
         resultSet.getString("name"), resultSet.getString("email"), resultSet.getString("picture"));
   }
 
   @Override
-  public Collection<Account> all() {
-    List<Account> accounts = namedParameterJdbcTemplate
-        .query("SELECT * FROM accounts", (resultSet, rowNum) -> mapRow(resultSet));
-    return accounts;
-  }
-
-  @Override
-  public void clear() {
-    namedParameterJdbcTemplate.update("DELETE FROM accounts", new HashMap<>());
+  protected String tableName() {
+    return "accounts";
   }
 }

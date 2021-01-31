@@ -7,10 +7,6 @@ import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
 import javax.sql.DataSource;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -19,7 +15,7 @@ import org.springframework.stereotype.Repository;
 
 @Primary
 @Repository
-public class JdbcFightRepository extends JdbcBaseRepository implements FightRepository {
+public class JdbcFightRepository extends JdbcBaseRepository<Fight, FightId> implements FightRepository {
 
   public JdbcFightRepository(DataSource dataSource) {
     super(dataSource);
@@ -30,6 +26,11 @@ public class JdbcFightRepository extends JdbcBaseRepository implements FightRepo
     Event event = new Event(resultSet.getDate("happen_at").toLocalDate(), resultSet.getString("place"));
     return new Fight(new FightId(resultSet.getString("id")), new BoxerId(resultSet.getString("first_boxer_id")),
         new BoxerId(resultSet.getString("second_boxer_id")), event, resultSet.getInt("number_of_rounds"));
+  }
+
+  @Override
+  protected String tableName() {
+    return "fights";
   }
 
   @Override
@@ -49,23 +50,5 @@ public class JdbcFightRepository extends JdbcBaseRepository implements FightRepo
           "INSERT INTO fights (id, first_boxer_id, second_boxer_id, number_of_rounds, place, happen_at) VALUES (:id, :first_boxer_id, :second_boxer_id, :number_of_rounds, :place, :happen_at)",
           params);
     }
-  }
-
-  @Override
-  public Optional<Fight> get(FightId id) {
-    SqlParameterSource params = new MapSqlParameterSource().addValue("id", id.value());
-    return queryOne("SELECT * FROM fights WHERE id = :id", params);
-  }
-
-  @Override
-  public Collection<Fight> all() {
-    List<Fight> fights = namedParameterJdbcTemplate
-        .query("SELECT * FROM fights", (resultSet, rowNum) -> mapRow(resultSet));
-    return fights;
-  }
-
-  @Override
-  public void clear() {
-    namedParameterJdbcTemplate.update("DELETE FROM fights", new HashMap<>());
   }
 }
