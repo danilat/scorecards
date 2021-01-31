@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Sort {
 
-  public static final Sort DEFAULT = new Sort(null, Direction.ASC);
+  public static final Sort DEFAULT = new Sort("id", Direction.ASC);
   private final String field;
   private final Direction direction;
 
@@ -23,6 +23,10 @@ public class Sort {
 
   public enum Direction {
     ASC, DESC;
+
+    public String value(){
+      return this.name();
+    }
   }
 
   @Override

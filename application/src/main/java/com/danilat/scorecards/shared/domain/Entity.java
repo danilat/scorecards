@@ -37,8 +37,7 @@ public abstract class Entity<I extends Id> {
       return false;
     }
     Entity<?> entity = (Entity<?>) o;
-    return Objects.equals(id, entity.id) &&
-        Objects.equals(domainEvents, entity.domainEvents);
+    return Objects.equals(id, entity.id);
   }
 
   @Override
