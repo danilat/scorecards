@@ -40,6 +40,7 @@ public class FightRepositoryTest {
 
     Optional retrieved = fightRepository.get(fightId);
     assertTrue(retrieved.isPresent());
+    assertEquals(retrieved.get(), aFight);
   }
 
   @Test

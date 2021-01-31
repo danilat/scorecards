@@ -40,6 +40,7 @@ public class BoxerRepositoryTest {
 
     Optional retrieved = boxerRepository.get(boxerId);
     assertTrue(retrieved.isPresent());
+    assertEquals(retrieved.get(), aBoxer);
   }
 
   public void saveAnExistingBoxer() {

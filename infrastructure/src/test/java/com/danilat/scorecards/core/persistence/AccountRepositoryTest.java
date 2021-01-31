@@ -1,5 +1,6 @@
 package com.danilat.scorecards.core.persistence;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.danilat.scorecards.core.domain.account.Account;
@@ -37,6 +38,7 @@ public class AccountRepositoryTest {
 
     Optional retrieved = accountRepository.get(accountId);
     assertTrue(retrieved.isPresent());
+    assertEquals(retrieved.get(), anAccount);
   }
 
   @Test
