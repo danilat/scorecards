@@ -1,7 +1,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Welcome to Scorecards</title>
+  <title>Login or Register to Scorecards</title>
   <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-analytics.js"></script>
@@ -20,74 +20,37 @@
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     firebase.analytics();
-
-
   </script>
   <script src="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.js"></script>
   <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.css"/>
   <script type="text/javascript">
       // FirebaseUI config.
       var uiConfig = {
-        signInSuccessUrl: '/',
+        signInSuccessUrl: '/accounts/login',
         signInOptions: [
           firebase.auth.GoogleAuthProvider.PROVIDER_ID
         ],
       };
-
       var ui = new firebaseui.auth.AuthUI(firebase.auth());
       ui.start('#firebaseui-auth-container', uiConfig);
-
       initApp = function() {
         firebase.auth().onAuthStateChanged(function(user) {
           if (user) {
-            // User is signed in.
-            var displayName = user.displayName;
-            var email = user.email;
-            var emailVerified = user.emailVerified;
-            var photoURL = user.photoURL;
-            var uid = user.uid;
-            var phoneNumber = user.phoneNumber;
-            var providerData = user.providerData;
             user.getIdToken().then(function(accessToken) {
-              document.getElementById('sign-in-status').textContent = 'Signed in';
-              document.getElementById('account-details').textContent = JSON.stringify({
-                displayName: displayName,
-                email: email,
-                emailVerified: emailVerified,
-                phoneNumber: phoneNumber,
-                photoURL: photoURL,
-                uid: uid,
-                accessToken: accessToken,
-                providerData: providerData
-              }, null, '  ');
-              document.getElementById('create-account').style.display = '';
               document.cookie = "access_token="+accessToken;
             });
-          } else {
-            // User is signed out.
-            document.getElementById('sign-in-status').textContent = 'Signed out';
-            document.getElementById('account-details').textContent = 'null';
           }
         }, function(error) {
           console.log(error);
         });
       };
-
       window.addEventListener('load', function() {
         initApp();
       });
-
-
   </script>
 </head>
 <body>
-<h1>Welcome to Scorecards</h1>
+<h1>Login or Register to Scorecards</h1>
 <div id="firebaseui-auth-container"></div>
-<div>
-  <a id="create-account" href="/accounts/login/" style="display:none">Login or create an account in ScoreCards</a>
-  <br><br><br>
-</div>
-<div id="sign-in-status"></div>
-<pre id="account-details"></pre>
 </body>
 </html>

@@ -11,7 +11,8 @@ public class AccountMother extends BaseMother {
   }
 
   public static Account anAccountWithEmail(String email) {
-    return new Account(new AccountId("foobar"), faker().name().username(), faker().name().fullName(), email,
+    String username = faker().name().username();
+    return new Account(new AccountId(username), username, faker().name().fullName(), email,
         faker().internet().avatar());
   }
 }

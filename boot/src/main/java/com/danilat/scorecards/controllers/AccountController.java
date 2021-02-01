@@ -1,8 +1,10 @@
 package com.danilat.scorecards.controllers;
 
 import com.danilat.scorecards.core.domain.account.Account;
+import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.usecases.accounts.RegisterAccount;
 import com.danilat.scorecards.core.usecases.accounts.RegisterAccount.RegisterAccountParameters;
+import com.danilat.scorecards.shared.Auth;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.auth.firebase.TokenValidator;
 import com.danilat.scorecards.shared.auth.firebase.TokenValidator.Token;
@@ -26,6 +28,21 @@ public class AccountController {
 
   @Autowired
   private RegisterAccount registerAccount;
+
+  @Autowired
+  private Auth auth;
+
+  @GetMapping("login")
+  public String login(@CookieValue(defaultValue = "", name = "access_token") String accessToken) {
+    if ("".equals(accessToken)) {
+      return "accounts/login";
+    }
+    AccountId accountId = auth.currentAccountId(accessToken);
+    if (accountId == null) {
+      return "redirect:/accounts/new";
+    }
+    return "redirect:/" + accountId.value() + "/scorecards";
+  }
 
   @GetMapping("new")
   public String createForm(@CookieValue(defaultValue = "", name = "access_token") String accessToken, Model model) {
