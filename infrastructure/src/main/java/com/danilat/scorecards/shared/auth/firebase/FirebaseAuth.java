@@ -28,6 +28,9 @@ public class FirebaseAuth implements Auth {
 
   @Override
   public Optional<Account> currentAccount(String accessToken) {
+    if (accessToken == null || accessToken.equals("")) {
+      return Optional.empty();
+    }
     Token token = tokenValidator.validateToken(accessToken);
     if (token == null) {
       return Optional.empty();

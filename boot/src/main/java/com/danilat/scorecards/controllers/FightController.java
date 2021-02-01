@@ -98,6 +98,7 @@ public class FightController {
     this.model = model;
     retrieveAFight.execute(fightWithBoxersPort, new FightId(id));
     AccountId accountId = auth.currentAccountId(accessToken);
+    this.model.addAttribute("accountId", accountId);
     if (accountId != null) {
       RetrieveAScoreCardParameters parameters = new RetrieveAScoreCardParameters(new FightId(id),
           accountId);
