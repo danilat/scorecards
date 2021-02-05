@@ -33,7 +33,3 @@ jobs:
         run: ./mvnw clean verify
       - name: Cucumber studio reports
         run: ./cucumber_studio.sh
-      - name: Code Climate
-        uses: paambaati/codeclimate-action@v2.7.5
-        env:
-          CC_TEST_REPORTER_ID: 6adcd3acd4607f5dc95b557cb343441e248a58b2006559f3e31843f42ce3a2ac
