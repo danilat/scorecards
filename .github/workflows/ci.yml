@@ -6,12 +6,12 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: node:10.18-jessie
     services:
       postgres:
         image: postgres
         env:
           POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_USER: postgres
         # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
