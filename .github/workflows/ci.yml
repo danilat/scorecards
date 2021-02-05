@@ -25,6 +25,6 @@ jobs:
         with:
           java-version: 1.14
       - name: Run database migrations
-        run: mvn flyway:migrate
+        run: ./mvnw flyway:migrate
       - name: Build and run the tests
-        run: mvn clean verify
+        run: ./mvnw clean verify
