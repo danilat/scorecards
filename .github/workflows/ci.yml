@@ -31,3 +31,5 @@ jobs:
         run: ./mvnw test-compile flyway:migrate
       - name: Build and run the tests
         run: ./mvnw clean verify
+      - name: Cucumber studio reports
+        run: ./cucumber_studio.sh
