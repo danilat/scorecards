@@ -7,6 +7,9 @@ import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxers;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersFetcher;
+import com.danilat.scorecards.shared.domain.Order;
+import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -38,5 +41,11 @@ public class InMemoryFightWithBoxersFetcher implements
         fight.secondBoxer(), secondBoxer.name(), fight.event().place(), fight.event().happenAt(),
         fight.numberOfRounds());
     return Optional.ofNullable(fightWithBoxers);
+  }
+
+  @Override
+  public Collection<FightWithBoxers> findAllBefore(LocalDate today, Order order,
+      int limit) {
+    return null;
   }
 }
