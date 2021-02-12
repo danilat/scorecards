@@ -4,7 +4,7 @@ import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxers;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersFetcher;
 import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.PrimaryPort;
-import com.danilat.scorecards.shared.domain.Order;
+import com.danilat.scorecards.shared.domain.Sort;
 import com.danilat.scorecards.shared.usecases.UseCase;
 import com.danilat.scorecards.shared.usecases.UseCase.Empty;
 import java.util.Collection;
@@ -24,6 +24,6 @@ public class RetrieveLastPastFights implements
 
   @Override
   public void execute(PrimaryPort<Collection<FightWithBoxers>> primaryPort, Empty parameters) {
-    primaryPort.success(fightWithBoxersFetcher.findAllBefore(clock.today(), Order.desc("happenedAt"), LIMIT));
+    primaryPort.success(fightWithBoxersFetcher.findAllBefore(clock.today(), Sort.desc("happenAt"), LIMIT));
   }
 }

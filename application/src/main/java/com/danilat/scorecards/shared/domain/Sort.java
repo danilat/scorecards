@@ -13,6 +13,10 @@ public class Sort {
     this.direction = direction;
   }
 
+  public static Sort desc(String field) {
+    return new Sort(field, Direction.DESC);
+  }
+
   public String field() {
     return field;
   }

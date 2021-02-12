@@ -4,6 +4,7 @@ import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.fight.Event;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
+import com.danilat.scorecards.shared.UniqueIdGenerator;
 import java.time.LocalDate;
 
 public class FightMother extends BaseMother {
@@ -17,6 +18,11 @@ public class FightMother extends BaseMother {
     return new Fight(id, new BoxerId("ali"), new BoxerId("foreman"), theRumbleInTheJungle, 12);
   }
 
+  public static Fight aFightWithHappenAt(LocalDate happenAt) {
+    Event theRumbleInTheJungle = new Event(happenAt, faker().rickAndMorty().location());
+    return new Fight(nextId(), new BoxerId("ali"), new BoxerId("foreman"), theRumbleInTheJungle, 12);
+  }
+
   public static Fight aFightWithIdAndNumberOfRounds(FightId id, Integer numberOfRounds) {
     Event theRumbleInTheJungle = new Event(LocalDate.now(), faker().rickAndMorty().location());
     return new Fight(id, new BoxerId("ali"), new BoxerId("foreman"), theRumbleInTheJungle, numberOfRounds);
@@ -25,5 +31,9 @@ public class FightMother extends BaseMother {
   public static Fight aFightWithIdAndBoxers(FightId id, BoxerId firstBoxerId, BoxerId secondBoxerId) {
     Event someEvent = new Event(LocalDate.now(), faker().rickAndMorty().location());
     return new Fight(id, firstBoxerId, secondBoxerId, someEvent, 12);
+  }
+
+  public static FightId nextId(){
+    return new FightId(new UniqueIdGenerator().next());
   }
 }

@@ -12,28 +12,39 @@ import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxers;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersFetcher;
 import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.mothers.FightMother;
-import com.danilat.scorecards.core.persistence.memory.InMemoryBoxerRepository;
-import com.danilat.scorecards.core.persistence.memory.InMemoryFightRepository;
+import com.danilat.scorecards.core.persistence.jdbc.JdbcConfig;
 import com.danilat.scorecards.core.persistence.memory.InMemoryFightWithBoxersFetcher;
+import com.danilat.scorecards.shared.domain.Sort;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
+@SpringBootTest(classes = {JdbcConfig.class, FightRepository.class, BoxerRepository.class,
+    InMemoryFightWithBoxersFetcher.class})
+@RunWith(SpringRunner.class)
 public class FightWithBoxersFetcherTest {
 
+  @Autowired
   private FightRepository fightRepository;
+  @Autowired
   private BoxerRepository boxerRepository;
+  @Autowired
   private FightWithBoxersFetcher fightWithBoxersFetcher;
   private FightId fightId = new FightId("some irrelevant id");
 
   @Before
   public void setup() {
-    fightRepository = new InMemoryFightRepository();
-    boxerRepository = new InMemoryBoxerRepository();
-    fightWithBoxersFetcher = new InMemoryFightWithBoxersFetcher(fightRepository,
-        boxerRepository);
+    boxerRepository.clear();
+    fightRepository.clear();
   }
-
 
   @Test
   public void getAFight() {
@@ -53,5 +64,24 @@ public class FightWithBoxersFetcherTest {
     assertEquals(firstBoxer.name(), fightWithBoxers.getFirstBoxerName());
     assertEquals(secondBoxer.name(), fightWithBoxers.getSecondBoxerName());
     assertEquals(fight.numberOfRounds(), fightWithBoxers.getNumberOfRounds());
+  }
+
+  @Test
+  public void findAllBeforeReturnOnlyPreviousFightsWithCorrectOrder() {
+    Fight tomorrowFight = FightMother.aFightWithHappenAt(LocalDate.now().plusDays(1));
+    Fight yesterdayFight = FightMother.aFightWithHappenAt(LocalDate.now().minusDays(1));
+    Fight todayFight = FightMother.aFightWithHappenAt(LocalDate.now());
+    Boxer firstBoxer = BoxerMother.aBoxerWithId("ali");
+    boxerRepository.save(firstBoxer);
+    Boxer secondBoxer = BoxerMother.aBoxerWithId("foreman");
+    boxerRepository.save(secondBoxer);
+    fightRepository.save(tomorrowFight);
+    fightRepository.save(yesterdayFight);
+    fightRepository.save(todayFight);
+
+    List<FightWithBoxers> fights = new ArrayList<>(fightWithBoxersFetcher.findAllBefore(LocalDate.now(), Sort.desc("happenAt"), 10));
+    assertEquals(2, fights.size());
+    assertEquals(todayFight.id(), fights.get(0).id());
+    assertEquals(yesterdayFight.id(), fights.get(1).id());
   }
 }
