@@ -12,10 +12,8 @@ import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDe
 import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.mothers.FightMother;
 import com.danilat.scorecards.core.mothers.ScoreCardMother;
-import com.danilat.scorecards.core.persistence.memory.InMemoryBoxerRepository;
-import com.danilat.scorecards.core.persistence.memory.InMemoryFightRepository;
-import com.danilat.scorecards.core.persistence.memory.InMemoryScoreCardRepository;
-import com.danilat.scorecards.core.persistence.memory.InMemoryScoreCardWithFightDetailsFetcher;
+import com.danilat.scorecards.core.persistence.jdbc.JdbcConfig;
+import com.danilat.scorecards.core.persistence.fetchers.InMemoryScoreCardWithFightDetailsFetcher;
 import com.danilat.scorecards.shared.domain.Sort;
 import com.danilat.scorecards.shared.domain.Sort.Direction;
 import java.time.Instant;
@@ -24,21 +22,30 @@ import java.util.Collection;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
+@SpringBootTest(classes = {JdbcConfig.class, FightRepository.class, BoxerRepository.class, ScoreCardRepository.class,
+    InMemoryScoreCardWithFightDetailsFetcher.class})
+@RunWith(SpringRunner.class)
 public class ScoreCardWithFightDetailsFetcherTest {
 
+  @Autowired
   private FightRepository fightRepository;
+  @Autowired
   private BoxerRepository boxerRepository;
+  @Autowired
   private ScoreCardRepository scoreCardRepository;
+  @Autowired
   private ScoreCardWithFightDetailsFetcher scoreCardWithFightDetailsFetcher;
 
   @Before
   public void setup() {
-    fightRepository = new InMemoryFightRepository();
-    boxerRepository = new InMemoryBoxerRepository();
-    scoreCardRepository = new InMemoryScoreCardRepository();
-    scoreCardWithFightDetailsFetcher = new InMemoryScoreCardWithFightDetailsFetcher(scoreCardRepository,
-        fightRepository, boxerRepository);
+    scoreCardRepository.clear();
+    fightRepository.clear();
+    boxerRepository.clear();
   }
 
   @Test

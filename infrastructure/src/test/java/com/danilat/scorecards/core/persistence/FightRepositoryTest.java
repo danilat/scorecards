@@ -9,7 +9,6 @@ import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.mothers.FightMother;
 import com.danilat.scorecards.core.persistence.jdbc.JdbcConfig;
 import com.danilat.scorecards.core.persistence.jdbc.JdbcFightRepository;
-import com.danilat.scorecards.core.persistence.memory.InMemoryFightRepository;
 import java.util.Collection;
 import java.util.Optional;
 import org.junit.Before;

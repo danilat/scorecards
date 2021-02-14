@@ -1,4 +1,4 @@
-package com.danilat.scorecards.core.persistence.memory;
+package com.danilat.scorecards.core.persistence.fetchers;
 
 import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.boxer.Boxer;
@@ -12,6 +12,7 @@ import com.danilat.scorecards.shared.domain.Sort;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -21,6 +22,7 @@ public class InMemoryScoreCardWithFightDetailsFetcher implements ScoreCardWithFi
   private final FightRepository fightRepository;
   private final BoxerRepository boxerRepository;
 
+  @Autowired
   public InMemoryScoreCardWithFightDetailsFetcher(ScoreCardRepository scoreCardRepository,
       FightRepository fightRepository, BoxerRepository boxerRepository) {
     this.scoreCardRepository = scoreCardRepository;

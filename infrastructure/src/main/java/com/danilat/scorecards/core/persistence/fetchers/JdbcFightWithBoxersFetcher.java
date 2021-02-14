@@ -1,4 +1,4 @@
-package com.danilat.scorecards.core.persistence.memory;
+package com.danilat.scorecards.core.persistence.fetchers;
 
 import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
@@ -23,7 +23,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class InMemoryFightWithBoxersFetcher implements
+public class JdbcFightWithBoxersFetcher implements
     FightWithBoxersFetcher {
 
   private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -31,7 +31,7 @@ public class InMemoryFightWithBoxersFetcher implements
   private BoxerRepository boxerRepository;
 
   @Autowired
-  public InMemoryFightWithBoxersFetcher(FightRepository fightRepository,
+  public JdbcFightWithBoxersFetcher(FightRepository fightRepository,
       BoxerRepository boxerRepository, DataSource dataSource) {
     this.fightRepository = fightRepository;
     this.boxerRepository = boxerRepository;
