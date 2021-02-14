@@ -1,4 +1,4 @@
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>Welcome to Scorecards</title>
@@ -89,5 +89,15 @@
 </div>
 <div id="sign-in-status"></div>
 <pre id="account-details"></pre>
+<h2>Last fights</h2>
+<ul>
+  <li th:each="fight : ${lastFights}">
+    <a th:href="@{/fights/{id}(id=${fight.id().value()})}"><span th:text=${fight.firstBoxerName} /> vs <span th:text=${fight.secondBoxerName} />. In <span th:text=${fight.numberOfRounds} /> rounds
+    <p>
+      <span th:text=${fight.happenAt} />, <span th:text=${fight.place} />
+    </p>
+    </a>
+  </li>
+</ul>
 </body>
 </html>
