@@ -11,7 +11,6 @@ import com.danilat.scorecards.core.usecases.UseCaseUnitTest;
 import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.domain.Sort;
-import com.danilat.scorecards.shared.usecases.UseCase.Empty;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
@@ -37,21 +36,21 @@ public class RetrieveLastPastFightsTest extends UseCaseUnitTest<Collection<Fight
   private Collection<FightWithBoxers> existingFightsWithBoxers;
   private RetrieveLastPastFights retrieveLastPastFights;
   private LocalDate today = LocalDate.now();
-  private int limit = 50;
-  private Sort sort = Sort.desc("happenedAt");
+  private int limit = 20;
+  private Sort sort = Sort.desc("happenAt");
 
   @Before
   public void setup() {
     existingFightsWithBoxers = Arrays.asList(FightWithBoxersMother.aFightWithBoxersWithId(new FightId("irrelevant")));
-    when(fightWithBoxersFetcher.findAllBefore(today, sort, limit)).thenReturn(existingFightsWithBoxers);
     when(clock.today()).thenReturn(today);
+    when(fightWithBoxersFetcher.findAllBefore(today, sort, limit)).thenReturn(existingFightsWithBoxers);
 
     retrieveLastPastFights = new RetrieveLastPastFights(fightWithBoxersFetcher, clock);
   }
 
   @Test
   public void givenAnExistingFightThenIsRetrieved() {
-    retrieveLastPastFights.execute(primaryPort, new Empty());
+    retrieveLastPastFights.execute(primaryPort);
 
     assertEquals(existingFightsWithBoxers, getSuccessEntity());
   }

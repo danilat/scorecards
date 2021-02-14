@@ -14,7 +14,7 @@ public class RetrieveLastPastFights implements
 
   private final FightWithBoxersFetcher fightWithBoxersFetcher;
   private final Clock clock;
-  public static final int LIMIT = 50;
+  public static final int LIMIT = 20;
 
   public RetrieveLastPastFights(FightWithBoxersFetcher fightWithBoxersFetcher,
       Clock clock) {
@@ -25,5 +25,9 @@ public class RetrieveLastPastFights implements
   @Override
   public void execute(PrimaryPort<Collection<FightWithBoxers>> primaryPort, Empty parameters) {
     primaryPort.success(fightWithBoxersFetcher.findAllBefore(clock.today(), Sort.desc("happenAt"), LIMIT));
+  }
+
+  public void execute(PrimaryPort<Collection<FightWithBoxers>> primaryPort){
+    execute(primaryPort, new Empty());
   }
 }

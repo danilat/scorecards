@@ -3,6 +3,7 @@ package com.danilat.scorecards.acceptation.steps;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
@@ -16,6 +17,7 @@ import com.danilat.scorecards.core.mothers.FightMother;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
+import com.danilat.scorecards.core.usecases.fights.RetrieveLastPastFights;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.domain.FieldErrors;
 import io.cucumber.java.en.Given;
@@ -24,6 +26,9 @@ import io.cucumber.java.en.When;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class FightSteps {
@@ -36,6 +41,8 @@ public class FightSteps {
   private RetrieveAFight retrieveAFight;
   @Autowired
   private RegisterFight registerFight;
+  @Autowired
+  private RetrieveLastPastFights retrieveLastPastFights;
   @Autowired
   private World world;
 
@@ -67,6 +74,15 @@ public class FightSteps {
       public void error(FieldErrors errors) {
         world.setErrors(errors);
         world.setFight(null);
+      }
+    };
+  }
+  private Collection<FightWithBoxers> retrievedFights;
+  private PrimaryPort<Collection<FightWithBoxers>> getRetrieveLastPastFightsPort() {
+    return new PrimaryPort<Collection<FightWithBoxers>>() {
+      @Override
+      public void success(Collection<FightWithBoxers> response) {
+        retrievedFights = response;
       }
     };
   }
@@ -158,5 +174,44 @@ public class FightSteps {
         LocalDate.now(), "irrelevant place", numberOfRounds);
 
     registerFight.execute(getRegisterFightPort(), parameters);
+  }
+
+  @Given("exists a fight that happened {string}")
+  public void existsAFightThatHappened(String happen) {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    existingFight = FightMother.aFightWithHappenAt(LocalDate.parse(happen, formatter));
+    fightRepository.save(existingFight);
+    Boxer firstBoxer = BoxerMother.aBoxerWithId(existingFight.firstBoxer());
+    boxerRepository.save(firstBoxer);
+    Boxer secondBoxer = BoxerMother.aBoxerWithId(existingFight.secondBoxer());
+    boxerRepository.save(secondBoxer);
+  }
+
+  @When("I retrieve the last fights")
+  public void iRetrieveTheLastFights() {
+    retrieveLastPastFights.execute(getRetrieveLastPastFightsPort());
+  }
+  @Then("the fights are present")
+  public void theFightsArePresent() {
+    assertNotNull(retrievedFights);
+    assertTrue(retrievedFights.size() > 0);
+  }
+  @Then("the fight that happened {string} is first than the fight that happened {string}")
+  public void theFightThatHappenedIsFirstThanTheFightThatHappened(String firstFightDate, String secondFightDate) {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    List<FightWithBoxers> fights = new ArrayList<>(retrievedFights);
+    assertEquals(LocalDate.parse(firstFightDate, formatter), fights.get(0).getHappenAt());
+    assertEquals(LocalDate.parse(secondFightDate, formatter), fights.get(1).getHappenAt());
+  }
+
+  @Given("there is no fights")
+  public void thereIsNoFights() {
+    fightRepository.clear();
+  }
+
+  @Then("the fights are not present")
+  public void theFightsAreNotPresent() {
+    assertNotNull(retrievedFights);
+    assertEquals(0, retrievedFights.size());
   }
 }
