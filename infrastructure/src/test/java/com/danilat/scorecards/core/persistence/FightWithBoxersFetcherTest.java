@@ -12,8 +12,8 @@ import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxers;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersFetcher;
 import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.mothers.FightMother;
-import com.danilat.scorecards.core.persistence.jdbc.JdbcConfig;
 import com.danilat.scorecards.core.persistence.fetchers.JdbcFightWithBoxersFetcher;
+import com.danilat.scorecards.core.persistence.jdbc.JdbcConfig;
 import com.danilat.scorecards.shared.domain.Sort;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -26,8 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-@SpringBootTest(classes = {JdbcConfig.class, FightRepository.class, BoxerRepository.class,
-    JdbcFightWithBoxersFetcher.class})
+@SpringBootTest(classes = {JdbcConfig.class, JdbcFightWithBoxersFetcher.class})
 @RunWith(SpringRunner.class)
 public class FightWithBoxersFetcherTest {
 
@@ -78,7 +77,8 @@ public class FightWithBoxersFetcherTest {
     fightRepository.save(yesterdayFight);
     fightRepository.save(todayFight);
 
-    List<FightWithBoxers> fights = new ArrayList<>(fightWithBoxersFetcher.findAllBefore(LocalDate.now(), Sort.desc("happenAt"), 10));
+    List<FightWithBoxers> fights = new ArrayList<>(
+        fightWithBoxersFetcher.findAllBefore(LocalDate.now(), Sort.desc("happenAt"), 10));
     assertEquals(2, fights.size());
     assertEquals(todayFight.id(), fights.get(0).id());
     assertEquals(yesterdayFight.id(), fights.get(1).id());
