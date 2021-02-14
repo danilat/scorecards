@@ -23,5 +23,6 @@ public class CleanRepositories {
     scoreCardRepository.clear();
     fightRepository.clear();
     boxerRepository.clear();
+    accountRepository.clear();
   }
 }

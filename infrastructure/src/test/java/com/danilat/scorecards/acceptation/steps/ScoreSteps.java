@@ -102,12 +102,16 @@ public class ScoreSteps {
     }
   };
 
-  @When("an aficionado scores the round {int} for the existing fight with {int} and {int}")
-  public void anAficionadoScoresTheRoundForTheExistingFightWithAnd(Integer round, Integer firstBoxerScore,
-      Integer secondBoxerScore) {
-    Account account = AccountMother.anAccountWithUsername("danilat");
+  @Given("an aficionado with username {string}")
+  public void anAficionadoWithUsername(String username) {
+    Account account = AccountMother.anAccountWithUsername(username);
     accountRepository.save(account);
     when(tokenValidator.validateToken(AN_ACCESS_TOKEN)).thenReturn(TokenMother.forAccount(account));
+  }
+
+  @When("the aficionado scores the round {int} for the existing fight with {int} and {int}")
+  public void anAficionadoScoresTheRoundForTheExistingFightWithAnd(Integer round, Integer firstBoxerScore,
+      Integer secondBoxerScore) {
     Fight fight = world.getFight();
     ScoreRound.ScoreFightParameters params = new ScoreRound.ScoreFightParameters(fight.id(), round, fight.firstBoxer(),
         firstBoxerScore, fight.secondBoxer(), secondBoxerScore, AN_ACCESS_TOKEN);
@@ -137,12 +141,12 @@ public class ScoreSteps {
     scoreRound.execute(scoreRoundPrimaryPort, params);
   }
 
-  @When("an aficionado scores the round {int} for the non-existing fight with {int} and {int}")
+  @When("the aficionado scores the round {int} for the non-existing fight with {int} and {int}")
   public void anAficionadoScoresTheRoundForTheNonExistingFightWithAnd(Integer round, Integer firstBoxerScore,
       Integer secondBoxerScore) {
     FightId nonExistingFightId = new FightId("not-exists");
     ScoreRound.ScoreFightParameters params = new ScoreRound.ScoreFightParameters(nonExistingFightId, round,
-        new BoxerId("irrelevant 1"), firstBoxerScore, new BoxerId("irrelevant 2"), secondBoxerScore, "theToken");
+        new BoxerId("irrelevant 1"), firstBoxerScore, new BoxerId("irrelevant 2"), secondBoxerScore, AN_ACCESS_TOKEN);
 
     scoreRound.execute(scoreRoundPrimaryPort, params);
   }
@@ -153,7 +157,7 @@ public class ScoreSteps {
     assertNull(scoreCard);
   }
 
-  @When("an aficionado scores the round {int} for the existing fight with {int} for the first boxer")
+  @When("the aficionado scores the round {int} for the existing fight with {int} for the first boxer")
   public void anAficionadoScoresTheRoundForTheExistingFightWithForTheFirstBoxer(Integer round,
       Integer firstBoxerScore) {
     Fight fight = world.getFight();
@@ -163,12 +167,12 @@ public class ScoreSteps {
     scoreRound.execute(scoreRoundPrimaryPort, params);
   }
 
-  @When("an aficionado scores the round {int} for the existing fight with {int} for {string} and {int} for {string}")
+  @When("the aficionado scores the round {int} for the existing fight with {int} for {string} and {int} for {string}")
   public void anAficionadoScoresTheRoundForTheExistingFightWithForAndFor(Integer round, Integer firstBoxerScore,
       String firstBoxer, Integer secondBoxerScore, String secondBoxer) {
     Fight fight = world.getFight();
     ScoreRound.ScoreFightParameters params = new ScoreRound.ScoreFightParameters(fight.id(), round,
-        new BoxerId(firstBoxer), firstBoxerScore, new BoxerId(secondBoxer), secondBoxerScore, "theToken");
+        new BoxerId(firstBoxer), firstBoxerScore, new BoxerId(secondBoxer), secondBoxerScore, AN_ACCESS_TOKEN);
 
     scoreRound.execute(scoreRoundPrimaryPort, params);
   }
