@@ -13,7 +13,7 @@ import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.mothers.FightMother;
 import com.danilat.scorecards.core.mothers.ScoreCardMother;
 import com.danilat.scorecards.core.persistence.jdbc.JdbcConfig;
-import com.danilat.scorecards.core.persistence.fetchers.InMemoryScoreCardWithFightDetailsFetcher;
+import com.danilat.scorecards.core.persistence.fetchers.JdbcScoreCardWithFightDetailsFetcher;
 import com.danilat.scorecards.shared.domain.Sort;
 import com.danilat.scorecards.shared.domain.Sort.Direction;
 import java.time.Instant;
@@ -28,7 +28,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @SpringBootTest(classes = {JdbcConfig.class, FightRepository.class, BoxerRepository.class, ScoreCardRepository.class,
-    InMemoryScoreCardWithFightDetailsFetcher.class})
+    JdbcScoreCardWithFightDetailsFetcher.class})
 @RunWith(SpringRunner.class)
 public class ScoreCardWithFightDetailsFetcherTest {
 

@@ -6,9 +6,9 @@ import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.score.ScoreCard;
 import com.danilat.scorecards.core.domain.score.ScoreCardId;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
+import com.danilat.scorecards.core.persistence.mappers.RawToScores;
 import com.danilat.scorecards.shared.domain.Sort;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,19 +34,8 @@ public class JdbcScoreCardRepository extends JdbcBaseRepository<ScoreCard, Score
 
   @Override
   protected ScoreCard mapRow(ResultSet resultSet) throws SQLException {
-    ObjectMapper objectMapper = new ObjectMapper();
-    Map<Integer, Integer> firstBoxerScores;
-    Map<Integer, Integer> secondBoxerScores;
-    try {
-      firstBoxerScores = objectMapper
-          .readValue(resultSet.getString("first_boxer_scores"), new TypeReference<Map<Integer, Integer>>() {
-          });
-      secondBoxerScores = objectMapper
-          .readValue(resultSet.getString("second_boxer_scores"), new TypeReference<Map<Integer, Integer>>() {
-          });
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException(e);
-    }
+    Map<Integer, Integer> firstBoxerScores = RawToScores.map(resultSet.getString("first_boxer_scores"));
+    Map<Integer, Integer> secondBoxerScores = RawToScores.map(resultSet.getString("second_boxer_scores"));
     Instant scoredAt = resultSet.getTimestamp("scored_at").toInstant();
 
     return new ScoreCard(new ScoreCardId(resultSet.getString("id")), new AccountId(resultSet.getString("account_id")),
