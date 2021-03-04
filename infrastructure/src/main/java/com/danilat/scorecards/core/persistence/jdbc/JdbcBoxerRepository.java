@@ -24,17 +24,20 @@ public class JdbcBoxerRepository extends JdbcBaseRepository<Boxer, BoxerId> impl
   @Override
   public void save(Boxer boxer) {
     SqlParameterSource params = new MapSqlParameterSource().addValue("id", boxer.id().value())
-        .addValue("name", boxer.name());
+        .addValue("name", boxer.name()).addValue("alias", boxer.alias()).addValue("boxrec_url", boxer.boxrecUrl());
     if (get(boxer.id()).isPresent()) {
-      namedParameterJdbcTemplate.update("UPDATE boxers SET name = :name WHERE id = :id", params);
+      namedParameterJdbcTemplate
+          .update("UPDATE boxers SET name = :name, alias = :alias, boxrec_url = :boxrec_url WHERE id = :id", params);
     } else {
-      namedParameterJdbcTemplate.update("INSERT INTO boxers (id, name) VALUES (:id, :name)", params);
+      namedParameterJdbcTemplate
+          .update("INSERT INTO boxers (id, name, alias, boxrec_url) VALUES (:id, :name, :alias, :boxrec_url)", params);
     }
   }
 
   @Override
   protected Boxer mapRow(ResultSet resultSet) throws SQLException {
-    return new Boxer(new BoxerId(resultSet.getString("id")), resultSet.getString("name"));
+    return new Boxer(new BoxerId(resultSet.getString("id")), resultSet.getString("name"), resultSet.getString("alias"),
+        resultSet.getString("boxrec_url"));
   }
 
   @Override

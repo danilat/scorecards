@@ -10,7 +10,7 @@ public class BoxerMother extends BaseMother {
   }
 
   public static Boxer aBoxerWithIdAndName(BoxerId id, String name) {
-    return new Boxer(id, name);
+    return new Boxer(id, name, "irrelevant alias", "irrelevant url");
   }
 
   public static Boxer aBoxerWithId(String id) {

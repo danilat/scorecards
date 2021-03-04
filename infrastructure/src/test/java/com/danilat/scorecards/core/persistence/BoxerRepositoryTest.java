@@ -47,7 +47,7 @@ public class BoxerRepositoryTest {
     Boxer aBoxer = BoxerMother.aBoxerWithId(boxerId);
     boxerRepository.save(aBoxer);
 
-    aBoxer = new Boxer(boxerId, "Pepito, The Beast");
+    aBoxer = new Boxer(boxerId, "Pepito, The Beast", aBoxer.alias(), aBoxer.boxrecUrl());
     boxerRepository.save(aBoxer);
 
     Boxer retrieved = boxerRepository.get(boxerId).get();
