@@ -6,8 +6,11 @@ import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.score.events.RoundScored;
 import com.danilat.scorecards.shared.domain.Entity;
 import java.time.Instant;
-import java.util.Objects;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
+@ToString
+@EqualsAndHashCode
 public class ScoreCard extends Entity<ScoreCardId> {
 
   private final FightId fightId;
@@ -91,43 +94,5 @@ public class ScoreCard extends Entity<ScoreCardId> {
 
   public boolean isRoundScored(int round) {
     return firstBoxerScore(round) != null && secondBoxerScore(round) != null;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    if (!super.equals(o)) {
-      return false;
-    }
-    ScoreCard scoreCard = (ScoreCard) o;
-    return Objects.equals(fightId, scoreCard.fightId) &&
-        Objects.equals(firstBoxerScores, scoreCard.firstBoxerScores) &&
-        Objects.equals(secondBoxerScores, scoreCard.secondBoxerScores) &&
-        Objects.equals(accountId, scoreCard.accountId) &&
-        Objects.equals(scoredAt, scoreCard.scoredAt);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects
-        .hash(super.hashCode(), fightId, firstBoxerScores, secondBoxerScores, accountId,
-            scoredAt);
-  }
-
-  @Override
-  public String toString() {
-    return "ScoreCard{" +
-        "fightId=" + fightId +
-        ", firstBoxerScores=" + firstBoxerScores +
-        ", secondBoxerScores=" + secondBoxerScores +
-        ", accountId=" + accountId +
-        ", scoredAt=" + scoredAt +
-        ", id=" + id +
-        '}';
   }
 }

@@ -3,8 +3,11 @@ package com.danilat.scorecards.core.domain.score;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
+@ToString
+@EqualsAndHashCode
 public class BoxerScores {
 
   private final Map<Integer, Integer> map;
@@ -38,31 +41,5 @@ public class BoxerScores {
 
   public BoxerId boxerId() {
     return boxerId;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    BoxerScores that = (BoxerScores) o;
-    return Objects.equals(map, that.map) &&
-        Objects.equals(boxerId, that.boxerId);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(map, boxerId);
-  }
-
-  @Override
-  public String toString() {
-    return "BoxerScores{" +
-        "map=" + map +
-        ", boxerId=" + boxerId +
-        '}';
   }
 }

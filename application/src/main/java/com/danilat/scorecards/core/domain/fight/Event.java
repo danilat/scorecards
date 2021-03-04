@@ -1,8 +1,11 @@
 package com.danilat.scorecards.core.domain.fight;
 
 import java.time.LocalDate;
-import java.util.Objects;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
+@ToString
+@EqualsAndHashCode
 public class Event {
 
   private final LocalDate happenAt;
@@ -19,31 +22,5 @@ public class Event {
 
   public LocalDate happenAt() {
     return happenAt;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Event event = (Event) o;
-    return Objects.equals(happenAt, event.happenAt) &&
-        Objects.equals(place, event.place);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(happenAt, place);
-  }
-
-  @Override
-  public String toString() {
-    return "Event{" +
-        "happenAt=" + happenAt +
-        ", place='" + place + '\'' +
-        '}';
   }
 }

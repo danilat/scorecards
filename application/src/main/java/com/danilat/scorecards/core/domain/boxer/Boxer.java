@@ -4,8 +4,11 @@ import com.danilat.scorecards.core.domain.boxer.events.BoxerCreated;
 import com.danilat.scorecards.shared.domain.Entity;
 import com.danilat.scorecards.shared.events.DomainEventId;
 import java.time.Instant;
-import java.util.Objects;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
+@ToString
+@EqualsAndHashCode
 public class Boxer extends Entity<BoxerId> {
 
   private String name;
@@ -41,36 +44,5 @@ public class Boxer extends Entity<BoxerId> {
 
   public String boxrecUrl() {
     return boxrecUrl;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    if (!super.equals(o)) {
-      return false;
-    }
-    Boxer boxer = (Boxer) o;
-    return Objects.equals(name, boxer.name) &&
-        Objects.equals(alias, boxer.alias) &&
-        Objects.equals(boxrecUrl, boxer.boxrecUrl);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(super.hashCode(), name, alias, boxrecUrl);
-  }
-
-  @Override
-  public String toString() {
-    return "Boxer{" +
-        "name='" + name + '\'' +
-        ", alias='" + alias + '\'' +
-        ", boxrecUrl='" + boxrecUrl + '\'' +
-        '}';
   }
 }

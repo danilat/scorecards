@@ -11,7 +11,11 @@ import com.danilat.scorecards.core.domain.score.ScoreCardId;
 import com.danilat.scorecards.shared.domain.Entity;
 import java.time.Instant;
 import java.time.LocalDate;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
+@ToString
+@EqualsAndHashCode
 public class ScoreCardWithFightDetails extends Entity<ScoreCardId> {
 
   private final FightId fightId;
