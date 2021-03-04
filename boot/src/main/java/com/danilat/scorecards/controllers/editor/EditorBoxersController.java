@@ -3,8 +3,10 @@ package com.danilat.scorecards.controllers.editor;
 import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.usecases.boxers.CreateBoxer;
 import com.danilat.scorecards.core.usecases.boxers.CreateBoxer.CreateBoxerParams;
+import com.danilat.scorecards.core.usecases.boxers.RetrieveAllBoxers;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.domain.FieldErrors;
+import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +18,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping(value = "/editor/boxers")
 public class EditorBoxersController {
+  @Autowired
+  private RetrieveAllBoxers retrieveAllBoxers;
+  @GetMapping("")
+  public String list(Model model){
+    retrieveAllBoxers.execute(listBoxersPort(model));
+    return "editor/boxers/list";
+  }
+
+  private PrimaryPort<Collection<Boxer>> listBoxersPort(Model model) {
+    return boxers -> {
+      model.addAttribute("boxers", boxers);
+    };
+  }
 
   @GetMapping("new")
   public String createForm(Model model) {

@@ -1,0 +1,17 @@
+
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<h1>Boxers</h1>
+
+<ul th:if="${boxers}">
+  <li th:each="boxer : ${boxers}">
+    <span th:text=${boxer.name()}></span>.
+    <span th:text=${boxer.alias()}></span> | <a th:href="${boxer.boxrecUrl()}"><span th:text=${boxer.boxrecUrl()}></span></a>
+    <br>
+    <a th:href="@{/editor/boxers/{id}(id=${boxer.id().value()})}">Go to the boxer</a>
+    <br>
+
+  </li>
+</ul>
+</body>
+</html>
