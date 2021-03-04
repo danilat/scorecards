@@ -8,7 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.danilat.scorecards.core.domain.account.Account;
-import com.danilat.scorecards.core.domain.account.AccountCreated;
+import com.danilat.scorecards.core.domain.account.events.AccountCreated;
 import com.danilat.scorecards.core.domain.account.AccountRepository;
 import com.danilat.scorecards.core.mothers.AccountMother;
 import com.danilat.scorecards.core.usecases.UseCaseUnitTest;

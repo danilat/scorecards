@@ -1,5 +1,6 @@
 package com.danilat.scorecards.core.domain.account;
 
+import com.danilat.scorecards.core.domain.account.events.AccountCreated;
 import com.danilat.scorecards.shared.domain.Entity;
 import com.danilat.scorecards.shared.events.DomainEventId;
 import java.time.Instant;
