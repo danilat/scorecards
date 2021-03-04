@@ -54,7 +54,7 @@ public class EditorBoxersController {
     return new PrimaryPort<Boxer>() {
       @Override
       public void success(Boxer boxer) {
-        createResult = "redirect:/editor/boxers/" + boxer.id().value();
+        createResult = "redirect:/editor/boxers";
       }
 
       @Override

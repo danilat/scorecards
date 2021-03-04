@@ -5,16 +5,13 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import com.danilat.scorecards.controllers.BaseControllerTest;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
-import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.mothers.BoxerMother;
-import com.danilat.scorecards.core.mothers.FightMother;
-import java.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +49,7 @@ public class EditorBoxersControllerTest extends BaseControllerTest {
         .param("alias", "pacman")
         .param("boxrecUrl", "https://boxrec.com/en/proboxer/6129"))
         .andExpect(status().is3xxRedirection())
-        .andExpect(redirectedUrlPattern("/editor/boxers/{id}"));
+        .andExpect(redirectedUrl("/editor/boxers"));
   }
 
   @Test
