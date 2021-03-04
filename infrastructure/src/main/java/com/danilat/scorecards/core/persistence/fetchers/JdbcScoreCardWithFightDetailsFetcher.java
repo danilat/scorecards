@@ -3,6 +3,7 @@ package com.danilat.scorecards.core.persistence.fetchers;
 import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.fight.FightId;
+import com.danilat.scorecards.core.domain.score.BoxerScores;
 import com.danilat.scorecards.core.domain.score.ScoreCardId;
 import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDetails;
 import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDetailsFetcher;
@@ -12,7 +13,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.util.Collection;
-import java.util.Map;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -46,8 +46,8 @@ public class JdbcScoreCardWithFightDetailsFetcher implements ScoreCardWithFightD
     ScoreCardId scoreCardId = new ScoreCardId(resultSet.getString("scorecard_id"));
     AccountId accountId = new AccountId(resultSet.getString("account_id"));
 
-    Map<Integer, Integer> firstBoxerScores = RawToScores.map(resultSet.getString("first_boxer_scores"));
-    Map<Integer, Integer> secondBoxerScores = RawToScores.map(resultSet.getString("second_boxer_scores"));
+    BoxerScores firstBoxerScores = RawToScores.map(resultSet.getString("first_boxer_scores"));
+    BoxerScores secondBoxerScores = RawToScores.map(resultSet.getString("second_boxer_scores"));
     Instant scoredAt = resultSet.getTimestamp("scored_at").toInstant();
 
     return new ScoreCardWithFightDetails(scoreCardId, fightId, resultSet.getString("place"),

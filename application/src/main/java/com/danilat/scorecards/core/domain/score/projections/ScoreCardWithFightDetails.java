@@ -5,12 +5,12 @@ import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
+import com.danilat.scorecards.core.domain.score.BoxerScores;
 import com.danilat.scorecards.core.domain.score.ScoreCard;
 import com.danilat.scorecards.core.domain.score.ScoreCardId;
 import com.danilat.scorecards.shared.domain.Entity;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.Map;
 
 public class ScoreCardWithFightDetails extends Entity<ScoreCardId> {
 
@@ -22,15 +22,14 @@ public class ScoreCardWithFightDetails extends Entity<ScoreCardId> {
   private final String firstBoxerName;
   private final BoxerId secondBoxerId;
   private final String secondBoxerName;
-  private final Map<Integer, Integer> firstBoxerScores;
-  private final Map<Integer, Integer> secondBoxerScores;
+  private final BoxerScores firstBoxerScores;
+  private final BoxerScores secondBoxerScores;
   private final AccountId accountId;
   private final Instant scoredAt;
 
   public ScoreCardWithFightDetails(ScoreCardId id, FightId fightId, String place, LocalDate happenAt,
-      Integer numberOfRounds, BoxerId firstBoxerId, String firstBoxerName,
-      BoxerId secondBoxerId, String secondBoxerName, Map<Integer, Integer> firstBoxerScores,
-      Map<Integer, Integer> secondBoxerScores,
+      Integer numberOfRounds, BoxerId firstBoxerId, String firstBoxerName, BoxerId secondBoxerId,
+      String secondBoxerName, BoxerScores firstBoxerScores, BoxerScores secondBoxerScores,
       AccountId accountId, Instant scoredAt) {
     super(id);
     this.fightId = fightId;
@@ -96,20 +95,20 @@ public class ScoreCardWithFightDetails extends Entity<ScoreCardId> {
     return secondBoxerName;
   }
 
-  public Map<Integer, Integer> getFirstBoxerScores() {
+  public BoxerScores getFirstBoxerScores() {
     return firstBoxerScores;
   }
 
   public Integer getFirstBoxerScore() {
-    return firstBoxerScores.values().stream().reduce(0, Integer::sum);
+    return firstBoxerScores.total();
   }
 
-  public Map<Integer, Integer> getSecondBoxerScores() {
+  public BoxerScores getSecondBoxerScores() {
     return secondBoxerScores;
   }
 
   public Integer getSecondBoxerScore() {
-    return secondBoxerScores.values().stream().reduce(0, Integer::sum);
+    return secondBoxerScores.total();
   }
 
   public AccountId getAccountId() {

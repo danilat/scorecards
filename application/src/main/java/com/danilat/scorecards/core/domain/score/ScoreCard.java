@@ -6,8 +6,6 @@ import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.score.events.RoundScored;
 import com.danilat.scorecards.shared.domain.Entity;
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 public class ScoreCard extends Entity<ScoreCardId> {
@@ -15,13 +13,13 @@ public class ScoreCard extends Entity<ScoreCardId> {
   private final FightId fightId;
   private final BoxerId firstBoxerId;
   private final BoxerId secondBoxerId;
-  private final Map<Integer, Integer> firstBoxerScores;
-  private final Map<Integer, Integer> secondBoxerScores;
+  private final BoxerScores firstBoxerScores;
+  private final BoxerScores secondBoxerScores;
   private final AccountId accountId;
   private Instant scoredAt;
 
   public ScoreCard(ScoreCardId id, AccountId accountId, FightId fightId, BoxerId firstBoxerId, BoxerId secondBoxerId,
-      Map<Integer, Integer> firstBoxerScores, Map<Integer, Integer> secondBoxerScores, Instant scoredAt) {
+      BoxerScores firstBoxerScores, BoxerScores secondBoxerScores, Instant scoredAt) {
     super(id);
     this.fightId = fightId;
     this.firstBoxerId = firstBoxerId;
@@ -34,7 +32,8 @@ public class ScoreCard extends Entity<ScoreCardId> {
 
   public static ScoreCard create(ScoreCardId id, AccountId accountId, FightId fightId, BoxerId firstBoxerId,
       BoxerId secondBoxerId) {
-    return new ScoreCard(id, accountId, fightId, firstBoxerId, secondBoxerId, new HashMap<>(), new HashMap<>(), null);
+    return new ScoreCard(id, accountId, fightId, firstBoxerId, secondBoxerId, new BoxerScores(), new BoxerScores(),
+        null);
   }
 
   @Override
@@ -59,32 +58,32 @@ public class ScoreCard extends Entity<ScoreCardId> {
   }
 
   public Integer firstBoxerScore() {
-    return firstBoxerScores.values().stream().reduce(0, Integer::sum);
+    return firstBoxerScores.total();
   }
 
   public Integer firstBoxerScore(int round) {
-    return firstBoxerScores.get(round);
+    return firstBoxerScores.inRound(round);
   }
 
   public Integer secondBoxerScore() {
-    return secondBoxerScores.values().stream().reduce(0, Integer::sum);
+    return secondBoxerScores.total();
   }
 
   public Integer secondBoxerScore(int round) {
-    return secondBoxerScores.get(round);
+    return secondBoxerScores.inRound(round);
   }
 
-  public Map<Integer, Integer> firstBoxerScores() {
+  public BoxerScores firstBoxerScores() {
     return firstBoxerScores;
   }
 
-  public Map<Integer, Integer> secondBoxerScores() {
+  public BoxerScores secondBoxerScores() {
     return secondBoxerScores;
   }
 
   public void scoreRound(int round, int firstBoxerScore, int secondBoxerScore, Instant scoredAt) {
-    firstBoxerScores.put(round, firstBoxerScore);
-    secondBoxerScores.put(round, secondBoxerScore);
+    firstBoxerScores.add(round, firstBoxerScore);
+    secondBoxerScores.add(round, secondBoxerScore);
     this.scoredAt = scoredAt;
     addDomainEvent(RoundScored.create(this, scoredAt));
   }

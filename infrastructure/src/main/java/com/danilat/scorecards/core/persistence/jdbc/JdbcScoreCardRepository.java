@@ -3,6 +3,7 @@ package com.danilat.scorecards.core.persistence.jdbc;
 import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.fight.FightId;
+import com.danilat.scorecards.core.domain.score.BoxerScores;
 import com.danilat.scorecards.core.domain.score.ScoreCard;
 import com.danilat.scorecards.core.domain.score.ScoreCardId;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
@@ -16,7 +17,6 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import javax.sql.DataSource;
 import org.springframework.context.annotation.Primary;
@@ -34,8 +34,8 @@ public class JdbcScoreCardRepository extends JdbcBaseRepository<ScoreCard, Score
 
   @Override
   protected ScoreCard mapRow(ResultSet resultSet) throws SQLException {
-    Map<Integer, Integer> firstBoxerScores = RawToScores.map(resultSet.getString("first_boxer_scores"));
-    Map<Integer, Integer> secondBoxerScores = RawToScores.map(resultSet.getString("second_boxer_scores"));
+    BoxerScores firstBoxerScores = RawToScores.map(resultSet.getString("first_boxer_scores"));
+    BoxerScores secondBoxerScores = RawToScores.map(resultSet.getString("second_boxer_scores"));
     Instant scoredAt = resultSet.getTimestamp("scored_at").toInstant();
 
     return new ScoreCard(new ScoreCardId(resultSet.getString("id")), new AccountId(resultSet.getString("account_id")),
@@ -77,8 +77,8 @@ public class JdbcScoreCardRepository extends JdbcBaseRepository<ScoreCard, Score
           .addValue("account_id", scoreCard.accountId().value())
           .addValue("first_boxer_id", scoreCard.firstBoxerId().value())
           .addValue("second_boxer_id", scoreCard.secondBoxerId().value())
-          .addValue("first_boxer_scores", objectMapper.writeValueAsString(scoreCard.firstBoxerScores()))
-          .addValue("second_boxer_scores", objectMapper.writeValueAsString(scoreCard.secondBoxerScores()))
+          .addValue("first_boxer_scores", objectMapper.writeValueAsString(scoreCard.firstBoxerScores().values()))
+          .addValue("second_boxer_scores", objectMapper.writeValueAsString(scoreCard.secondBoxerScores().values()))
           .addValue("scored_at", Timestamp.from(scoreCard.scoredAt()));
     } catch (JsonProcessingException e) {
       throw new RuntimeException(e);
