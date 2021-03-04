@@ -1,0 +1,19 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<form th:action="@{/editor/boxers}" method="post" th:object="${boxer}">
+  <ul style="border: 1px solid red;" th:if="${errors}">
+    <li th:each="err : ${errors}">
+      <p th:text="${err.fieldName}"></p>
+      <p th:text="${err.message}"></p>
+    </li>
+  </ul>
+
+  <h1>Create a boxer</h1>
+  Name <input type="text" name="name" th:value="*{name}"
+                          th:class="${errors?.hasError('name')}? fieldError"/>
+  <br>
+  Alias <input type="text" name="alias" th:value="*{alias}"/>
+  <br>
+  Boxrec URL <input type="url" name="boxrecUrl" th:value="*{boxrecUrl}"/>
+  <br>
+  <input type="submit" value="Create!">
+</form>

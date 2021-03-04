@@ -79,6 +79,10 @@ public class CreateBoxer implements UseCase<Boxer, CreateBoxerParams> {
       return boxrecUrl;
     }
 
+    public static CreateBoxerParams empty() {
+      return new CreateBoxerParams("", "", "");
+    }
+
     public FieldErrors validate() {
       ConstraintValidatorToErrorMapper constraintValidatorToErrorMapper = new ConstraintValidatorToErrorMapper<CreateBoxerParams>();
       ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
