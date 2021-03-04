@@ -66,6 +66,13 @@ public class BoxerSteps {
     @Override
     public void success(Boxer response) {
       boxer = response;
+      fieldErrors = null;
+    }
+
+    @Override
+    public void error(FieldErrors errors) {
+      fieldErrors = errors;
+      boxer = null;
     }
   };
 

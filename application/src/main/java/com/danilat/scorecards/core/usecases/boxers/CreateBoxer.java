@@ -3,12 +3,20 @@ package com.danilat.scorecards.core.usecases.boxers;
 import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
+import com.danilat.scorecards.core.usecases.ConstraintValidatorToErrorMapper;
 import com.danilat.scorecards.core.usecases.boxers.CreateBoxer.CreateBoxerParams;
 import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
+import com.danilat.scorecards.shared.domain.FieldErrors;
 import com.danilat.scorecards.shared.events.EventBus;
 import com.danilat.scorecards.shared.usecases.UseCase;
+import java.util.Set;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import javax.validation.constraints.NotEmpty;
 
 public class CreateBoxer implements UseCase<Boxer, CreateBoxerParams> {
 
@@ -16,6 +24,7 @@ public class CreateBoxer implements UseCase<Boxer, CreateBoxerParams> {
   private final BoxerRepository boxerRepository;
   private final EventBus eventBus;
   private final Clock clock;
+  private FieldErrors errors;
 
   public CreateBoxer(UniqueIdGenerator uniqueIdGenerator,
       BoxerRepository boxerRepository, EventBus eventBus, Clock clock) {
@@ -27,6 +36,11 @@ public class CreateBoxer implements UseCase<Boxer, CreateBoxerParams> {
 
   @Override
   public void execute(PrimaryPort<Boxer> primaryPort, CreateBoxerParams params) {
+    if (!validate(params)) {
+      primaryPort.error(errors);
+      return;
+    }
+
     BoxerId boxerId = new BoxerId(uniqueIdGenerator.next());
     Boxer boxer = Boxer.create(boxerId, params.getName(), params.getAlias(), params.getBoxrecUrl(), clock.now());
     boxerRepository.save(boxer);
@@ -34,8 +48,15 @@ public class CreateBoxer implements UseCase<Boxer, CreateBoxerParams> {
     primaryPort.success(boxer);
   }
 
+  private boolean validate(CreateBoxerParams params) {
+    errors = new FieldErrors();
+    errors.addAll(params.validate());
+    return errors.isEmpty();
+  }
+
   public static class CreateBoxerParams {
 
+    @NotEmpty(message = "name is mandatory")
     private final String name;
     private final String alias;
     private final String boxrecUrl;
@@ -56,6 +77,14 @@ public class CreateBoxer implements UseCase<Boxer, CreateBoxerParams> {
 
     public String getBoxrecUrl() {
       return boxrecUrl;
+    }
+
+    public FieldErrors validate() {
+      ConstraintValidatorToErrorMapper constraintValidatorToErrorMapper = new ConstraintValidatorToErrorMapper<CreateBoxerParams>();
+      ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+      Validator validator = factory.getValidator();
+      Set<ConstraintViolation<CreateBoxerParams>> violations = validator.validate(this);
+      return constraintValidatorToErrorMapper.mapConstraintViolationsToErrors(violations);
     }
   }
 }

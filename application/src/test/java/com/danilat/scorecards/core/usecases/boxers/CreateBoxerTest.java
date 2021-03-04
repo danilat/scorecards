@@ -2,6 +2,7 @@ package com.danilat.scorecards.core.usecases.boxers;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -14,6 +15,7 @@ import com.danilat.scorecards.core.usecases.boxers.CreateBoxer.CreateBoxerParams
 import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
+import com.danilat.scorecards.shared.domain.FieldErrors;
 import com.danilat.scorecards.shared.events.EventBus;
 import java.time.Instant;
 import org.junit.Before;
@@ -97,5 +99,15 @@ public class CreateBoxerTest extends UseCaseUnitTest<Boxer> {
     assertEquals(boxer, boxerCreated.boxer());
     assertEquals(anHappenedAt, boxerCreated.happenedAt());
     assertNotNull(boxerCreated.eventId());
+  }
+
+  @Test
+  public void givenAliasAndBoxrecUrlButNotNameThenIsInvalid() {
+    CreateBoxerParams params = new CreateBoxerParams("", alias, boxrecUrl);
+
+    createBoxer.execute(primaryPort, params);
+
+    FieldErrors errors = getErrors();
+    assertTrue(errors.hasMessage("name is mandatory"));
   }
 }
