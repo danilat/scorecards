@@ -34,13 +34,14 @@ public class JdbcScoreCardRepository extends JdbcBaseRepository<ScoreCard, Score
 
   @Override
   protected ScoreCard mapRow(ResultSet resultSet) throws SQLException {
-    BoxerScores firstBoxerScores = RawToScores.map(resultSet.getString("first_boxer_scores"));
-    BoxerScores secondBoxerScores = RawToScores.map(resultSet.getString("second_boxer_scores"));
+    BoxerScores firstBoxerScores = RawToScores
+        .map(resultSet.getString("first_boxer_scores"), new BoxerId(resultSet.getString("first_boxer_id")));
+    BoxerScores secondBoxerScores = RawToScores
+        .map(resultSet.getString("second_boxer_scores"), new BoxerId(resultSet.getString("second_boxer_id")));
     Instant scoredAt = resultSet.getTimestamp("scored_at").toInstant();
 
     return new ScoreCard(new ScoreCardId(resultSet.getString("id")), new AccountId(resultSet.getString("account_id")),
-        new FightId(resultSet.getString("fight_id")), new BoxerId(resultSet.getString("first_boxer_id")),
-        new BoxerId(resultSet.getString("second_boxer_id")), firstBoxerScores, secondBoxerScores, scoredAt);
+        new FightId(resultSet.getString("fight_id")), firstBoxerScores, secondBoxerScores, scoredAt);
   }
 
   @Override

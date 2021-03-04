@@ -18,9 +18,7 @@ public class ScoreCardWithFightDetails extends Entity<ScoreCardId> {
   private final String place;
   private final LocalDate happenAt;
   private final Integer numberOfRounds;
-  private final BoxerId firstBoxerId;
   private final String firstBoxerName;
-  private final BoxerId secondBoxerId;
   private final String secondBoxerName;
   private final BoxerScores firstBoxerScores;
   private final BoxerScores secondBoxerScores;
@@ -28,17 +26,14 @@ public class ScoreCardWithFightDetails extends Entity<ScoreCardId> {
   private final Instant scoredAt;
 
   public ScoreCardWithFightDetails(ScoreCardId id, FightId fightId, String place, LocalDate happenAt,
-      Integer numberOfRounds, BoxerId firstBoxerId, String firstBoxerName, BoxerId secondBoxerId,
-      String secondBoxerName, BoxerScores firstBoxerScores, BoxerScores secondBoxerScores,
-      AccountId accountId, Instant scoredAt) {
+      Integer numberOfRounds, String firstBoxerName, String secondBoxerName, BoxerScores firstBoxerScores,
+      BoxerScores secondBoxerScores, AccountId accountId, Instant scoredAt) {
     super(id);
     this.fightId = fightId;
     this.place = place;
     this.happenAt = happenAt;
     this.numberOfRounds = numberOfRounds;
-    this.firstBoxerId = firstBoxerId;
     this.firstBoxerName = firstBoxerName;
-    this.secondBoxerId = secondBoxerId;
     this.secondBoxerName = secondBoxerName;
     this.firstBoxerScores = firstBoxerScores;
     this.secondBoxerScores = secondBoxerScores;
@@ -52,9 +47,7 @@ public class ScoreCardWithFightDetails extends Entity<ScoreCardId> {
     this.place = fight.event().place();
     this.happenAt = fight.event().happenAt();
     this.numberOfRounds = fight.numberOfRounds();
-    this.firstBoxerId = scoreCard.firstBoxerId();
     this.firstBoxerName = firstBoxer.name();
-    this.secondBoxerId = scoreCard.secondBoxerId();
     this.secondBoxerName = secondBoxer.name();
     this.firstBoxerScores = scoreCard.firstBoxerScores();
     this.secondBoxerScores = scoreCard.secondBoxerScores();
@@ -80,7 +73,7 @@ public class ScoreCardWithFightDetails extends Entity<ScoreCardId> {
   }
 
   public BoxerId getFirstBoxerId() {
-    return firstBoxerId;
+    return firstBoxerScores.boxerId();
   }
 
   public String getFirstBoxerName() {
@@ -88,7 +81,7 @@ public class ScoreCardWithFightDetails extends Entity<ScoreCardId> {
   }
 
   public BoxerId getSecondBoxerId() {
-    return secondBoxerId;
+    return secondBoxerScores.boxerId();
   }
 
   public String getSecondBoxerName() {

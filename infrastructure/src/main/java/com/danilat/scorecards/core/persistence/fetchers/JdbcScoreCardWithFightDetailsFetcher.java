@@ -46,13 +46,13 @@ public class JdbcScoreCardWithFightDetailsFetcher implements ScoreCardWithFightD
     ScoreCardId scoreCardId = new ScoreCardId(resultSet.getString("scorecard_id"));
     AccountId accountId = new AccountId(resultSet.getString("account_id"));
 
-    BoxerScores firstBoxerScores = RawToScores.map(resultSet.getString("first_boxer_scores"));
-    BoxerScores secondBoxerScores = RawToScores.map(resultSet.getString("second_boxer_scores"));
+    BoxerScores firstBoxerScores = RawToScores.map(resultSet.getString("first_boxer_scores"), firstBoxerId);
+    BoxerScores secondBoxerScores = RawToScores.map(resultSet.getString("second_boxer_scores"), secondBoxerId);
     Instant scoredAt = resultSet.getTimestamp("scored_at").toInstant();
 
     return new ScoreCardWithFightDetails(scoreCardId, fightId, resultSet.getString("place"),
-        resultSet.getDate("happen_at").toLocalDate(), resultSet.getInt("number_of_rounds"), firstBoxerId,
-        resultSet.getString("first_boxer_name"), secondBoxerId, resultSet.getString("second_boxer_name"),
+        resultSet.getDate("happen_at").toLocalDate(), resultSet.getInt("number_of_rounds"),
+        resultSet.getString("first_boxer_name"), resultSet.getString("second_boxer_name"),
         firstBoxerScores, secondBoxerScores, accountId, scoredAt);
   }
 }

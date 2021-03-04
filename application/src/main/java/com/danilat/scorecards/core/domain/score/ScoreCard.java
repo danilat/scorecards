@@ -11,19 +11,15 @@ import java.util.Objects;
 public class ScoreCard extends Entity<ScoreCardId> {
 
   private final FightId fightId;
-  private final BoxerId firstBoxerId;
-  private final BoxerId secondBoxerId;
   private final BoxerScores firstBoxerScores;
   private final BoxerScores secondBoxerScores;
   private final AccountId accountId;
   private Instant scoredAt;
 
-  public ScoreCard(ScoreCardId id, AccountId accountId, FightId fightId, BoxerId firstBoxerId, BoxerId secondBoxerId,
+  public ScoreCard(ScoreCardId id, AccountId accountId, FightId fightId,
       BoxerScores firstBoxerScores, BoxerScores secondBoxerScores, Instant scoredAt) {
     super(id);
     this.fightId = fightId;
-    this.firstBoxerId = firstBoxerId;
-    this.secondBoxerId = secondBoxerId;
     this.accountId = accountId;
     this.firstBoxerScores = firstBoxerScores;
     this.secondBoxerScores = secondBoxerScores;
@@ -32,7 +28,8 @@ public class ScoreCard extends Entity<ScoreCardId> {
 
   public static ScoreCard create(ScoreCardId id, AccountId accountId, FightId fightId, BoxerId firstBoxerId,
       BoxerId secondBoxerId) {
-    return new ScoreCard(id, accountId, fightId, firstBoxerId, secondBoxerId, new BoxerScores(), new BoxerScores(),
+    return new ScoreCard(id, accountId, fightId, new BoxerScores(firstBoxerId), new BoxerScores(
+        secondBoxerId),
         null);
   }
 
@@ -46,11 +43,11 @@ public class ScoreCard extends Entity<ScoreCardId> {
   }
 
   public BoxerId firstBoxerId() {
-    return firstBoxerId;
+    return firstBoxerScores.boxerId();
   }
 
   public BoxerId secondBoxerId() {
-    return secondBoxerId;
+    return secondBoxerScores.boxerId();
   }
 
   public AccountId accountId() {
@@ -109,8 +106,6 @@ public class ScoreCard extends Entity<ScoreCardId> {
     }
     ScoreCard scoreCard = (ScoreCard) o;
     return Objects.equals(fightId, scoreCard.fightId) &&
-        Objects.equals(firstBoxerId, scoreCard.firstBoxerId) &&
-        Objects.equals(secondBoxerId, scoreCard.secondBoxerId) &&
         Objects.equals(firstBoxerScores, scoreCard.firstBoxerScores) &&
         Objects.equals(secondBoxerScores, scoreCard.secondBoxerScores) &&
         Objects.equals(accountId, scoreCard.accountId) &&
@@ -120,7 +115,7 @@ public class ScoreCard extends Entity<ScoreCardId> {
   @Override
   public int hashCode() {
     return Objects
-        .hash(super.hashCode(), fightId, firstBoxerId, secondBoxerId, firstBoxerScores, secondBoxerScores, accountId,
+        .hash(super.hashCode(), fightId, firstBoxerScores, secondBoxerScores, accountId,
             scoredAt);
   }
 
@@ -128,8 +123,6 @@ public class ScoreCard extends Entity<ScoreCardId> {
   public String toString() {
     return "ScoreCard{" +
         "fightId=" + fightId +
-        ", firstBoxerId=" + firstBoxerId +
-        ", secondBoxerId=" + secondBoxerId +
         ", firstBoxerScores=" + firstBoxerScores +
         ", secondBoxerScores=" + secondBoxerScores +
         ", accountId=" + accountId +

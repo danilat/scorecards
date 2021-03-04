@@ -1,5 +1,6 @@
 package com.danilat.scorecards.core.domain.score;
 
+import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -7,12 +8,15 @@ import java.util.Objects;
 public class BoxerScores {
 
   private final Map<Integer, Integer> map;
+  private final BoxerId boxerId;
 
-  public BoxerScores(Map<Integer, Integer> map) {
+  public BoxerScores(BoxerId boxerId, Map<Integer, Integer> map) {
     this.map = map;
+    this.boxerId = boxerId;
   }
 
-  public BoxerScores() {
+  public BoxerScores(BoxerId boxerId) {
+    this.boxerId = boxerId;
     map = new HashMap<>();
   }
 
@@ -32,6 +36,10 @@ public class BoxerScores {
     map.put(round, score);
   }
 
+  public BoxerId boxerId() {
+    return boxerId;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -41,11 +49,20 @@ public class BoxerScores {
       return false;
     }
     BoxerScores that = (BoxerScores) o;
-    return Objects.equals(map, that.map);
+    return Objects.equals(map, that.map) &&
+        Objects.equals(boxerId, that.boxerId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(map);
+    return Objects.hash(map, boxerId);
+  }
+
+  @Override
+  public String toString() {
+    return "BoxerScores{" +
+        "map=" + map +
+        ", boxerId=" + boxerId +
+        '}';
   }
 }
