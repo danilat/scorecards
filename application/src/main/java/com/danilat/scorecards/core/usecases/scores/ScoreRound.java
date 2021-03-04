@@ -9,7 +9,6 @@ import com.danilat.scorecards.core.domain.score.ScoreCardId;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.core.services.ScoringInFightValidator;
 import com.danilat.scorecards.core.services.ScoringInFightValidator.Scoring;
-import com.danilat.scorecards.core.usecases.ConstraintValidatorToErrorMapper;
 import com.danilat.scorecards.core.usecases.scores.ScoreRound.ScoreFightParameters;
 import com.danilat.scorecards.shared.Auth;
 import com.danilat.scorecards.shared.Clock;
@@ -18,11 +17,7 @@ import com.danilat.scorecards.shared.UniqueIdGenerator;
 import com.danilat.scorecards.shared.domain.FieldErrors;
 import com.danilat.scorecards.shared.events.EventBus;
 import com.danilat.scorecards.shared.usecases.UseCase;
-import java.util.Set;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
+import com.danilat.scorecards.shared.usecases.ValidatableParameters;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -79,7 +74,7 @@ public class ScoreRound implements UseCase<ScoreCard, ScoreFightParameters> {
     return errors.isEmpty();
   }
 
-  public static class ScoreFightParameters {
+  public static class ScoreFightParameters extends ValidatableParameters {
 
     private final FightId fightId;
     private final Integer round;
@@ -128,14 +123,6 @@ public class ScoreRound implements UseCase<ScoreCard, ScoreFightParameters> {
 
     public int getSecondBoxerScore() {
       return secondBoxerScore;
-    }
-
-    public FieldErrors validate() {
-      ConstraintValidatorToErrorMapper constraintValidatorToErrorMapper = new ConstraintValidatorToErrorMapper<ScoreFightParameters>();
-      ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-      Validator validator = factory.getValidator();
-      Set<ConstraintViolation<ScoreFightParameters>> violations = validator.validate(this);
-      return constraintValidatorToErrorMapper.mapConstraintViolationsToErrors(violations);
     }
 
     public Scoring scoring() {

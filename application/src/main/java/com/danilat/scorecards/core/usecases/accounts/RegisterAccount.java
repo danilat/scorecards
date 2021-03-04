@@ -3,21 +3,15 @@ package com.danilat.scorecards.core.usecases.accounts;
 import com.danilat.scorecards.core.domain.account.Account;
 import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.account.AccountRepository;
-import com.danilat.scorecards.core.usecases.ConstraintValidatorToErrorMapper;
 import com.danilat.scorecards.core.usecases.accounts.RegisterAccount.RegisterAccountParameters;
-import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.domain.Error;
 import com.danilat.scorecards.shared.domain.FieldError;
 import com.danilat.scorecards.shared.domain.FieldErrors;
 import com.danilat.scorecards.shared.events.EventBus;
+import com.danilat.scorecards.shared.usecases.ValidatableParameters;
 import com.danilat.scorecards.shared.usecases.UseCase;
-import java.util.Set;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import javax.validation.constraints.NotEmpty;
 
 public class RegisterAccount implements UseCase<Account, RegisterAccountParameters> {
@@ -62,7 +56,7 @@ public class RegisterAccount implements UseCase<Account, RegisterAccountParamete
     return errors.isEmpty();
   }
 
-  public static class RegisterAccountParameters {
+  public static class RegisterAccountParameters extends ValidatableParameters {
 
     @NotEmpty(message = "username is mandatory")
     private final String username;
@@ -93,14 +87,6 @@ public class RegisterAccount implements UseCase<Account, RegisterAccountParamete
 
     public String getEmail() {
       return email;
-    }
-
-    public FieldErrors validate() {
-      ConstraintValidatorToErrorMapper constraintValidatorToErrorMapper = new ConstraintValidatorToErrorMapper<RegisterFightParameters>();
-      ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-      Validator validator = factory.getValidator();
-      Set<ConstraintViolation<RegisterAccountParameters>> violations = validator.validate(this);
-      return constraintValidatorToErrorMapper.mapConstraintViolationsToErrors(violations);
     }
   }
 }

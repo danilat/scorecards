@@ -3,19 +3,14 @@ package com.danilat.scorecards.core.usecases.boxers;
 import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
-import com.danilat.scorecards.core.usecases.ConstraintValidatorToErrorMapper;
 import com.danilat.scorecards.core.usecases.boxers.CreateBoxer.CreateBoxerParams;
 import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 import com.danilat.scorecards.shared.domain.FieldErrors;
 import com.danilat.scorecards.shared.events.EventBus;
+import com.danilat.scorecards.shared.usecases.ValidatableParameters;
 import com.danilat.scorecards.shared.usecases.UseCase;
-import java.util.Set;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import javax.validation.constraints.NotEmpty;
 
 public class CreateBoxer implements UseCase<Boxer, CreateBoxerParams> {
@@ -54,7 +49,7 @@ public class CreateBoxer implements UseCase<Boxer, CreateBoxerParams> {
     return errors.isEmpty();
   }
 
-  public static class CreateBoxerParams {
+  public static class CreateBoxerParams extends ValidatableParameters {
 
     @NotEmpty(message = "name is mandatory")
     private final String name;
@@ -81,14 +76,6 @@ public class CreateBoxer implements UseCase<Boxer, CreateBoxerParams> {
 
     public static CreateBoxerParams empty() {
       return new CreateBoxerParams("", "", "");
-    }
-
-    public FieldErrors validate() {
-      ConstraintValidatorToErrorMapper constraintValidatorToErrorMapper = new ConstraintValidatorToErrorMapper<CreateBoxerParams>();
-      ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-      Validator validator = factory.getValidator();
-      Set<ConstraintViolation<CreateBoxerParams>> violations = validator.validate(this);
-      return constraintValidatorToErrorMapper.mapConstraintViolationsToErrors(violations);
     }
   }
 }

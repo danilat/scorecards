@@ -16,7 +16,7 @@ public class ConstraintValidatorToErrorMapper<T> {
     return error;
   }
 
-  public FieldErrors mapConstraintViolationsToErrors(Set<ConstraintViolation<T>> violations) {
+  public FieldErrors mapConstraintViolationsToErrors(Set<ConstraintViolation> violations) {
     FieldErrors errors = new FieldErrors();
     if (!violations.isEmpty()) {
       violations.forEach(violation -> {
