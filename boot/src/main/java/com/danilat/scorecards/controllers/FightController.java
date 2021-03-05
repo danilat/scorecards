@@ -12,7 +12,7 @@ import com.danilat.scorecards.core.usecases.scores.ScoreRound;
 import com.danilat.scorecards.core.usecases.scores.ScoreRound.ScoreFightParameters;
 import com.danilat.scorecards.shared.Auth;
 import com.danilat.scorecards.shared.PrimaryPort;
-import com.danilat.scorecards.shared.domain.FieldErrors;
+import com.danilat.scorecards.shared.domain.Errors;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +59,7 @@ public class FightController {
     }
 
     @Override
-    public void error(FieldErrors errors) {
+    public void error(Errors errors) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, errors.toString());
     }
   };
@@ -71,7 +71,7 @@ public class FightController {
     }
 
     @Override
-    public void error(FieldErrors errors) {
+    public void error(Errors errors) {
       populateScoreCardForm(null);
     }
 
@@ -116,7 +116,7 @@ public class FightController {
     }
 
     @Override
-    public void error(FieldErrors errors) {
+    public void error(Errors errors) {
       model.addAttribute("errors", errors);
       scoreResult = findById(id, model, accessToken);
     }

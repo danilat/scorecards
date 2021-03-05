@@ -13,7 +13,7 @@ import com.danilat.scorecards.core.usecases.boxers.CreateBoxer.CreateBoxerParams
 import com.danilat.scorecards.core.usecases.boxers.RetrieveABoxer;
 import com.danilat.scorecards.core.usecases.boxers.RetrieveAllBoxers;
 import com.danilat.scorecards.shared.PrimaryPort;
-import com.danilat.scorecards.shared.domain.FieldErrors;
+import com.danilat.scorecards.shared.domain.Errors;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -59,7 +59,7 @@ public class BoxerSteps {
   private String boxrecUrl;
 
   private Boxer boxer;
-  private FieldErrors fieldErrors;
+  private Errors errors;
 
   @Autowired
   private CreateBoxer createBoxer;
@@ -68,12 +68,12 @@ public class BoxerSteps {
     @Override
     public void success(Boxer response) {
       boxer = response;
-      fieldErrors = null;
+      errors = null;
     }
 
     @Override
-    public void error(FieldErrors errors) {
-      fieldErrors = errors;
+    public void error(Errors errors) {
+      BoxerSteps.this.errors = errors;
       boxer = null;
     }
   };
@@ -102,13 +102,13 @@ public class BoxerSteps {
   @Then("the boxer is successfully created")
   public void theBoxerIsSuccessfullyCreated() {
     assertNotNull(boxer);
-    assertNull(fieldErrors);
+    assertNull(errors);
   }
 
   @Then("the boxer is not created")
   public void theBoxerIsNotCreated() {
     assertNull(boxer);
-    assertNotNull(fieldErrors);
+    assertNotNull(errors);
   }
 
   @Autowired
@@ -118,12 +118,12 @@ public class BoxerSteps {
     @Override
     public void success(Boxer response) {
       boxer = response;
-      fieldErrors = null;
+      errors = null;
     }
 
     @Override
-    public void error(FieldErrors errors) {
-      fieldErrors = errors;
+    public void error(Errors errors) {
+      BoxerSteps.this.errors = errors;
       boxer = null;
     }
   };
@@ -143,12 +143,12 @@ public class BoxerSteps {
   @Then("the boxer {string} is present")
   public void theBoxerIsPresent(String id) {
     assertNotNull(boxer);
-    assertNull(fieldErrors);
+    assertNull(errors);
   }
 
   @Then("the boxer {string} is not present")
   public void theBoxerIsNotPresent(String id) {
     assertNull(boxer);
-    assertNotNull(fieldErrors);
+    assertNotNull(errors);
   }
 }

@@ -7,7 +7,7 @@ import com.danilat.scorecards.core.usecases.boxers.CreateBoxer.CreateBoxerParams
 import com.danilat.scorecards.core.usecases.boxers.RetrieveABoxer;
 import com.danilat.scorecards.core.usecases.boxers.RetrieveAllBoxers;
 import com.danilat.scorecards.shared.PrimaryPort;
-import com.danilat.scorecards.shared.domain.FieldErrors;
+import com.danilat.scorecards.shared.domain.Errors;
 import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -55,8 +55,9 @@ public class EditorBoxersController {
         BoxerForm boxerForm = new BoxerForm(boxer);
         model.addAttribute("boxer", boxerForm);
       }
+
       @Override
-      public void error(FieldErrors errors) {
+      public void error(Errors errors) {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, errors.toString());
       }
     };
@@ -88,7 +89,7 @@ public class EditorBoxersController {
       }
 
       @Override
-      public void error(FieldErrors errors) {
+      public void error(Errors errors) {
         model.addAttribute("errors", errors);
         createResult = createForm(model);
       }

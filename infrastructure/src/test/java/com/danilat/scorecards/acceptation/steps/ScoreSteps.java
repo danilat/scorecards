@@ -31,7 +31,7 @@ import com.danilat.scorecards.shared.Auth;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.auth.TokenMother;
 import com.danilat.scorecards.shared.auth.firebase.TokenValidator;
-import com.danilat.scorecards.shared.domain.FieldErrors;
+import com.danilat.scorecards.shared.domain.Errors;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -60,7 +60,7 @@ public class ScoreSteps {
   @Autowired
   private ScoreRound scoreRound;
   private ScoreCard scoreCard;
-  private FieldErrors someErrors;
+  private Errors someErrors;
   private PrimaryPort<ScoreCard> scoreRoundPrimaryPort = new PrimaryPort<ScoreCard>() {
     @Override
     public void success(ScoreCard entity) {
@@ -69,7 +69,7 @@ public class ScoreSteps {
     }
 
     @Override
-    public void error(FieldErrors errors) {
+    public void error(Errors errors) {
       someErrors = errors;
       scoreCard = null;
     }
@@ -96,7 +96,7 @@ public class ScoreSteps {
     }
 
     @Override
-    public void error(FieldErrors errors) {
+    public void error(Errors errors) {
       someErrors = errors;
       scoreCard = null;
     }

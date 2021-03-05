@@ -6,6 +6,7 @@ import com.danilat.scorecards.shared.domain.FieldErrors;
 import com.danilat.scorecards.shared.events.EventBus;
 
 public abstract class WriteUseCase<OUTPUT extends Entity, INPUT> implements UseCase<OUTPUT, INPUT> {
+
   private final EventBus eventBus;
 
   protected WriteUseCase(EventBus eventBus) {
@@ -15,7 +16,7 @@ public abstract class WriteUseCase<OUTPUT extends Entity, INPUT> implements UseC
   @Override
   public void execute(PrimaryPort<OUTPUT> primaryPort, INPUT parameters) {
     FieldErrors errors = validate(parameters);
-    if (!errors.isEmpty()) {
+    if (errors.hasErrors()) {
       primaryPort.error(errors);
       return;
     }

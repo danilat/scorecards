@@ -7,7 +7,6 @@ import com.danilat.scorecards.core.domain.fight.FightNotFoundError;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.domain.score.BoxerIsNotInFightError;
 import com.danilat.scorecards.core.domain.score.RoundOutOfIntervalError;
-import com.danilat.scorecards.shared.domain.FieldError;
 import com.danilat.scorecards.shared.domain.FieldErrors;
 import java.util.Optional;
 
@@ -23,25 +22,18 @@ public class ScoringInFightValidator {
     FieldErrors errors = new FieldErrors();
     Optional<Fight> optionalFight = fightRepository.get(scoring.getFightId());
     if (!optionalFight.isPresent()) {
-      FieldError error = new FieldError("fightId", new FightNotFoundError(scoring.getFightId()));
-      errors.add(error);
+      errors.add("fightId", new FightNotFoundError(scoring.getFightId()));
       return errors;
     }
     Fight fight = optionalFight.get();
     if (!fight.isRoundInInterval(scoring.getRound())) {
-      FieldError error = new FieldError("round",
-          new RoundOutOfIntervalError(scoring.getRound(), fight.numberOfRounds()));
-      errors.add(error);
+      errors.add("round", new RoundOutOfIntervalError(scoring.getRound(), fight.numberOfRounds()));
     }
     if (!fight.isTheFirstBoxer(scoring.getFirstBoxerId())) {
-      FieldError error = new FieldError("firstBoxer",
-          new BoxerIsNotInFightError(scoring.getFirstBoxerId(), scoring.getFightId()));
-      errors.add(error);
+      errors.add("firstBoxer", new BoxerIsNotInFightError(scoring.getFirstBoxerId(), scoring.getFightId()));
     }
     if (!fight.isTheSecondBoxer(scoring.getSecondBoxerId())) {
-      FieldError error = new FieldError("secondBoxer",
-          new BoxerIsNotInFightError(scoring.getSecondBoxerId(), scoring.getFightId()));
-      errors.add(error);
+      errors.add("secondBoxer", new BoxerIsNotInFightError(scoring.getSecondBoxerId(), scoring.getFightId()));
     }
     return errors;
   }

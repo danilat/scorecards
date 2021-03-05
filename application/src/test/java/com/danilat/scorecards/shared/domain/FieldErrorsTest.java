@@ -10,8 +10,7 @@ public class FieldErrorsTest {
   @Test
   public void givenAnExistingFieldNameThenHasError() {
     FieldErrors errors = new FieldErrors();
-    FieldError error = new FieldError("a field", new Error("a default message", "a message template"));
-    errors.add(error);
+    errors.add("a field", new Error("a default message", "a message template"));
 
     assertTrue(errors.hasError(FieldError.class));
   }

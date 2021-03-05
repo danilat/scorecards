@@ -10,7 +10,6 @@ import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
-import com.danilat.scorecards.shared.domain.FieldError;
 import com.danilat.scorecards.shared.domain.FieldErrors;
 import com.danilat.scorecards.shared.events.EventBus;
 import com.danilat.scorecards.shared.usecases.ValidatableParameters;
@@ -50,15 +49,15 @@ public class RegisterFight extends WriteUseCase<Fight, RegisterFightParameters> 
   protected FieldErrors validate(RegisterFightParameters parameters) {
     FieldErrors errors = new FieldErrors();
     errors.addAll(parameters.validate());
-    errors.add(validateBoxer("firstBoxer", parameters.getFirstBoxer()));
-    errors.add(validateBoxer("secondBoxer", parameters.getSecondBoxer()));
+    errors.add("firstBoxer", validateBoxer(parameters.getFirstBoxer()));
+    errors.add("secondBoxer", validateBoxer(parameters.getSecondBoxer()));
     return errors;
   }
 
-  private FieldError validateBoxer(String fieldName, BoxerId boxerId) {
-    FieldError error = null;
+  private BoxerNotFoundError validateBoxer(BoxerId boxerId) {
+    BoxerNotFoundError error = null;
     if (!this.boxerRepository.get(boxerId).isPresent()) {
-      error = new FieldError(fieldName, new BoxerNotFoundError(boxerId));
+      error = new BoxerNotFoundError(boxerId);
     }
     return error;
   }

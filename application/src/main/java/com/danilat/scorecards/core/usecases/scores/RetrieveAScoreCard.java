@@ -7,7 +7,6 @@ import com.danilat.scorecards.core.domain.score.ScoreCardNotFoundError;
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.core.usecases.scores.RetrieveAScoreCard.RetrieveAScoreCardParameters;
 import com.danilat.scorecards.shared.PrimaryPort;
-import com.danilat.scorecards.shared.domain.FieldError;
 import com.danilat.scorecards.shared.domain.FieldErrors;
 import com.danilat.scorecards.shared.usecases.UseCase;
 import java.util.Optional;
@@ -26,9 +25,8 @@ public class RetrieveAScoreCard implements UseCase<ScoreCard, RetrieveAScoreCard
     if (optionalScoreCard.isPresent()) {
       primaryPort.success(optionalScoreCard.get());
     } else {
-      FieldError fieldError = new FieldError("scoreCardId",
-          new ScoreCardNotFoundError(parameters.getFightId(), parameters.getAccountId()));
-      FieldErrors errors = FieldErrors.newWithError(fieldError);
+      FieldErrors errors = FieldErrors
+          .newWithError("scoreCardId", new ScoreCardNotFoundError(parameters.getFightId(), parameters.getAccountId()));
       primaryPort.error(errors);
     }
   }

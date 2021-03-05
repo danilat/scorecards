@@ -8,13 +8,13 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class FieldErrors implements Iterable<FieldError> {
+public class FieldErrors implements Iterable<FieldError>, Errors {
 
   private final List<FieldError> values;
 
-  public static FieldErrors newWithError(FieldError error) {
+  public static FieldErrors newWithError(String fieldName, Error error) {
     FieldErrors errors = new FieldErrors();
-    errors.add(error);
+    errors.add(fieldName, error);
     return errors;
   }
 
@@ -42,9 +42,9 @@ public class FieldErrors implements Iterable<FieldError> {
     return this.getMessagesFor(fieldName).collect(Collectors.joining(". "));
   }
 
-  public boolean add(FieldError error) {
+  public boolean add(String fieldName, Error error) {
     if (error != null) {
-      return values.add(error);
+      return values.add(new FieldError(fieldName, error));
     } else {
       return false;
     }
@@ -54,8 +54,8 @@ public class FieldErrors implements Iterable<FieldError> {
     values.addAll(fieldErrors.values);
   }
 
-  public boolean isEmpty() {
-    return values.isEmpty();
+  public boolean hasErrors() {
+    return !values.isEmpty();
   }
 
   @Override

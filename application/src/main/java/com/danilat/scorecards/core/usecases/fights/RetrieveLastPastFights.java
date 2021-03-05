@@ -27,7 +27,7 @@ public class RetrieveLastPastFights implements
     primaryPort.success(fightWithBoxersFetcher.findAllBefore(clock.today(), Sort.desc("happenAt"), LIMIT));
   }
 
-  public void execute(PrimaryPort<Collection<FightWithBoxers>> primaryPort){
+  public void execute(PrimaryPort<Collection<FightWithBoxers>> primaryPort) {
     execute(primaryPort, new Empty());
   }
 }
