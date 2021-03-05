@@ -10,6 +10,7 @@ import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.usecases.boxers.CreateBoxer;
 import com.danilat.scorecards.core.usecases.boxers.CreateBoxer.CreateBoxerParams;
+import com.danilat.scorecards.core.usecases.boxers.RetrieveABoxer;
 import com.danilat.scorecards.core.usecases.boxers.RetrieveAllBoxers;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.domain.FieldErrors;
@@ -62,6 +63,7 @@ public class BoxerSteps {
 
   @Autowired
   private CreateBoxer createBoxer;
+
   private PrimaryPort<Boxer> primaryPortCreateBoxer = new PrimaryPort<Boxer>() {
     @Override
     public void success(Boxer response) {
@@ -85,15 +87,18 @@ public class BoxerSteps {
   public void aBoxerAlias(String alias) {
     this.alias = alias;
   }
+
   @Given("a boxrec url {string}")
   public void aBoxrecUrl(String boxrecUrl) {
     this.boxrecUrl = boxrecUrl;
   }
+
   @When("I create the boxer")
   public void iCreateTheBoxer() {
     CreateBoxerParams params = new CreateBoxerParams(name, alias, boxrecUrl);
     createBoxer.execute(primaryPortCreateBoxer, params);
   }
+
   @Then("the boxer is successfully created")
   public void theBoxerIsSuccessfullyCreated() {
     assertNotNull(boxer);
@@ -102,6 +107,47 @@ public class BoxerSteps {
 
   @Then("the boxer is not created")
   public void theBoxerIsNotCreated() {
+    assertNull(boxer);
+    assertNotNull(fieldErrors);
+  }
+
+  @Autowired
+  private RetrieveABoxer retrieveABoxer;
+
+  private PrimaryPort<Boxer> primaryPortRetrieveBoxer = new PrimaryPort<Boxer>() {
+    @Override
+    public void success(Boxer response) {
+      boxer = response;
+      fieldErrors = null;
+    }
+
+    @Override
+    public void error(FieldErrors errors) {
+      fieldErrors = errors;
+      boxer = null;
+    }
+  };
+
+  @Given("an existing boxer {string}")
+  public void anExistingBoxer(String id) {
+    BoxerId boxerId = new BoxerId(id);
+    Boxer aBoxer = BoxerMother.aBoxerWithId(boxerId);
+    boxerRepository.save(aBoxer);
+  }
+
+  @When("I retrieve the boxer {string}")
+  public void iRetrieveTheBoxer(String id) {
+    retrieveABoxer.execute(primaryPortRetrieveBoxer, new BoxerId(id));
+  }
+
+  @Then("the boxer {string} is present")
+  public void theBoxerIsPresent(String id) {
+    assertNotNull(boxer);
+    assertNull(fieldErrors);
+  }
+
+  @Then("the boxer {string} is not present")
+  public void theBoxerIsNotPresent(String id) {
     assertNull(boxer);
     assertNotNull(fieldErrors);
   }

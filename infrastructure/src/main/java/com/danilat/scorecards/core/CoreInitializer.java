@@ -8,6 +8,7 @@ import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDetailsFetcher;
 import com.danilat.scorecards.core.usecases.accounts.RegisterAccount;
 import com.danilat.scorecards.core.usecases.boxers.CreateBoxer;
+import com.danilat.scorecards.core.usecases.boxers.RetrieveABoxer;
 import com.danilat.scorecards.core.usecases.boxers.RetrieveAllBoxers;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
@@ -79,6 +80,11 @@ public class CoreInitializer {
   @Bean
   public RetrieveAllBoxers retrieveAllBoxers() {
     return new RetrieveAllBoxers(boxerRepository);
+  }
+
+  @Bean
+  public RetrieveABoxer retrieveBoxers() {
+    return new RetrieveABoxer(boxerRepository);
   }
 
   @Bean
