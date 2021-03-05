@@ -46,6 +46,12 @@ public class EditorBoxersControllerTest extends BaseControllerTest {
   }
 
   @Test
+  public void getTheBoxersDetailWhenNotExist() throws Exception {
+    this.mvc.perform(get("/editor/boxers/foobar"))
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
   public void getsTheFormToCreateABoxer() throws Exception {
     this.mvc.perform(get("/editor/boxers/new"))
         .andExpect(status().isOk());

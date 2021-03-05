@@ -10,6 +10,7 @@ import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.domain.FieldErrors;
 import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.server.ResponseStatusException;
 
 @Controller
 @RequestMapping(value = "/editor/boxers")
@@ -47,9 +49,16 @@ public class EditorBoxersController {
   }
 
   private PrimaryPort<Boxer> findByIdPort(Model model) {
-    return boxer -> {
-      BoxerForm boxerForm = new BoxerForm(boxer);
-      model.addAttribute("boxer", boxerForm);
+    return new PrimaryPort<Boxer>() {
+      @Override
+      public void success(Boxer boxer) {
+        BoxerForm boxerForm = new BoxerForm(boxer);
+        model.addAttribute("boxer", boxerForm);
+      }
+      @Override
+      public void error(FieldErrors errors) {
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, errors.toString());
+      }
     };
   }
 
