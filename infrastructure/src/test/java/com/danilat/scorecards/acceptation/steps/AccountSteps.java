@@ -9,7 +9,7 @@ import com.danilat.scorecards.core.mothers.AccountMother;
 import com.danilat.scorecards.core.usecases.accounts.RegisterAccount;
 import com.danilat.scorecards.core.usecases.accounts.RegisterAccount.RegisterAccountParameters;
 import com.danilat.scorecards.shared.PrimaryPort;
-import com.danilat.scorecards.shared.domain.errors.Errors;
+import com.danilat.scorecards.shared.domain.errors.Error;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -28,7 +28,7 @@ public class AccountSteps {
   @Autowired
   private RegisterAccount registerAccount;
   private Account account;
-  private Errors errors;
+  private Error errors;
   private PrimaryPort<Account> primaryPort = new PrimaryPort<Account>() {
     @Override
     public void success(Account response) {
@@ -37,7 +37,7 @@ public class AccountSteps {
     }
 
     @Override
-    public void error(Errors errors) {
+    public void error(Error errors) {
       AccountSteps.this.errors = errors;
       account = null;
     }

@@ -113,7 +113,7 @@ public class RegisterAccountTest extends UseCaseUnitTest<Account> {
 
     registerAccount.execute(primaryPort, parameters);
 
-    FieldErrors errors = getErrors();
+    FieldErrors errors = getFieldErrors();
     assertTrue(errors.hasMessage("username is mandatory"));
   }
 
@@ -123,7 +123,7 @@ public class RegisterAccountTest extends UseCaseUnitTest<Account> {
 
     registerAccount.execute(primaryPort, parameters);
 
-    FieldErrors errors = getErrors();
+    FieldErrors errors = getFieldErrors();
     assertTrue(errors.hasMessage("email is mandatory"));
   }
 
@@ -133,7 +133,7 @@ public class RegisterAccountTest extends UseCaseUnitTest<Account> {
 
     registerAccount.execute(primaryPort, parameters);
 
-    FieldErrors errors = getErrors();
+    FieldErrors errors = getFieldErrors();
     assertTrue(errors.hasMessage("name is mandatory"));
   }
 
@@ -146,7 +146,7 @@ public class RegisterAccountTest extends UseCaseUnitTest<Account> {
 
     registerAccount.execute(primaryPort, parameters);
 
-    FieldErrors errors = getErrors();
+    FieldErrors errors = getFieldErrors();
     assertTrue(errors.hasMessage("The username is already used"));
   }
 
@@ -159,7 +159,7 @@ public class RegisterAccountTest extends UseCaseUnitTest<Account> {
 
     registerAccount.execute(primaryPort, parameters);
 
-    FieldErrors errors = getErrors();
+    FieldErrors errors = getFieldErrors();
     assertTrue(errors.hasMessage("The email is already used"));
   }
 }

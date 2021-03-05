@@ -3,6 +3,7 @@ package com.danilat.scorecards.core.usecases;
 import static org.mockito.Mockito.verify;
 
 import com.danilat.scorecards.shared.PrimaryPort;
+import com.danilat.scorecards.shared.domain.errors.Error;
 import com.danilat.scorecards.shared.domain.errors.FieldErrors;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -16,11 +17,16 @@ public abstract class UseCaseUnitTest<SUCCESS_ENTITY> {
   public ArgumentCaptor<SUCCESS_ENTITY> successArgumentCaptor;
 
   @Captor
-  ArgumentCaptor<FieldErrors> errorsArgumentCaptor;
+  ArgumentCaptor<Error> errorsArgumentCaptor;
 
   public abstract PrimaryPort getPrimaryPort();
 
-  public FieldErrors getErrors() {
+  public FieldErrors getFieldErrors() {
+    verify(getPrimaryPort()).error(errorsArgumentCaptor.capture());
+    return (FieldErrors) errorsArgumentCaptor.getValue();
+  }
+
+  public Error getError() {
     verify(getPrimaryPort()).error(errorsArgumentCaptor.capture());
     return errorsArgumentCaptor.getValue();
   }

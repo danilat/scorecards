@@ -1,16 +1,16 @@
 package com.danilat.scorecards.core.usecases;
 
-import com.danilat.scorecards.shared.domain.errors.Error;
+import com.danilat.scorecards.shared.domain.errors.SimpleError;
 import com.danilat.scorecards.shared.domain.errors.FieldErrors;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 
 public class ConstraintValidatorToErrorMapper<T> {
 
-  public Error mapConstraintViolationToError(ConstraintViolation violation) {
+  public SimpleError mapConstraintViolationToError(ConstraintViolation violation) {
     String message = violation.getMessage();
     String messageTemplate = violation.getMessageTemplate();
-    return new Error(message, messageTemplate);
+    return new SimpleError(message, messageTemplate);
   }
 
   public FieldErrors mapConstraintViolationsToErrors(Set<ConstraintViolation> violations) {
@@ -18,7 +18,7 @@ public class ConstraintValidatorToErrorMapper<T> {
     if (!violations.isEmpty()) {
       violations.forEach(violation -> {
         String fieldName = violation.getPropertyPath().toString();
-        Error error = mapConstraintViolationToError(violation);
+        SimpleError error = mapConstraintViolationToError(violation);
         errors.add(fieldName, error);
       });
     }

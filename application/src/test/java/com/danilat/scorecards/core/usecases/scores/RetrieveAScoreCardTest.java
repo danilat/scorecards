@@ -54,7 +54,7 @@ public class RetrieveAScoreCardTest extends UseCaseUnitTest<ScoreCard> {
     parameters = new RetrieveAScoreCardParameters(A_FIGHT_ID, null);
     retrieveAScoreCard.execute(primaryPort, parameters);
 
-    assertNotNull(getErrors().hasError(ScoreCardNotFoundError.class));
+    assertNotNull(getFieldErrors().hasError(ScoreCardNotFoundError.class));
   }
 
   @Override

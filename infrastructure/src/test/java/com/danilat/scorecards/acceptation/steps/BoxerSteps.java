@@ -13,7 +13,7 @@ import com.danilat.scorecards.core.usecases.boxers.CreateBoxer.CreateBoxerParams
 import com.danilat.scorecards.core.usecases.boxers.RetrieveABoxer;
 import com.danilat.scorecards.core.usecases.boxers.RetrieveAllBoxers;
 import com.danilat.scorecards.shared.PrimaryPort;
-import com.danilat.scorecards.shared.domain.errors.Errors;
+import com.danilat.scorecards.shared.domain.errors.Error;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -59,7 +59,7 @@ public class BoxerSteps {
   private String boxrecUrl;
 
   private Boxer boxer;
-  private Errors errors;
+  private Error errors;
 
   @Autowired
   private CreateBoxer createBoxer;
@@ -72,7 +72,7 @@ public class BoxerSteps {
     }
 
     @Override
-    public void error(Errors errors) {
+    public void error(Error errors) {
       BoxerSteps.this.errors = errors;
       boxer = null;
     }
@@ -122,7 +122,7 @@ public class BoxerSteps {
     }
 
     @Override
-    public void error(Errors errors) {
+    public void error(Error errors) {
       BoxerSteps.this.errors = errors;
       boxer = null;
     }

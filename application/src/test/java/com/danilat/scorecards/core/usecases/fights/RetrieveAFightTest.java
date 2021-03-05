@@ -1,9 +1,11 @@
 package com.danilat.scorecards.core.usecases.fights;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 import com.danilat.scorecards.core.domain.fight.FightId;
+import com.danilat.scorecards.core.domain.fight.FightNotFoundError;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxers;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersFetcher;
 import com.danilat.scorecards.core.mothers.FightWithBoxersMother;
@@ -52,7 +54,6 @@ public class RetrieveAFightTest extends UseCaseUnitTest<FightWithBoxers> {
   public void givenAnNonExistingFightThenIsNotRetrieved() {
     retrieveAFight.execute(primaryPort, new FightId("un-existing id"));
 
-    assertEquals("Fight: " + new FightId("un-existing id") + " not found",
-        getErrors().getMessagesContentFor("fightId"));
+    assertTrue(getError() instanceof FightNotFoundError);
   }
 }

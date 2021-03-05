@@ -107,7 +107,7 @@ public class CreateBoxerTest extends UseCaseUnitTest<Boxer> {
 
     createBoxer.execute(primaryPort, params);
 
-    FieldErrors errors = getErrors();
+    FieldErrors errors = getFieldErrors();
     assertTrue(errors.hasMessage("name is mandatory"));
   }
 }

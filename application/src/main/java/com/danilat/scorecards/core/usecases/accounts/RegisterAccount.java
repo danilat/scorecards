@@ -5,7 +5,7 @@ import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.account.AccountRepository;
 import com.danilat.scorecards.core.usecases.accounts.RegisterAccount.RegisterAccountParameters;
 import com.danilat.scorecards.shared.Clock;
-import com.danilat.scorecards.shared.domain.errors.Error;
+import com.danilat.scorecards.shared.domain.errors.SimpleError;
 import com.danilat.scorecards.shared.domain.errors.FieldErrors;
 import com.danilat.scorecards.shared.events.EventBus;
 import com.danilat.scorecards.shared.usecases.ValidatableParameters;
@@ -37,10 +37,10 @@ public class RegisterAccount extends WriteUseCase<Account, RegisterAccountParame
     FieldErrors errors = new FieldErrors();
     errors.addAll(params.validate());
     if (accountRepository.findByUsername(params.getUsername()).isPresent()) {
-      errors.add("username", new Error("The username is already used"));
+      errors.add("username", new SimpleError("The username is already used"));
     }
     if (accountRepository.findByEmail(params.getEmail()).isPresent()) {
-      errors.add("email", new Error("The email is already used"));
+      errors.add("email", new SimpleError("The email is already used"));
     }
     return errors;
   }

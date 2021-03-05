@@ -7,7 +7,7 @@ import com.danilat.scorecards.core.usecases.boxers.RetrieveAllBoxers;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import com.danilat.scorecards.shared.PrimaryPort;
-import com.danilat.scorecards.shared.domain.errors.Errors;
+import com.danilat.scorecards.shared.domain.errors.Error;
 import java.time.LocalDate;
 import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +67,7 @@ public class EditorFightsController {
       }
 
       @Override
-      public void error(Errors errors) {
+      public void error(Error errors) {
         model.addAttribute("errors", errors);
         model.addAttribute("fight", fightForm);
         createResult = createForm(model);

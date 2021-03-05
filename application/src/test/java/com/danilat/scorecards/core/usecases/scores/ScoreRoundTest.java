@@ -186,7 +186,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
 
     scoreRound.execute(primaryPort, params);
 
-    FieldErrors errors = getErrors();
+    FieldErrors errors = getFieldErrors();
     assertEquals("Fight: " + nonExistingFightId + " not found", errors.getMessagesContentFor("fightId"));
   }
 
@@ -198,7 +198,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
 
     scoreRound.execute(primaryPort, params);
 
-    FieldErrors errors = getErrors();
+    FieldErrors errors = getFieldErrors();
     assertEquals(round + " is out of the interval between 1 and 12", errors.getMessagesContentFor("round"));
   }
 
@@ -210,7 +210,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
 
     scoreRound.execute(primaryPort, params);
 
-    FieldErrors errors = getErrors();
+    FieldErrors errors = getFieldErrors();
     assertEquals(round + " is out of the interval between 1 and 12", errors.getMessagesContentFor("round"));
   }
 
@@ -224,7 +224,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
 
     scoreRound.execute(primaryPort, params);
 
-    FieldErrors errors = getErrors();
+    FieldErrors errors = getFieldErrors();
     assertEquals(roundOutOfInterval + " is out of the interval between 1 and " + fight.numberOfRounds(),
         errors.getMessagesContentFor("round"));
   }
@@ -237,7 +237,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
 
     scoreRound.execute(primaryPort, params);
 
-    FieldErrors errors = getErrors();
+    FieldErrors errors = getFieldErrors();
     assertEquals("secondBoxerScore is mandatory", errors.getMessagesContentFor("secondBoxerScore"));
   }
 
@@ -249,7 +249,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
 
     scoreRound.execute(primaryPort, params);
 
-    FieldErrors errors = getErrors();
+    FieldErrors errors = getFieldErrors();
     assertEquals("scores interval is between 1 and 10", errors.getMessagesContentFor("secondBoxerScore"));
   }
 
@@ -261,7 +261,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
 
     scoreRound.execute(primaryPort, params);
 
-    FieldErrors errors = getErrors();
+    FieldErrors errors = getFieldErrors();
     assertEquals("scores interval is between 1 and 10", errors.getMessagesContentFor("firstBoxerScore"));
   }
 
@@ -271,7 +271,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
     ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, 1, tyson, 10, SECOND_BOXER, 10, AN_ACCESS_TOKEN);
 
     scoreRound.execute(primaryPort, params);
-    FieldErrors errors = getErrors();
+    FieldErrors errors = getFieldErrors();
     assertEquals(tyson + " is not in the fight" + A_FIGHT_ID, errors.getMessagesContentFor("firstBoxer"));
   }
 
@@ -281,7 +281,7 @@ public class ScoreRoundTest extends UseCaseUnitTest<ScoreCard> {
     ScoreFightParameters params = new ScoreFightParameters(A_FIGHT_ID, 1, FIRST_BOXER, 10, tyson, 10, AN_ACCESS_TOKEN);
 
     scoreRound.execute(primaryPort, params);
-    FieldErrors errors = getErrors();
+    FieldErrors errors = getFieldErrors();
     assertEquals(tyson + " is not in the fight" + A_FIGHT_ID, errors.getMessagesContentFor("secondBoxer"));
   }
 }

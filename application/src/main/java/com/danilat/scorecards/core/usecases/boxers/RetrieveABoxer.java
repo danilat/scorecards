@@ -5,7 +5,6 @@ import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.boxer.BoxerNotFoundError;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.shared.PrimaryPort;
-import com.danilat.scorecards.shared.domain.errors.FieldErrors;
 import com.danilat.scorecards.shared.usecases.UseCase;
 import java.util.Optional;
 
@@ -23,8 +22,7 @@ public class RetrieveABoxer implements UseCase<Boxer, BoxerId> {
     if (optionalBoxer.isPresent()) {
       primaryPort.success(optionalBoxer.get());
     } else {
-      FieldErrors error = FieldErrors.newWithError("boxerId", new BoxerNotFoundError(boxerId));
-      primaryPort.error(error);
+      primaryPort.error(new BoxerNotFoundError(boxerId));
     }
   }
 }

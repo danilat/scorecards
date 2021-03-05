@@ -1,14 +1,14 @@
 package com.danilat.scorecards.acceptation.steps;
 
 import com.danilat.scorecards.core.domain.fight.Fight;
-import com.danilat.scorecards.shared.domain.errors.Errors;
+import com.danilat.scorecards.shared.domain.errors.Error;
 import org.springframework.stereotype.Component;
 
 @Component
 public class World {
 
   private Fight fight;
-  private Errors errors;
+  private Error errors;
 
   public void setFight(Fight fight) {
     this.fight = fight;
@@ -18,11 +18,11 @@ public class World {
     return fight;
   }
 
-  public void setErrors(Errors errors) {
+  public void setErrors(Error errors) {
     this.errors = errors;
   }
 
-  public Errors getErrors() {
+  public Error getErrors() {
     return errors;
   }
 }

@@ -3,9 +3,9 @@ package com.danilat.scorecards.shared.domain.errors;
 public class FieldError {
 
   private final String fieldName;
-  private final Error error;
+  private final SimpleError error;
 
-  public FieldError(String fieldName, Error error) {
+  public FieldError(String fieldName, SimpleError error) {
     this.fieldName = fieldName;
     this.error = error;
   }

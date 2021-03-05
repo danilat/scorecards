@@ -19,7 +19,7 @@ import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightPa
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
 import com.danilat.scorecards.core.usecases.fights.RetrieveLastPastFights;
 import com.danilat.scorecards.shared.PrimaryPort;
-import com.danilat.scorecards.shared.domain.errors.Errors;
+import com.danilat.scorecards.shared.domain.errors.Error;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -57,7 +57,7 @@ public class FightSteps {
     }
 
     @Override
-    public void error(Errors errors) {
+    public void error(Error errors) {
       world.setErrors(errors);
     }
   };
@@ -71,7 +71,7 @@ public class FightSteps {
       }
 
       @Override
-      public void error(Errors errors) {
+      public void error(Error errors) {
         world.setErrors(errors);
         world.setFight(null);
       }

@@ -8,11 +8,11 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class FieldErrors implements Iterable<FieldError>, Errors {
+public class FieldErrors implements Iterable<FieldError>, Error {
 
   private final List<FieldError> values;
 
-  public static FieldErrors newWithError(String fieldName, Error error) {
+  public static FieldErrors newWithError(String fieldName, SimpleError error) {
     FieldErrors errors = new FieldErrors();
     errors.add(fieldName, error);
     return errors;
@@ -42,12 +42,18 @@ public class FieldErrors implements Iterable<FieldError>, Errors {
     return this.getMessagesFor(fieldName).collect(Collectors.joining(". "));
   }
 
-  public boolean add(String fieldName, Error error) {
+  public boolean add(String fieldName, SimpleError error) {
     if (error != null) {
       return values.add(new FieldError(fieldName, error));
     } else {
       return false;
     }
+  }
+
+  @Override
+  public String getMessage() {
+    return values.stream().map(fieldError -> fieldError.getFieldName() + ": " + fieldError.getMessage())
+        .collect(Collectors.joining(". "));
   }
 
   public void addAll(FieldErrors fieldErrors) {
