@@ -1,4 +1,5 @@
 Feature: Score all rounds
+
   Background:
     Given an existing boxer called "Mohamed Ali"
     And an existing boxer called "Joe Frazier"

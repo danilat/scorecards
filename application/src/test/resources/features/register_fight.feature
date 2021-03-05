@@ -25,7 +25,7 @@ Feature: Register a fight
     And an event in "Bilbao Arena" at "28/04/2018"
     When I register the fight in the event for "Kerman Lejarraga" and "" for 12 rounds
     Then the fight is not registered
-    
+
   Scenario: fails without event date
     Given an existing boxer called "Kerman Lejarraga"
     And an existing boxer called "Bradley Skeete"
