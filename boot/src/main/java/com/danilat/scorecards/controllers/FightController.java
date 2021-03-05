@@ -60,7 +60,7 @@ public class FightController {
 
     @Override
     public void error(Error errors) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, errors.toString());
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, errors.getMessage());
     }
   };
 
