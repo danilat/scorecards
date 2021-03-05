@@ -7,7 +7,7 @@ import com.danilat.scorecards.core.domain.fight.FightNotFoundError;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.domain.score.BoxerIsNotInFightError;
 import com.danilat.scorecards.core.domain.score.RoundOutOfIntervalError;
-import com.danilat.scorecards.shared.domain.FieldErrors;
+import com.danilat.scorecards.shared.domain.errors.FieldErrors;
 import java.util.Optional;
 
 public class ScoringInFightValidator {

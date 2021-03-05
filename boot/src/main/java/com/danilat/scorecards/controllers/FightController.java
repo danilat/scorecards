@@ -12,7 +12,7 @@ import com.danilat.scorecards.core.usecases.scores.ScoreRound;
 import com.danilat.scorecards.core.usecases.scores.ScoreRound.ScoreFightParameters;
 import com.danilat.scorecards.shared.Auth;
 import com.danilat.scorecards.shared.PrimaryPort;
-import com.danilat.scorecards.shared.domain.Errors;
+import com.danilat.scorecards.shared.domain.errors.Errors;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
 import org.springframework.beans.factory.annotation.Autowired;

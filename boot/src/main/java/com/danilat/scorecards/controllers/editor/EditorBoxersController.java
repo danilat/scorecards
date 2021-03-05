@@ -7,7 +7,7 @@ import com.danilat.scorecards.core.usecases.boxers.CreateBoxer.CreateBoxerParams
 import com.danilat.scorecards.core.usecases.boxers.RetrieveABoxer;
 import com.danilat.scorecards.core.usecases.boxers.RetrieveAllBoxers;
 import com.danilat.scorecards.shared.PrimaryPort;
-import com.danilat.scorecards.shared.domain.Errors;
+import com.danilat.scorecards.shared.domain.errors.Errors;
 import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

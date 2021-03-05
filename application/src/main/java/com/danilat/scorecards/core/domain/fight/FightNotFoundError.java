@@ -1,7 +1,7 @@
 package com.danilat.scorecards.core.domain.fight;
 
 
-import com.danilat.scorecards.shared.domain.Error;
+import com.danilat.scorecards.shared.domain.errors.Error;
 
 public class FightNotFoundError extends Error {
 

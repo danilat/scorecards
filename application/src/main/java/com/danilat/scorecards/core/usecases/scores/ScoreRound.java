@@ -13,7 +13,7 @@ import com.danilat.scorecards.core.usecases.scores.ScoreRound.ScoreFightParamete
 import com.danilat.scorecards.shared.Auth;
 import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
-import com.danilat.scorecards.shared.domain.FieldErrors;
+import com.danilat.scorecards.shared.domain.errors.FieldErrors;
 import com.danilat.scorecards.shared.events.EventBus;
 import com.danilat.scorecards.shared.usecases.ValidatableParameters;
 import com.danilat.scorecards.shared.usecases.WriteUseCase;

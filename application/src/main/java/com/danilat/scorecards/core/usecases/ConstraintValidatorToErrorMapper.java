@@ -1,7 +1,7 @@
 package com.danilat.scorecards.core.usecases;
 
-import com.danilat.scorecards.shared.domain.Error;
-import com.danilat.scorecards.shared.domain.FieldErrors;
+import com.danilat.scorecards.shared.domain.errors.Error;
+import com.danilat.scorecards.shared.domain.errors.FieldErrors;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 

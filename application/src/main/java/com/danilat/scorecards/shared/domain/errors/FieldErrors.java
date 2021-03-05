@@ -1,4 +1,4 @@
-package com.danilat.scorecards.shared.domain;
+package com.danilat.scorecards.shared.domain.errors;
 
 import java.util.ArrayList;
 import java.util.Iterator;

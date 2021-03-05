@@ -31,7 +31,7 @@ import com.danilat.scorecards.shared.Auth;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.auth.TokenMother;
 import com.danilat.scorecards.shared.auth.firebase.TokenValidator;
-import com.danilat.scorecards.shared.domain.Errors;
+import com.danilat.scorecards.shared.domain.errors.Errors;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;

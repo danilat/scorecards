@@ -1,7 +1,7 @@
 package com.danilat.scorecards.acceptation.steps;
 
 import com.danilat.scorecards.core.domain.fight.Fight;
-import com.danilat.scorecards.shared.domain.Errors;
+import com.danilat.scorecards.shared.domain.errors.Errors;
 import org.springframework.stereotype.Component;
 
 @Component

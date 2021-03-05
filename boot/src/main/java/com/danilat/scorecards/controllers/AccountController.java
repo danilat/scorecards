@@ -8,7 +8,7 @@ import com.danilat.scorecards.shared.Auth;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.auth.firebase.TokenValidator;
 import com.danilat.scorecards.shared.auth.firebase.TokenValidator.Token;
-import com.danilat.scorecards.shared.domain.Errors;
+import com.danilat.scorecards.shared.domain.errors.Errors;
 import com.google.firebase.auth.FirebaseAuthException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

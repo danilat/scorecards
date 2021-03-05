@@ -1,6 +1,6 @@
 package com.danilat.scorecards.shared;
 
-import com.danilat.scorecards.shared.domain.Errors;
+import com.danilat.scorecards.shared.domain.errors.Errors;
 
 public interface PrimaryPort<E> {
 

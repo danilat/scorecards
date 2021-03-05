@@ -2,7 +2,7 @@ package com.danilat.scorecards.shared.usecases;
 
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.domain.Entity;
-import com.danilat.scorecards.shared.domain.FieldErrors;
+import com.danilat.scorecards.shared.domain.errors.FieldErrors;
 import com.danilat.scorecards.shared.events.EventBus;
 
 public abstract class WriteUseCase<OUTPUT extends Entity, INPUT> implements UseCase<OUTPUT, INPUT> {
