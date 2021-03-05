@@ -1,8 +1,10 @@
 package com.danilat.scorecards.controllers.editor;
 
 import com.danilat.scorecards.core.domain.boxer.Boxer;
+import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.usecases.boxers.CreateBoxer;
 import com.danilat.scorecards.core.usecases.boxers.CreateBoxer.CreateBoxerParams;
+import com.danilat.scorecards.core.usecases.boxers.RetrieveABoxer;
 import com.danilat.scorecards.core.usecases.boxers.RetrieveAllBoxers;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.domain.FieldErrors;
@@ -12,16 +14,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping(value = "/editor/boxers")
 public class EditorBoxersController {
+
   @Autowired
   private RetrieveAllBoxers retrieveAllBoxers;
+
   @GetMapping("")
-  public String list(Model model){
+  public String list(Model model) {
     retrieveAllBoxers.execute(listBoxersPort(model));
     return "editor/boxers/list";
   }
@@ -29,6 +34,22 @@ public class EditorBoxersController {
   private PrimaryPort<Collection<Boxer>> listBoxersPort(Model model) {
     return boxers -> {
       model.addAttribute("boxers", boxers);
+    };
+  }
+
+  @Autowired
+  private RetrieveABoxer retrieveABoxer;
+
+  @GetMapping("{id}")
+  public String findById(@PathVariable String id, Model model) {
+    retrieveABoxer.execute(findByIdPort(model), new BoxerId(id));
+    return "editor/boxers/edit";
+  }
+
+  private PrimaryPort<Boxer> findByIdPort(Model model) {
+    return boxer -> {
+      BoxerForm boxerForm = new BoxerForm(boxer);
+      model.addAttribute("boxer", boxerForm);
     };
   }
 
@@ -63,5 +84,36 @@ public class EditorBoxersController {
         createResult = createForm(model);
       }
     };
+  }
+
+  private class BoxerForm {
+
+    private String id;
+    private String name;
+    private String alias;
+    private String boxrecUrl;
+
+    public BoxerForm(Boxer boxer) {
+      id = boxer.id().value();
+      name = boxer.name();
+      alias = boxer.alias();
+      boxrecUrl = boxer.boxrecUrl();
+    }
+
+    public String getId() {
+      return id;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public String getAlias() {
+      return alias;
+    }
+
+    public String getBoxrecUrl() {
+      return boxrecUrl;
+    }
   }
 }

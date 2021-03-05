@@ -37,6 +37,15 @@ public class EditorBoxersControllerTest extends BaseControllerTest {
   }
 
   @Test
+  public void getTheBoxersDetail() throws Exception {
+    boxerRepository.save(BoxerMother.aBoxerWithId("ali"));
+
+    this.mvc.perform(get("/editor/boxers/ali"))
+        .andExpect(status().isOk())
+        .andExpect(model().attribute("boxer", notNullValue()));
+  }
+
+  @Test
   public void getsTheFormToCreateABoxer() throws Exception {
     this.mvc.perform(get("/editor/boxers/new"))
         .andExpect(status().isOk());
