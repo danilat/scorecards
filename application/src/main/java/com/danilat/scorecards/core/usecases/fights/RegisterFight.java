@@ -9,59 +9,50 @@ import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import com.danilat.scorecards.shared.Clock;
-import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 import com.danilat.scorecards.shared.domain.FieldError;
 import com.danilat.scorecards.shared.domain.FieldErrors;
 import com.danilat.scorecards.shared.events.EventBus;
 import com.danilat.scorecards.shared.usecases.ValidatableParameters;
-import com.danilat.scorecards.shared.usecases.UseCase;
+import com.danilat.scorecards.shared.usecases.WriteUseCase;
 import java.time.LocalDate;
 import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-public class RegisterFight implements UseCase<Fight, RegisterFightParameters> {
+public class RegisterFight extends WriteUseCase<Fight, RegisterFightParameters> {
 
   private final FightRepository fightRepository;
   private final BoxerRepository boxerRepository;
-  private final EventBus eventBus;
   private final Clock clock;
   private final UniqueIdGenerator uniqueIdGenerator;
-  private FieldErrors errors;
 
   public RegisterFight(FightRepository fightRepository, BoxerRepository boxerRepository,
       EventBus eventBus, Clock clock,
       UniqueIdGenerator uniqueIdGenerator) {
+    super(eventBus);
     this.fightRepository = fightRepository;
     this.boxerRepository = boxerRepository;
-    this.eventBus = eventBus;
     this.clock = clock;
     this.uniqueIdGenerator = uniqueIdGenerator;
   }
 
-  public void execute(PrimaryPort<Fight> primaryPort, RegisterFightParameters parameters) {
-    if (!validate(parameters)) {
-      primaryPort.error(errors);
-      return;
-    }
-
+  public Fight executeWhenValid(RegisterFightParameters parameters) {
     Event event = new Event(parameters.getHappenAt(), parameters.getPlace());
     Fight fight = Fight.create(new FightId(uniqueIdGenerator.next()), parameters.getFirstBoxer(),
         parameters.getSecondBoxer(),
         event, parameters.getNumberOfRounds(), clock.now());
     fightRepository.save(fight);
-    eventBus.publish(fight.domainEvents());
-    primaryPort.success(fight);
+    return fight;
   }
 
-  private boolean validate(RegisterFightParameters parameters) {
-    errors = new FieldErrors();
+  protected FieldErrors validate(RegisterFightParameters parameters) {
+    FieldErrors errors = new FieldErrors();
     errors.addAll(parameters.validate());
     errors.add(validateBoxer("firstBoxer", parameters.getFirstBoxer()));
     errors.add(validateBoxer("secondBoxer", parameters.getSecondBoxer()));
-    return errors.isEmpty();
+    return errors;
   }
 
   private FieldError validateBoxer(String fieldName, BoxerId boxerId) {

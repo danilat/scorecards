@@ -12,48 +12,39 @@ import com.danilat.scorecards.core.services.ScoringInFightValidator.Scoring;
 import com.danilat.scorecards.core.usecases.scores.ScoreRound.ScoreFightParameters;
 import com.danilat.scorecards.shared.Auth;
 import com.danilat.scorecards.shared.Clock;
-import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.UniqueIdGenerator;
 import com.danilat.scorecards.shared.domain.FieldErrors;
 import com.danilat.scorecards.shared.events.EventBus;
-import com.danilat.scorecards.shared.usecases.UseCase;
 import com.danilat.scorecards.shared.usecases.ValidatableParameters;
+import com.danilat.scorecards.shared.usecases.WriteUseCase;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-public class ScoreRound implements UseCase<ScoreCard, ScoreFightParameters> {
+public class ScoreRound extends WriteUseCase<ScoreCard, ScoreFightParameters> {
 
   private final ScoreCardRepository scoreCardRepository;
   private final FightRepository fightRepository;
   private final UniqueIdGenerator uniqueIdGenerator;
   private final Auth auth;
-  private final EventBus eventBus;
   private final Clock clock;
-  private FieldErrors errors;
 
   public ScoreRound(ScoreCardRepository scoreCardRepository, FightRepository fightRepository,
       UniqueIdGenerator uniqueIdGenerator, Auth auth, EventBus eventBus, Clock clock) {
+    super(eventBus);
     this.scoreCardRepository = scoreCardRepository;
     this.fightRepository = fightRepository;
     this.uniqueIdGenerator = uniqueIdGenerator;
     this.auth = auth;
-    this.eventBus = eventBus;
     this.clock = clock;
   }
 
   @Override
-  public void execute(PrimaryPort<ScoreCard> primaryPort, ScoreFightParameters params) {
-    if (!validate(params)) {
-      primaryPort.error(errors);
-      return;
-    }
-
+  public ScoreCard executeWhenValid(ScoreFightParameters params) {
     ScoreCard scoreCard = getOrCreateScoreCard(params);
     scoreCard.scoreRound(params.getRound(), params.getFirstBoxerScore(), params.getSecondBoxerScore(), clock.now());
     this.scoreCardRepository.save(scoreCard);
-    this.eventBus.publish(scoreCard.domainEvents());
-    primaryPort.success(scoreCard);
+    return scoreCard;
   }
 
   private ScoreCard getOrCreateScoreCard(ScoreFightParameters params) {
@@ -66,12 +57,12 @@ public class ScoreRound implements UseCase<ScoreCard, ScoreFightParameters> {
         });
   }
 
-  private boolean validate(ScoreFightParameters params) {
-    errors = new FieldErrors();
+  protected FieldErrors validate(ScoreFightParameters params) {
+    FieldErrors errors = new FieldErrors();
     errors.addAll(params.validate());
     ScoringInFightValidator scoringInFightValidator = new ScoringInFightValidator(fightRepository);
     errors.addAll(scoringInFightValidator.execute(params.scoring()));
-    return errors.isEmpty();
+    return errors;
   }
 
   public static class ScoreFightParameters extends ValidatableParameters {
