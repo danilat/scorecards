@@ -1,6 +1,7 @@
 package com.danilat.scorecards.core.domain.boxer;
 
 import com.danilat.scorecards.core.domain.boxer.events.BoxerCreated;
+import com.danilat.scorecards.core.domain.boxer.events.BoxerUpdated;
 import com.danilat.scorecards.shared.domain.Entity;
 import com.danilat.scorecards.shared.events.DomainEventId;
 import java.time.Instant;
@@ -44,5 +45,13 @@ public class Boxer extends Entity<BoxerId> {
 
   public String boxrecUrl() {
     return boxrecUrl;
+  }
+
+  public void change(String name, String alias, String boxrecUrl, Instant happenedAt) {
+    this.name = name;
+    this.alias = alias;
+    this.boxrecUrl = boxrecUrl;
+    BoxerUpdated boxerUpdated = new BoxerUpdated(happenedAt, new DomainEventId(this.id().value() + happenedAt), this);
+    this.addDomainEvent(boxerUpdated);
   }
 }

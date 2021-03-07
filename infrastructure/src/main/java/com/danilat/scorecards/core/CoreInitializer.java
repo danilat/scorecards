@@ -10,6 +10,7 @@ import com.danilat.scorecards.core.usecases.accounts.RegisterAccount;
 import com.danilat.scorecards.core.usecases.boxers.CreateBoxer;
 import com.danilat.scorecards.core.usecases.boxers.RetrieveABoxer;
 import com.danilat.scorecards.core.usecases.boxers.RetrieveAllBoxers;
+import com.danilat.scorecards.core.usecases.boxers.UpdateBoxer;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
 import com.danilat.scorecards.core.usecases.fights.RetrieveLastPastFights;
@@ -90,6 +91,11 @@ public class CoreInitializer {
   @Bean
   public CreateBoxer createBoxer() {
     return new CreateBoxer(uniqueIdGenerator, boxerRepository, eventBus, clock);
+  }
+
+  @Bean
+  public UpdateBoxer updateBoxer() {
+    return new UpdateBoxer(boxerRepository, eventBus, clock);
   }
 
   @Bean

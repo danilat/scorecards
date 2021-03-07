@@ -12,6 +12,8 @@ import com.danilat.scorecards.core.usecases.boxers.CreateBoxer;
 import com.danilat.scorecards.core.usecases.boxers.CreateBoxer.CreateBoxerParams;
 import com.danilat.scorecards.core.usecases.boxers.RetrieveABoxer;
 import com.danilat.scorecards.core.usecases.boxers.RetrieveAllBoxers;
+import com.danilat.scorecards.core.usecases.boxers.UpdateBoxer;
+import com.danilat.scorecards.core.usecases.boxers.UpdateBoxer.UpdateBoxerParams;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.domain.errors.Error;
 import io.cucumber.java.en.Given;
@@ -57,6 +59,7 @@ public class BoxerSteps {
   private String name;
   private String alias;
   private String boxrecUrl;
+  private BoxerId boxerId;
 
   private Boxer boxer;
   private Error errors;
@@ -130,7 +133,7 @@ public class BoxerSteps {
 
   @Given("an existing boxer {string}")
   public void anExistingBoxer(String id) {
-    BoxerId boxerId = new BoxerId(id);
+    boxerId = new BoxerId(id);
     Boxer aBoxer = BoxerMother.aBoxerWithId(boxerId);
     boxerRepository.save(aBoxer);
   }
@@ -148,6 +151,46 @@ public class BoxerSteps {
 
   @Then("the boxer {string} is not present")
   public void theBoxerIsNotPresent(String id) {
+    assertNull(boxer);
+    assertNotNull(errors);
+  }
+
+  @Autowired
+  private UpdateBoxer updateBoxer;
+  private PrimaryPort<Boxer> primaryPortUpdateBoxer = new PrimaryPort<Boxer>() {
+    @Override
+    public void success(Boxer response) {
+      boxer = response;
+      errors = null;
+    }
+
+    @Override
+    public void error(Error error) {
+      errors = error;
+      boxer = null;
+    }
+  };
+
+  @When("I update the boxer")
+  public void iUpdateTheBoxer() {
+    UpdateBoxerParams params = new UpdateBoxerParams(boxerId, name, alias, boxrecUrl);
+    updateBoxer.execute(primaryPortUpdateBoxer, params);
+  }
+
+  @Then("the boxer is successfully updated")
+  public void theBoxerIsSuccessfullyUpdated() {
+    assertNotNull(boxer);
+    assertNull(errors);
+  }
+
+  @Given("an non-existing boxer")
+  public void anNonExistingBoxer() {
+    UpdateBoxerParams params = new UpdateBoxerParams(boxerId, name, alias, boxrecUrl);
+    updateBoxer.execute(primaryPortUpdateBoxer, params);
+  }
+
+  @Then("the boxer is not updated")
+  public void theBoxerIsNotUpdated() {
     assertNull(boxer);
     assertNotNull(errors);
   }
