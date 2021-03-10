@@ -185,8 +185,7 @@ public class BoxerSteps {
 
   @Given("an non-existing boxer")
   public void anNonExistingBoxer() {
-    UpdateBoxerParams params = new UpdateBoxerParams(boxerId, name, alias, boxrecUrl);
-    updateBoxer.execute(primaryPortUpdateBoxer, params);
+    boxerId = new BoxerId("non-existing");
   }
 
   @Then("the boxer is not updated")

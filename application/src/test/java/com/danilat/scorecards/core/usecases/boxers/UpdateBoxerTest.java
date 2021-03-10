@@ -2,6 +2,7 @@ package com.danilat.scorecards.core.usecases.boxers;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -15,6 +16,7 @@ import com.danilat.scorecards.core.usecases.UseCaseUnitTest;
 import com.danilat.scorecards.core.usecases.boxers.UpdateBoxer.UpdateBoxerParams;
 import com.danilat.scorecards.shared.Clock;
 import com.danilat.scorecards.shared.PrimaryPort;
+import com.danilat.scorecards.shared.domain.errors.FieldErrors;
 import com.danilat.scorecards.shared.events.EventBus;
 import java.time.Instant;
 import java.util.Optional;
@@ -89,6 +91,27 @@ public class UpdateBoxerTest extends UseCaseUnitTest<Boxer> {
     assertEquals(boxer, boxerUpdated.boxer());
     assertEquals(happenedAt, boxerUpdated.happenedAt());
     assertNotNull(boxerUpdated.eventId());
+  }
+
+  @Test
+  public void givenAnExistingBoxerButNoNameInParamsThenIsInvalid() {
+    UpdateBoxerParams params = new UpdateBoxerParams(boxerId, "", changedAlias, changedBoxrecUrl);
+
+    updateBoxer.execute(primaryPort, params);
+
+    FieldErrors errors = getFieldErrors();
+    assertTrue(errors.hasMessage("name is mandatory"));
+  }
+
+  @Test
+  public void givenANonExistingBoxerAndValidParamsThenIsInvalid() {
+    BoxerId nonExistingBoxerId = new BoxerId("non-existing-id");
+    UpdateBoxerParams params = new UpdateBoxerParams(nonExistingBoxerId, changedName, changedAlias, changedBoxrecUrl);
+
+    updateBoxer.execute(primaryPort, params);
+
+    FieldErrors errors = getFieldErrors();
+    assertTrue(errors.hasMessage("Boxer: " + nonExistingBoxerId + " not found"));
   }
 
   @Override
