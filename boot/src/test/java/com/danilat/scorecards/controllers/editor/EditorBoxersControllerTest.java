@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import com.danilat.scorecards.controllers.BaseControllerTest;
+import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.mothers.BoxerMother;
 import org.junit.Before;
@@ -75,5 +76,31 @@ public class EditorBoxersControllerTest extends BaseControllerTest {
         .param("boxrecUrl", "https://boxrec.com/en/proboxer/6129"))
         .andExpect(status().isOk())
         .andExpect(view().name("editor/boxers/new"));
+  }
+
+  @Test
+  public void updateABoxerWithValidParameters() throws Exception {
+    Boxer boxer = BoxerMother.aBoxerWithId("ali");
+    boxerRepository.save(BoxerMother.aBoxerWithId("ali"));
+
+    this.mvc.perform(post("/editor/boxers/ali")
+        .param("name", boxer.name())
+        .param("alias", "The Greatest!")
+        .param("boxrecUrl", boxer.boxrecUrl()))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl("/editor/boxers"));
+  }
+
+  @Test
+  public void updateABoxerWithInvalidParameters() throws Exception {
+    Boxer boxer = BoxerMother.aBoxerWithId("ali");
+    boxerRepository.save(BoxerMother.aBoxerWithId("ali"));
+
+    this.mvc.perform(post("/editor/boxers/ali")
+        .param("name", "")
+        .param("alias", boxer.alias())
+        .param("boxrecUrl", boxer.boxrecUrl()))
+        .andExpect(status().isOk())
+        .andExpect(view().name("editor/boxers/edit"));
   }
 }

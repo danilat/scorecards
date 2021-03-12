@@ -6,6 +6,8 @@ import com.danilat.scorecards.core.usecases.boxers.CreateBoxer;
 import com.danilat.scorecards.core.usecases.boxers.CreateBoxer.CreateBoxerParams;
 import com.danilat.scorecards.core.usecases.boxers.RetrieveABoxer;
 import com.danilat.scorecards.core.usecases.boxers.RetrieveAllBoxers;
+import com.danilat.scorecards.core.usecases.boxers.UpdateBoxer;
+import com.danilat.scorecards.core.usecases.boxers.UpdateBoxer.UpdateBoxerParams;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.domain.errors.Error;
 import java.util.Collection;
@@ -52,8 +54,7 @@ public class EditorBoxersController {
     return new PrimaryPort<Boxer>() {
       @Override
       public void success(Boxer boxer) {
-        BoxerForm boxerForm = new BoxerForm(boxer);
-        model.addAttribute("boxer", boxerForm);
+        model.addAttribute("boxer", toForm(boxer));
       }
 
       @Override
@@ -96,6 +97,42 @@ public class EditorBoxersController {
     };
   }
 
+  @PostMapping("{id}")
+  public String update(@PathVariable String id, Model model, @ModelAttribute BoxerForm form) {
+    updateBoxer.execute(updateBoxerPort(model, form), new UpdateBoxerParams(new BoxerId(id), form.getName(), form.getAlias(),
+        form.getBoxrecUrl()));
+    return updateResult;
+  }
+
+  @Autowired
+  private UpdateBoxer updateBoxer;
+  private String updateResult;
+
+  private PrimaryPort<Boxer> updateBoxerPort(Model model, BoxerForm form) {
+    return new PrimaryPort<Boxer>() {
+      @Override
+      public void success(Boxer boxer) {
+        updateResult = "redirect:/editor/boxers";
+      }
+
+      @Override
+      public void error(Error errors) {
+        model.addAttribute("boxer", form);
+        model.addAttribute("errors", errors);
+        updateResult = "editor/boxers/edit";
+      }
+    };
+  }
+
+  private BoxerForm toForm(Boxer boxer) {
+    BoxerForm form = new BoxerForm();
+    form.id = boxer.id().value();
+    form.name = boxer.name();
+    form.alias = boxer.alias();
+    form.boxrecUrl = boxer.boxrecUrl();
+    return form;
+  }
+
   private class BoxerForm {
 
     private String id;
@@ -103,12 +140,7 @@ public class EditorBoxersController {
     private String alias;
     private String boxrecUrl;
 
-    public BoxerForm(Boxer boxer) {
-      id = boxer.id().value();
-      name = boxer.name();
-      alias = boxer.alias();
-      boxrecUrl = boxer.boxrecUrl();
-    }
+    public BoxerForm(){}
 
     public String getId() {
       return id;
@@ -124,6 +156,22 @@ public class EditorBoxersController {
 
     public String getBoxrecUrl() {
       return boxrecUrl;
+    }
+
+    public void setId(String id) {
+      this.id = id;
+    }
+
+    public void setName(String name) {
+      this.name = name;
+    }
+
+    public void setAlias(String alias) {
+      this.alias = alias;
+    }
+
+    public void setBoxrecUrl(String boxrecUrl) {
+      this.boxrecUrl = boxrecUrl;
     }
   }
 }
