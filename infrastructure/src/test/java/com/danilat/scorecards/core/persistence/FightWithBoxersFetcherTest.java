@@ -17,6 +17,7 @@ import com.danilat.scorecards.core.persistence.jdbc.JdbcConfig;
 import com.danilat.scorecards.shared.domain.Sort;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import org.junit.Before;
@@ -82,5 +83,19 @@ public class FightWithBoxersFetcherTest {
     assertEquals(2, fights.size());
     assertEquals(todayFight.id(), fights.get(0).id());
     assertEquals(yesterdayFight.id(), fights.get(1).id());
+  }
+
+  @Test
+  public void getAllFights() {
+    Fight fight = FightMother.aFightWithId(fightId);
+    fightRepository.save(fight);
+    Boxer firstBoxer = BoxerMother.aBoxerWithId("ali");
+    boxerRepository.save(firstBoxer);
+    Boxer secondBoxer = BoxerMother.aBoxerWithId("foreman");
+    boxerRepository.save(secondBoxer);
+
+    Collection<FightWithBoxers> fightWithBoxers = fightWithBoxersFetcher.all();
+
+    assertEquals(1, fightWithBoxers.size());
   }
 }

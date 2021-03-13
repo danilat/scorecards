@@ -17,9 +17,11 @@ import com.danilat.scorecards.core.mothers.FightMother;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
+import com.danilat.scorecards.core.usecases.fights.RetrieveAllFights;
 import com.danilat.scorecards.core.usecases.fights.RetrieveLastPastFights;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.domain.errors.Error;
+import com.danilat.scorecards.shared.usecases.UseCase.Empty;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -77,14 +79,11 @@ public class FightSteps {
       }
     };
   }
+
   private Collection<FightWithBoxers> retrievedFights;
-  private PrimaryPort<Collection<FightWithBoxers>> getRetrieveLastPastFightsPort() {
-    return new PrimaryPort<Collection<FightWithBoxers>>() {
-      @Override
-      public void success(Collection<FightWithBoxers> response) {
-        retrievedFights = response;
-      }
-    };
+
+  private PrimaryPort<Collection<FightWithBoxers>> getFightsPort() {
+    return response -> retrievedFights = response;
   }
 
   @Given("an existing fight")
@@ -189,13 +188,15 @@ public class FightSteps {
 
   @When("I retrieve the last fights")
   public void iRetrieveTheLastFights() {
-    retrieveLastPastFights.execute(getRetrieveLastPastFightsPort());
+    retrieveLastPastFights.execute(getFightsPort());
   }
+
   @Then("the fights are present")
   public void theFightsArePresent() {
     assertNotNull(retrievedFights);
     assertTrue(retrievedFights.size() > 0);
   }
+
   @Then("the fight that happened {string} is first than the fight that happened {string}")
   public void theFightThatHappenedIsFirstThanTheFightThatHappened(String firstFightDate, String secondFightDate) {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -213,5 +214,28 @@ public class FightSteps {
   public void theFightsAreNotPresent() {
     assertNotNull(retrievedFights);
     assertEquals(0, retrievedFights.size());
+  }
+
+  @Autowired
+  private RetrieveAllFights retrieveAllFights;
+
+  @Given("an existing fight between {string} and {string}")
+  public void anExistingFightBetweenAnd(String firstBoxerId, String secondBoxerId) {
+    existingFight = FightMother
+        .aFightWithIdAndBoxers(new FightId("a fight"), new BoxerId(firstBoxerId), new BoxerId(secondBoxerId));
+    fightRepository.save(existingFight);
+  }
+
+  @When("I retrieve all the fights")
+  public void iRetrieveAllTheFights() {
+    retrieveAllFights.execute(getFightsPort(), new Empty());
+  }
+
+  @Then("there is the fight between {string} and {string} present")
+  public void thereIsTheFightBetweenAndPresent(String firstBoxerId, String secondBoxerId) {
+    assertNotNull(retrievedFights);
+    assertTrue(retrievedFights.stream()
+        .anyMatch(fight -> fight.getFirstBoxerId().equals(new BoxerId(firstBoxerId)) && fight.getSecondBoxerId()
+            .equals(new BoxerId(secondBoxerId))));
   }
 }

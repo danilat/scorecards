@@ -13,6 +13,7 @@ import com.danilat.scorecards.core.usecases.boxers.RetrieveAllBoxers;
 import com.danilat.scorecards.core.usecases.boxers.UpdateBoxer;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
+import com.danilat.scorecards.core.usecases.fights.RetrieveAllFights;
 import com.danilat.scorecards.core.usecases.fights.RetrieveLastPastFights;
 import com.danilat.scorecards.core.usecases.scores.RetrieveAScoreCard;
 import com.danilat.scorecards.core.usecases.scores.RetrieveScoreCards;
@@ -71,6 +72,11 @@ public class CoreInitializer {
   @Bean
   public RegisterFight registerFight() {
     return new RegisterFight(fightRepository, boxerRepository, eventBus, clock, uniqueIdGenerator);
+  }
+
+  @Bean
+  public RetrieveAllFights retrieveAllFights() {
+    return new RetrieveAllFights(fightWithBoxersFetcher);
   }
 
   @Bean

@@ -57,6 +57,13 @@ public class JdbcFightWithBoxersFetcher implements
             .direction().value(), params, (resultSet, rowNum) -> mapRow(resultSet));
   }
 
+  @Override
+  public Collection<FightWithBoxers> all() {
+    return namedParameterJdbcTemplate.query(
+        "SELECT f.*, fb.name as first_boxer_name, sb.name as second_boxer_name FROM fights  f LEFT JOIN boxers fb ON f.first_boxer_id = fb.id LEFT JOIN boxers sb ON f.second_boxer_id = sb.id ORDER BY happen_at DESC",
+            (resultSet, rowNum) -> mapRow(resultSet));
+  }
+
   private FightWithBoxers mapRow(ResultSet resultSet) throws SQLException {
     Event event = new Event(resultSet.getDate("happen_at").toLocalDate(), resultSet.getString("place"));
     Fight fight = new Fight(new FightId(resultSet.getString("id")), new BoxerId(resultSet.getString("first_boxer_id")),

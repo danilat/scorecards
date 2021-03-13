@@ -12,4 +12,6 @@ public interface FightWithBoxersFetcher {
 
   Collection<FightWithBoxers> findAllBefore(LocalDate today, Sort sort,
       int limit);
+
+  Collection<FightWithBoxers> all();
 }
