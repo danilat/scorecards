@@ -1,0 +1,15 @@
+
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<h1>Fights</h1>
+
+<a th:href="@{/editor/fights/new}">Create fight</a>
+<ul th:if="${fights}">
+  <li th:each="fight : ${fights}">
+    <span th:text=${fight.happenAt} />.
+    <a th:href="@{/fights/{id}(id=${fight.id().value()})}"><span th:text=${fight.firstBoxerName} /> vs <span th:text=${fight.secondBoxerName} />.</a>
+    In <span th:text=${fight.numberOfRounds} /> rounds, <span th:text=${fight.place} />
+  </li>
+</ul>
+</body>
+</html>

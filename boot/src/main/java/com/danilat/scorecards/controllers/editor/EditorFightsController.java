@@ -3,11 +3,14 @@ package com.danilat.scorecards.controllers.editor;
 import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.fight.Fight;
+import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxers;
 import com.danilat.scorecards.core.usecases.boxers.RetrieveAllBoxers;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
+import com.danilat.scorecards.core.usecases.fights.RetrieveAllFights;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.domain.errors.Error;
+import com.danilat.scorecards.shared.usecases.UseCase.Empty;
 import java.time.LocalDate;
 import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,39 +30,48 @@ public class EditorFightsController {
   private RetrieveAllBoxers retrieveAllBoxers;
   @Autowired
   private RegisterFight registerFight;
+  @Autowired
+  private RetrieveAllFights retrieveAllFights;
 
-  private Model model;
-  private FightForm fightForm;
   private String createResult;
-  private Collection<Boxer> retrievedBoxers;
+
+  @GetMapping("")
+  public String list(Model model) {
+    retrieveAllFights.execute(retrieveAllFightsPort(model), new Empty());
+    return "editor/fights/list";
+  }
+
+  private PrimaryPort<Collection<FightWithBoxers>> retrieveAllFightsPort(Model model) {
+    return fights -> model.addAttribute("fights", fights);
+  }
 
   @GetMapping("new")
   public String createForm(Model model) {
-    retrieveAllBoxers.execute(retrieveAllBoxersPort());
-    model.addAttribute("boxers", retrievedBoxers);
-    if (!model.containsAttribute("fight")) {
-      model.addAttribute("fight", new FightForm());
-    }
+    retrieveAllBoxers.execute(retrieveAllBoxersPort(model));
+
     return "editor/fights/new";
   }
 
-  private PrimaryPort<Collection<Boxer>> retrieveAllBoxersPort() {
-    return boxers -> retrievedBoxers = boxers;
+  private PrimaryPort<Collection<Boxer>> retrieveAllBoxersPort(Model model) {
+    return boxers -> {
+      model.addAttribute("boxers", boxers);
+      if (!model.containsAttribute("fight")) {
+        model.addAttribute("fight", new FightForm());
+      }
+    };
   }
 
   @PostMapping("")
   public String create(Model model, @ModelAttribute FightForm fightForm) {
-    this.model = model;
-    this.fightForm = fightForm;
     RegisterFightParameters parameters = new RegisterFightParameters(
         new BoxerId(fightForm.getFirstBoxer()),
         new BoxerId(fightForm.getSecondBoxer()), fightForm.getHappenAt(), fightForm.getPlace(),
         fightForm.getNumberOfRounds());
-    registerFight.execute(registerFightPort(), parameters);
+    registerFight.execute(registerFightPort(model, fightForm), parameters);
     return createResult;
   }
 
-  private PrimaryPort<Fight> registerFightPort() {
+  private PrimaryPort<Fight> registerFightPort(Model model, FightForm fightForm) {
     return new PrimaryPort<Fight>() {
       @Override
       public void success(Fight fight) {
