@@ -78,6 +78,10 @@ public class FightController {
     private void populateScoreCardForm(ScoreCard scoreCard) {
       FightWithBoxers fight = (FightWithBoxers) model.getAttribute("fight");
       ScoreCardForm scoreCardForm = (ScoreCardForm) model.getAttribute("scores");
+      if (scoreCard != null){
+        scoreCardForm.setFirstBoxerScore(scoreCard.firstBoxerScore());
+        scoreCardForm.setSecondBoxerScore(scoreCard.secondBoxerScore());
+      }
       IntStream.rangeClosed(1, fight.getNumberOfRounds()).forEach(round -> {
         ScoreForm scoreForm = new ScoreForm();
         scoreForm.setRound(round);
@@ -193,10 +197,14 @@ public class FightController {
       super();
       this.firstBoxer = firstBoxer;
       this.secondBoxer = secondBoxer;
+      this.firstBoxerScore = 0;
+      this.secondBoxerScore = 0;
     }
 
     private String firstBoxer;
     private String secondBoxer;
+    private int firstBoxerScore;
+    private int secondBoxerScore;
 
 
     public String getFirstBoxer() {
@@ -213,6 +221,22 @@ public class FightController {
 
     public void setSecondBoxer(String secondBoxer) {
       this.secondBoxer = secondBoxer;
+    }
+
+    public int getFirstBoxerScore() {
+      return firstBoxerScore;
+    }
+
+    public void setFirstBoxerScore(int firstBoxerScore) {
+      this.firstBoxerScore = firstBoxerScore;
+    }
+
+    public int getSecondBoxerScore() {
+      return secondBoxerScore;
+    }
+
+    public void setSecondBoxerScore(int secondBoxerScore) {
+      this.secondBoxerScore = secondBoxerScore;
     }
   }
 }
