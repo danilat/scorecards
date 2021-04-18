@@ -25,3 +25,5 @@ target/
 /.nb-gradle/
 
 .DS_Store
+
+google-credentials.json
