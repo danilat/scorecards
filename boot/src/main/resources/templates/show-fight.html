@@ -1,29 +1,29 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <h1>Fight detail</h1>
-Boxer 1: <p th:text=${fight.firstBoxerName}></p>
-Boxer 2: <p th:text=${fight.secondBoxerName}></p>
+Boxer 1: <p th:text=${fight.firstBoxerName}>Mohamed Ali</p>
+Boxer 2: <p th:text=${fight.secondBoxerName}>George Foreman</p>
 Event:
 <p th:text=${fight.place}></p>
-<p th:text=${fight.happenAt}></p>
+<p th:text=${fight.happenAt}>30-10-1974</p>
 Number of rounds:
-<p th:text=${fight.numberOfRounds}></p>
+<p th:text=${fight.numberOfRounds}>12</p>
 
 <div th:if="${accountId}">
   Score the fight:
 
   <ul style="border: 1px solid red;" th:if="${errors}">
     <li th:each="err : ${errors}">
-      <p th:text="${err.fieldName}"></p>
-      <p th:text="${err.message}"></p>
+      <p th:text="${err.fieldName}">a field</p>
+      <p th:text="${err.message}">the error message</p>
     </li>
   </ul>
   <table>
     <thead>
     <tr>
       <td>Boxers</td>
-      <td th:text=${fight.firstBoxerName}></td>
-      <td th:text=${fight.secondBoxerName}></td>
+      <td th:text=${fight.firstBoxerName}>Mohamed Ali</td>
+      <td th:text=${fight.secondBoxerName}>George Foreman</td>
       <td></td>
     </tr>
     </thead>
@@ -35,11 +35,11 @@ Number of rounds:
         </td>
         <td>
           <input type="hidden" name="firstBoxer" th:value="*{firstBoxer}"/>
-          <input type="number" name="firstBoxerScore" th:value="*{firstBoxerScore}"/>
+          <input type="number" name="firstBoxerScore" th:value="*{firstBoxerScore}" value="10"/>
         </td>
         <td>
           <input type="hidden" name="secondBoxer" th:value="*{secondBoxer}"/>
-          <input type="number" name="secondBoxerScore" th:value="*{secondBoxerScore}"/>
+          <input type="number" name="secondBoxerScore" th:value="*{secondBoxerScore}" value="9"/>
         </td>
         <td>
           <input type="hidden" name="round" th:value="*{round}"/>
@@ -49,8 +49,8 @@ Number of rounds:
     </tr>
     <tr>
       <td>Total score</td>
-      <td th:text=${scores.firstBoxerScore}></td>
-      <td th:text=${scores.secondBoxerScore}></td>
+      <td th:text=${scores.firstBoxerScore}>10</td>
+      <td th:text=${scores.secondBoxerScore}>9</td>
       <td></td>
     </tr>
     </tbody>

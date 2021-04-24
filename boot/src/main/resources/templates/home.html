@@ -1,7 +1,8 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
   <meta charset="UTF-8">
   <title>Welcome to Scorecards</title>
+  <link th:href="@{/styles/main.css}" rel="stylesheet" href="../static/styles/main.css" />
   <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-analytics.js"></script>
@@ -92,9 +93,9 @@
 <h2>Last fights</h2>
 <ul>
   <li th:each="fight : ${lastFights}">
-    <a th:href="@{/fights/{id}(id=${fight.id().value()})}"><span th:text=${fight.firstBoxerName} /> vs <span th:text=${fight.secondBoxerName} />. In <span th:text=${fight.numberOfRounds} /> rounds
+    <a th:href="@{/fights/{id}(id=${fight.id().value()})}" href="show-fight.html"><span th:text=${fight.firstBoxerName}>Mohamed Ali</span> vs <span th:text=${fight.secondBoxerName}>George Foreman</span>. In <span th:text=${fight.numberOfRounds}>12</span> rounds
     <p>
-      <span th:text=${fight.happenAt} />, <span th:text=${fight.place} />
+      <span th:text=${fight.happenAt}>30-10-1974</span>, <span th:text=${fight.place} />Kinsasa, Zaire</span>
     </p>
     </a>
   </li>
