@@ -1,7 +1,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<h1>Scores in the account <span th:text="${accountId}"></span></h1>
-
+<h1>Scores in the account <span th:text=${account.name()}>Dani Latorre</span></h1>
+<p th:text=${account.username()}>danilat</p>
+<img src="https://picsum.photos/200/300" th:src=${account.picture()}>
 <ul th:if="${scorecards}">
   <li th:each="scorecard : ${scorecards}">
     <span th:text=${scorecard.getScoredAt()}></span> |

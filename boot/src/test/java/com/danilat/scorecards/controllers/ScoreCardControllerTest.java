@@ -1,5 +1,6 @@
 package com.danilat.scorecards.controllers;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -94,11 +95,12 @@ public class ScoreCardControllerTest extends BaseControllerTest {
   }
 
   @Test
-  public void getsScoreCardsByAccount() throws Exception {
+  public void getsAccountProfile() throws Exception {
     Account account = AccountMother.anAccountWithUsername("danilat");
     accountRepository.save(account);
     this.mvc.perform(get("/sc/" + account.username()))
             .andExpect(status().isOk())
-            .andExpect(model().attribute("scorecards", notNullValue()));
+            .andExpect(model().attribute("scorecards", notNullValue()))
+            .andExpect(model().attribute("account", equalTo(account)));
   }
 }
