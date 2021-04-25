@@ -24,7 +24,7 @@ public class ScoreCardController {
     }
   };
 
-  @GetMapping("{accountId}/scorecards")
+  @GetMapping("/sc/{accountId}")
   public String listByAccount(@PathVariable String accountId, Model model) {
     this.model = model;
     this.model.addAttribute("accountId", accountId);

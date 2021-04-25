@@ -65,13 +65,6 @@ public class ScoreCardControllerTest extends BaseControllerTest {
   }
 
   @Test
-  public void getsScoreCardsByAccount() throws Exception {
-    this.mvc.perform(get("/" + accountId + "/scorecards/"))
-        .andExpect(status().isOk())
-        .andExpect(model().attribute("scorecards", notNullValue()));
-  }
-
-  @Test
   public void postANewScoreWithValidParameters() throws Exception {
     Cookie cookie = getCookieFor(account);
 
@@ -98,5 +91,14 @@ public class ScoreCardControllerTest extends BaseControllerTest {
         .param("round", "1"))
         .andExpect(status().isOk())
         .andExpect(view().name("show-fight"));
+  }
+
+  @Test
+  public void getsScoreCardsByAccount() throws Exception {
+    Account account = AccountMother.anAccountWithUsername("danilat");
+    accountRepository.save(account);
+    this.mvc.perform(get("/sc/" + account.username()))
+            .andExpect(status().isOk())
+            .andExpect(model().attribute("scorecards", notNullValue()));
   }
 }
