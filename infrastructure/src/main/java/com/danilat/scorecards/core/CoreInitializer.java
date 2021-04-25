@@ -7,6 +7,7 @@ import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxersFetch
 import com.danilat.scorecards.core.domain.score.ScoreCardRepository;
 import com.danilat.scorecards.core.domain.score.projections.ScoreCardWithFightDetailsFetcher;
 import com.danilat.scorecards.core.usecases.accounts.RegisterAccount;
+import com.danilat.scorecards.core.usecases.accounts.RetrieveAccount;
 import com.danilat.scorecards.core.usecases.boxers.CreateBoxer;
 import com.danilat.scorecards.core.usecases.boxers.RetrieveABoxer;
 import com.danilat.scorecards.core.usecases.boxers.RetrieveAllBoxers;
@@ -34,94 +35,99 @@ import org.springframework.context.annotation.Import;
 @Import(SharedInitializer.class)
 public class CoreInitializer {
 
-  @Autowired
-  private FightWithBoxersFetcher fightWithBoxersFetcher;
+    @Autowired
+    private FightWithBoxersFetcher fightWithBoxersFetcher;
 
-  @Autowired
-  private FightRepository fightRepository;
+    @Autowired
+    private FightRepository fightRepository;
 
-  @Autowired
-  private BoxerRepository boxerRepository;
+    @Autowired
+    private BoxerRepository boxerRepository;
 
-  @Autowired
-  private EventBus eventBus;
+    @Autowired
+    private EventBus eventBus;
 
-  @Autowired
-  private Clock clock;
+    @Autowired
+    private Clock clock;
 
-  @Autowired
-  private UniqueIdGenerator uniqueIdGenerator;
+    @Autowired
+    private UniqueIdGenerator uniqueIdGenerator;
 
-  @Autowired
-  private ScoreCardRepository scoreCardRepository;
+    @Autowired
+    private ScoreCardRepository scoreCardRepository;
 
-  @Autowired
-  private ScoreCardWithFightDetailsFetcher scoreCardWithFightDetailsFetcher;
+    @Autowired
+    private ScoreCardWithFightDetailsFetcher scoreCardWithFightDetailsFetcher;
 
-  @Autowired
-  private Auth auth;
+    @Autowired
+    private Auth auth;
 
-  @Autowired
-  private AccountRepository accountRepository;
+    @Autowired
+    private AccountRepository accountRepository;
 
-  @Bean
-  public RetrieveAFight retrieveAFight() {
-    return new RetrieveAFight(fightWithBoxersFetcher);
-  }
+    @Bean
+    public RetrieveAFight retrieveAFight() {
+        return new RetrieveAFight(fightWithBoxersFetcher);
+    }
 
-  @Bean
-  public RegisterFight registerFight() {
-    return new RegisterFight(fightRepository, boxerRepository, eventBus, clock, uniqueIdGenerator);
-  }
+    @Bean
+    public RegisterFight registerFight() {
+        return new RegisterFight(fightRepository, boxerRepository, eventBus, clock, uniqueIdGenerator);
+    }
 
-  @Bean
-  public RetrieveAllFights retrieveAllFights() {
-    return new RetrieveAllFights(fightWithBoxersFetcher);
-  }
+    @Bean
+    public RetrieveAllFights retrieveAllFights() {
+        return new RetrieveAllFights(fightWithBoxersFetcher);
+    }
 
-  @Bean
-  public RetrieveLastPastFights retrieveLastPastFights() {
-    return new RetrieveLastPastFights(fightWithBoxersFetcher, clock);
-  }
+    @Bean
+    public RetrieveLastPastFights retrieveLastPastFights() {
+        return new RetrieveLastPastFights(fightWithBoxersFetcher, clock);
+    }
 
-  @Bean
-  public RetrieveAllBoxers retrieveAllBoxers() {
-    return new RetrieveAllBoxers(boxerRepository);
-  }
+    @Bean
+    public RetrieveAllBoxers retrieveAllBoxers() {
+        return new RetrieveAllBoxers(boxerRepository);
+    }
 
-  @Bean
-  public RetrieveABoxer retrieveBoxers() {
-    return new RetrieveABoxer(boxerRepository);
-  }
+    @Bean
+    public RetrieveABoxer retrieveBoxers() {
+        return new RetrieveABoxer(boxerRepository);
+    }
 
-  @Bean
-  public CreateBoxer createBoxer() {
-    return new CreateBoxer(uniqueIdGenerator, boxerRepository, eventBus, clock);
-  }
+    @Bean
+    public CreateBoxer createBoxer() {
+        return new CreateBoxer(uniqueIdGenerator, boxerRepository, eventBus, clock);
+    }
 
-  @Bean
-  public UpdateBoxer updateBoxer() {
-    return new UpdateBoxer(boxerRepository, eventBus, clock);
-  }
+    @Bean
+    public UpdateBoxer updateBoxer() {
+        return new UpdateBoxer(boxerRepository, eventBus, clock);
+    }
 
-  @Bean
-  public ScoreRound scoreRound() {
-    return new ScoreRound(scoreCardRepository, fightRepository, uniqueIdGenerator, auth, eventBus, clock);
-  }
+    @Bean
+    public ScoreRound scoreRound() {
+        return new ScoreRound(scoreCardRepository, fightRepository, uniqueIdGenerator, auth, eventBus, clock);
+    }
 
-  @Bean
-  public RetrieveAScoreCard retrieveAScoreCard() {
-    return new RetrieveAScoreCard(scoreCardRepository);
-  }
+    @Bean
+    public RetrieveAScoreCard retrieveAScoreCard() {
+        return new RetrieveAScoreCard(scoreCardRepository);
+    }
 
-  @Bean
-  public RetrieveScoreCards retrieveScoreCards() {
-    return new RetrieveScoreCards(scoreCardWithFightDetailsFetcher);
-  }
+    @Bean
+    public RetrieveScoreCards retrieveScoreCards() {
+        return new RetrieveScoreCards(scoreCardWithFightDetailsFetcher);
+    }
 
-  @Bean
-  public RegisterAccount registerAccount() {
-    return new RegisterAccount(accountRepository, eventBus, clock);
-  }
+    @Bean
+    public RegisterAccount registerAccount() {
+        return new RegisterAccount(accountRepository, eventBus, clock);
+    }
+
+    @Bean
+    RetrieveAccount retrieveAccount() {
+        return new RetrieveAccount(accountRepository);
+    }
 }
 

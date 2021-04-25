@@ -4,10 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.danilat.scorecards.core.domain.account.Account;
+import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.account.AccountRepository;
 import com.danilat.scorecards.core.mothers.AccountMother;
 import com.danilat.scorecards.core.usecases.accounts.RegisterAccount;
 import com.danilat.scorecards.core.usecases.accounts.RegisterAccount.RegisterAccountParameters;
+import com.danilat.scorecards.core.usecases.accounts.RetrieveAccount;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.domain.errors.Error;
 import io.cucumber.java.en.Given;
@@ -88,6 +90,31 @@ public class AccountSteps {
   public void anotherAccountWithUsernameIsPresent(String username) {
     Account exitingAccount = AccountMother.anAccountWithUsername(username);
     accountRepository.save(exitingAccount);
+  }
+
+  @Autowired
+  private RetrieveAccount retrieveAccount;
+
+  @Given("an existing account {string}")
+  public void anExistingAccount(String username) {
+    Account exitingAccount = AccountMother.anAccountWithUsername(username);
+    accountRepository.save(exitingAccount);
+  }
+
+  @When("I retrieve the account {string}")
+  public void iRetrieveTheAccount(String username) {
+    retrieveAccount.execute(primaryPort, new AccountId(username));
+  }
+  @Then("the account {string} is present")
+  public void theAccountIsPresent(String username) {
+    assertNotNull(account);
+    assertNull(errors);
+  }
+
+  @Then("the account {string} is not present")
+  public void theAccountIsNotPresent(String username) {
+    assertNull(account);
+    assertNotNull(errors);
   }
 
 }
