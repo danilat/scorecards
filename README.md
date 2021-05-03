@@ -30,3 +30,7 @@ Now we are starting to work with real persistence using PostgreSQL, you can use 
 `cb boot/`
 
 `GOOGLE_APPLICATION_CREDENTIALS=pat-to-crendetials.json mvn spring-boot:run -Dspring-boot.run.profiles=dev`
+
+You can also run the app with docker-compose creating a google-credentials.json file with:
+
+`docker-compose up`

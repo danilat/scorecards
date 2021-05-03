@@ -1,5 +1,24 @@
 version: '3.1'
 services:
+  scorecards:
+    image: 'danilat/scorecards:latest'
+    build:
+      context: .
+    container_name: app
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    environment:
+      - DB_NAME=postgres
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=
+      - GOOGLE_APPLICATION_CREDENTIALS=/tmp/keys/google-credentials.json
+    volumes:
+      - ".:/tmp/keys"
   db:
     image: postgres
     restart: always
