@@ -24,6 +24,14 @@
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
+  <dependencies>
+    <dependency>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-core</artifactId>
+      <version>6.5.7</version>
+    </dependency>
+  </dependencies>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -109,6 +117,21 @@
           <user>postgres</user>
           <password></password>
         </configuration>
+        <executions>
+          <execution>
+            <id>test-database-setup</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>clean</goal>
+              <goal>migrate</goal>
+            </goals>
+            <configuration>
+              <url>jdbc:postgresql://localhost:5432/postgres</url>
+              <user>postgres</user>
+              <password></password>
+            </configuration>
+          </execution>
+        </executions>
         <dependencies>
           <dependency>
             <groupId>org.postgresql</groupId>
