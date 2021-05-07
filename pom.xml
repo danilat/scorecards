@@ -117,7 +117,7 @@
           <user>postgres</user>
           <password></password>
         </configuration>
-        <executions>
+        <!--executions>
           <execution>
             <id>test-database-setup</id>
             <phase>process-test-classes</phase>
@@ -131,7 +131,7 @@
               <password></password>
             </configuration>
           </execution>
-        </executions>
+        </executions-->
         <dependencies>
           <dependency>
             <groupId>org.postgresql</groupId>
