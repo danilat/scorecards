@@ -120,7 +120,7 @@
         <executions>
           <execution>
             <id>test-database-setup</id>
-            <phase>validate</phase>
+            <phase>process-test-classes</phase>
             <goals>
               <goal>clean</goal>
               <goal>migrate</goal>
