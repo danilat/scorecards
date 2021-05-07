@@ -27,8 +27,6 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.14
-      - name: Run database migrations
-        run: ./mvnw test-compile flyway:migrate
       - name: Build and run the tests
         run: ./mvnw clean verify
       - name: Cucumber studio reports

@@ -1,2 +1,1 @@
-release: ./mvnw test-compile flyway:migrate -Dflyway.user=$DB_USER -Dflyway.password=$DB_PASSWORD -Dflyway.url=jdbc:postgresql://$DB_HOST:$DB_PORT/$DB_NAME
 web: java -Dserver.port=$PORT $JAVA_OPTS -jar boot/target/*.jar
