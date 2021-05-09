@@ -24,4 +24,8 @@ public abstract class DomainEvent {
   public DomainEventId eventId() {
     return eventId;
   }
+
+  public String type(){
+    return this.getClass().getSimpleName();
+  }
 }
