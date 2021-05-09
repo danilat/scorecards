@@ -30,6 +30,10 @@
       <artifactId>flyway-core</artifactId>
       <version>6.5.7</version>
     </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
   </dependencies>
 
   <properties>
@@ -117,21 +121,6 @@
           <user>postgres</user>
           <password></password>
         </configuration>
-        <!--executions>
-          <execution>
-            <id>test-database-setup</id>
-            <phase>process-test-classes</phase>
-            <goals>
-              <goal>clean</goal>
-              <goal>migrate</goal>
-            </goals>
-            <configuration>
-              <url>jdbc:postgresql://localhost:5432/postgres</url>
-              <user>postgres</user>
-              <password></password>
-            </configuration>
-          </execution>
-        </executions-->
         <dependencies>
           <dependency>
             <groupId>org.postgresql</groupId>
