@@ -75,6 +75,26 @@ public class AccountControllerTest extends BaseControllerTest {
   }
 
   @Test
+  public void newAccountFormWhenCreateAndTheAccessTokenIsNullThenRedirectsToLogin() throws Exception {
+    String theToken = "some_token";
+    when(tokenValidator.validateToken(theToken)).thenReturn(null);
+    Cookie cookie = new Cookie("access_token", theToken);
+
+    this.mvc.perform(
+            get("/accounts/new").cookie(cookie))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("/accounts/login"));
+  }
+
+  @Test
+  public void newAccountFormWhenCreateAndTheValidatedTokenIsNullThenRedirectsToLogin() throws Exception {
+    this.mvc.perform(
+            get("/accounts/new"))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("/accounts/login"));
+  }
+
+  @Test
   public void postANewAccountWithValidParameters() throws Exception {
     String theToken = "some_valid_token";
     Token token = new Token("Dani", "dani@email.com", "a picture url");
