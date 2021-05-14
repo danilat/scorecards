@@ -15,13 +15,15 @@ public class Account extends Entity<AccountId> {
   private String name;
   private String picture;
   private String email;
+  private boolean isEditor;
 
-  public Account(AccountId id, String username, String name, String email, String picture) {
+  public Account(AccountId id, String username, String name, String email, String picture, boolean isEditor) {
     super(id);
     this.username = username;
     this.name = name;
     this.email = email;
     this.picture = picture;
+    this.isEditor = isEditor;
   }
 
   public String username() {
@@ -41,9 +43,11 @@ public class Account extends Entity<AccountId> {
     return email;
   }
 
+  public boolean isEditor() { return isEditor; }
+
   public static Account create(AccountId id, String username, String name, String email, String picture,
       Instant happenedAt) {
-    Account account = new Account(id, username, name, email, picture);
+    Account account = new Account(id, username, name, email, picture, false);
     account
         .addDomainEvent(new AccountCreated(happenedAt, new DomainEventId(account.id().value() + happenedAt), account));
     return account;

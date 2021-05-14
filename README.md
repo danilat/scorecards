@@ -19,6 +19,7 @@ Now we are starting to work with real persistence using PostgreSQL, you can use 
 
 ### Run the tests
 
+`mvn flyway:migrate`
 `mvn clean test`
 
 ### Run the app

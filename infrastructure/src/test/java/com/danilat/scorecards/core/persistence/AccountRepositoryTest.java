@@ -4,11 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.danilat.scorecards.core.domain.account.Account;
-import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.account.AccountRepository;
+import com.danilat.scorecards.core.mothers.AccountMother;
 import com.danilat.scorecards.core.persistence.jdbc.JdbcAccountRepository;
 import com.danilat.scorecards.core.persistence.jdbc.JdbcConfig;
+
 import java.util.Optional;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,43 +22,39 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 public class AccountRepositoryTest {
 
-  @Autowired
-  private AccountRepository accountRepository;
-  private AccountId accountId = new AccountId("an account id");
+    @Autowired
+    private AccountRepository accountRepository;
+    private Account anAccount = AccountMother.anAccountWithEmail("irrelevant@email.com");
 
-  @Before
-  public void setup() {
-    accountRepository.clear();
-  }
+    @Before
+    public void setup() {
+        accountRepository.clear();
+    }
 
-  @Test
-  public void saveAnAccount() {
-    Account anAccount = new Account(accountId, "username", "name", "email", "picture");
+    @Test
+    public void saveAnAccount() {
+        accountRepository.save(anAccount);
 
-    accountRepository.save(anAccount);
+        Optional retrieved = accountRepository.get(anAccount.id());
+        assertTrue(retrieved.isPresent());
+        assertEquals(retrieved.get(), anAccount);
+    }
 
-    Optional retrieved = accountRepository.get(accountId);
-    assertTrue(retrieved.isPresent());
-    assertEquals(retrieved.get(), anAccount);
-  }
+    @Test
+    public void findByEmailFromAnExistingAccount() {
+        accountRepository.save(anAccount);
 
-  @Test
-  public void findByEmailFromAnExistingAccount() {
-    Account anAccount = new Account(accountId, "username", "name", "email", "picture");
-    accountRepository.save(anAccount);
+        Optional retrieved = accountRepository.findByEmail(anAccount.email());
 
-    Optional retrieved = accountRepository.findByEmail(anAccount.email());
+        assertTrue(retrieved.isPresent());
+    }
 
-    assertTrue(retrieved.isPresent());
-  }
+    @Test
+    public void findByUsernameFromAnExistingAccount() {
+        accountRepository.save(anAccount);
 
-  @Test
-  public void findByUsernameFromAnExistingAccount() {
-    Account anAccount = new Account(accountId, "username", "name", "email", "picture");
-    accountRepository.save(anAccount);
+        Optional retrieved = accountRepository.findByUsername(anAccount.username());
 
-    Optional retrieved = accountRepository.findByUsername(anAccount.username());
-
-    assertTrue(retrieved.isPresent());
-  }
+        assertTrue(retrieved.isPresent());
+    }
 }
