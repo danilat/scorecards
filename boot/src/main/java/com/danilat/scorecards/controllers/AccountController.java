@@ -45,7 +45,7 @@ public class AccountController {
       if (accountId == null) {
         return "redirect:/accounts/new";
       }
-      return "redirect:/" + accountId.value() + "/scorecards";
+      return "redirect:/sc/" + accountId.value();
     }
 
     @GetMapping("new")

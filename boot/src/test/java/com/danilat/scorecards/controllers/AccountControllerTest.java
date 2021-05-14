@@ -59,7 +59,7 @@ public class AccountControllerTest extends BaseControllerTest {
     this.mvc.perform(
         get("/accounts/login/").cookie(cookie))
         .andExpect(status().is3xxRedirection())
-        .andExpect(redirectedUrl("/" + account.username() + "/scorecards"));
+        .andExpect(redirectedUrl("/sc/" + account.username()));
   }
 
   @Test
