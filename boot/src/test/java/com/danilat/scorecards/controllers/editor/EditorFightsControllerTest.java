@@ -11,11 +11,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import com.danilat.scorecards.controllers.BaseControllerTest;
+import com.danilat.scorecards.core.domain.account.Account;
+import com.danilat.scorecards.core.domain.account.AccountRepository;
 import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
+import com.danilat.scorecards.core.mothers.AccountMother;
 import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.mothers.FightMother;
 import java.time.LocalDate;
@@ -23,13 +26,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.servlet.http.Cookie;
+
 public class EditorFightsControllerTest extends BaseControllerTest {
 
   @Autowired
   private BoxerRepository boxerRepository;
   @Autowired
   private FightRepository fightRepository;
-
+  @Autowired
+  private AccountRepository accountRepository;
+  private Account account = AccountMother.anEditorAccountWithUsername("an_username");
+  private Cookie cookie;
   private Boxer firstBoxer;
   private Boxer secondBoxer;
 
@@ -37,10 +45,13 @@ public class EditorFightsControllerTest extends BaseControllerTest {
   public void setup() {
     boxerRepository.clear();
     fightRepository.clear();
+    accountRepository.clear();
     firstBoxer = BoxerMother.aBoxerWithId("pacquiao");
     boxerRepository.save(firstBoxer);
     secondBoxer = BoxerMother.aBoxerWithId("mayweather");
     boxerRepository.save(secondBoxer);
+    accountRepository.save(account);
+    cookie = getCookieFor(account);
   }
 
   @Test
@@ -48,7 +59,7 @@ public class EditorFightsControllerTest extends BaseControllerTest {
     Fight fight = FightMother.aFightWithIdAndBoxers(new FightId("a-fight"), firstBoxer.id(), secondBoxer.id());
     fightRepository.save(fight);
 
-    this.mvc.perform(get("/editor/fights"))
+    this.mvc.perform(get("/editor/fights").cookie(cookie))
         .andExpect(status().isOk())
         .andExpect(model().attribute("fights", notNullValue()))
         .andExpect(model().attribute("fights", hasSize(1)));
@@ -56,7 +67,7 @@ public class EditorFightsControllerTest extends BaseControllerTest {
 
   @Test
   public void getsTheFormToCreateAFight() throws Exception {
-    this.mvc.perform(get("/editor/fights/new"))
+    this.mvc.perform(get("/editor/fights/new").cookie(cookie))
         .andExpect(status().isOk())
         .andExpect(model().attribute("boxers", hasItems(firstBoxer)));
 
@@ -64,7 +75,7 @@ public class EditorFightsControllerTest extends BaseControllerTest {
 
   @Test
   public void postANewFightWithValidParameters() throws Exception {
-    this.mvc.perform(post("/editor/fights")
+    this.mvc.perform(post("/editor/fights").cookie(cookie)
         .param("firstBoxer", firstBoxer.id().value())
         .param("secondBoxer", secondBoxer.id().value())
         .param("numberOfRounds", "12")
@@ -76,7 +87,7 @@ public class EditorFightsControllerTest extends BaseControllerTest {
 
   @Test
   public void postANewFightWithInValidParameters() throws Exception {
-    this.mvc.perform(post("/editor/fights")
+    this.mvc.perform(post("/editor/fights").cookie(cookie)
         .param("firstBoxer", firstBoxer.id().value())
         .param("secondBoxer", "foobar")
         .param("numberOfRounds", "0")

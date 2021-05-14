@@ -40,16 +40,16 @@ public class JdbcAccountRepository extends JdbcBaseRepository<Account, AccountId
     public void save(Account account) {
         SqlParameterSource params = new MapSqlParameterSource().addValue("id", account.id().value())
                 .addValue("name", account.name()).addValue("username", account.username()).addValue("email", account.email())
-                .addValue("picture", account.picture());
+                .addValue("picture", account.picture()).addValue("is_editor", account.isEditor());
         if (get(account.id()).isPresent()) {
             namedParameterJdbcTemplate
                     .update(
-                            "UPDATE accounts SET name = :name, username = :username, email = :email, picture = :picture WHERE id = :id",
+                            "UPDATE accounts SET name = :name, username = :username, email = :email, picture = :picture, is_editor = :is_editor WHERE id = :id",
                             params);
         } else {
             namedParameterJdbcTemplate
                     .update(
-                            "INSERT INTO accounts (id, name, username, email, picture) VALUES (:id, :name, :username, :email, :picture)",
+                            "INSERT INTO accounts (id, name, username, email, picture, is_editor) VALUES (:id, :name, :username, :email, :picture, :is_editor)",
                             params);
         }
     }

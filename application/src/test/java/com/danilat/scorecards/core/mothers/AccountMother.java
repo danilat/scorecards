@@ -10,6 +10,11 @@ public class AccountMother extends BaseMother {
         faker().internet().avatar(), false);
   }
 
+  public static Account anEditorAccountWithUsername(String username) {
+    return new Account(new AccountId(username), username, faker().name().fullName(), faker().internet().emailAddress(),
+            faker().internet().avatar(), true);
+  }
+
   public static Account anAccountWithEmail(String email) {
     String username = faker().name().username();
     return new Account(new AccountId(username), username, faker().name().fullName(), email,
