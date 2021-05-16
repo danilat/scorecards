@@ -1,6 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-  <title th:text="${account.name() + 'scorecards'}">Dani Latorre scorecards</title>
+  <title th:text="${account.name() + ' scorecards - ' + account.username()}">Dani Latorre scorecards - danilat</title>
   <link th:href="@{/styles/main.css}" rel="stylesheet" href="../static/styles/main.css" />
 </head>
 <body>
