@@ -1,6 +1,10 @@
-
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{editor/layout}">
+<head>
+  <title>Fights list</title>
+</head>
 <body>
+<div layout:fragment="content">
+
 <h1>Fights</h1>
 
 <a th:href="@{/editor/fights/new}">Create fight</a>
@@ -11,5 +15,6 @@
     In <span th:text=${fight.numberOfRounds} /> rounds, <span th:text=${fight.place} />
   </li>
 </ul>
+</div>
 </body>
 </html>

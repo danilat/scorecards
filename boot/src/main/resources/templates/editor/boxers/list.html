@@ -1,6 +1,9 @@
-
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{editor/layout}">
+<head>
+  <title>Boxers list</title>
+</head>
 <body>
+<div layout:fragment="content">
 <h1>Boxers</h1>
 
 <a th:href="@{/editor/boxers/new}">Create boxer</a>
@@ -11,5 +14,6 @@
     <a th:href="@{/editor/boxers/{id}(id=${boxer.id().value()})}">Go to the boxer</a>
   </li>
 </ul>
+</div>
 </body>
 </html>

@@ -1,6 +1,9 @@
-<html xmlns:th="http://www.thymeleaf.org">
-
-
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{editor/layout}">
+<head>
+  <title>Create fight</title>
+</head>
+<body>
+<div layout:fragment="content">
 <form th:action="@{/editor/fights}" method="post" th:object="${fight}">
   <ul style="border: 1px solid red;" th:if="${errors}">
     <li th:each="err : ${errors}">
@@ -34,3 +37,6 @@
   <br>
   <input type="submit" value="Create!">
 </form>
+</div>
+</body>
+</html>
