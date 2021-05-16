@@ -10,6 +10,8 @@ import com.danilat.scorecards.core.usecases.UseCaseUnitTest;
 import com.danilat.scorecards.shared.PrimaryPort;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import com.danilat.scorecards.shared.domain.Sort;
 import org.junit.Test;
 import org.mockito.Mock;
 
@@ -26,9 +28,11 @@ public class RetrieveAllBoxersTest extends UseCaseUnitTest<Collection<Boxer>> {
     return primaryPort;
   }
 
+  Sort sort = new Sort("name", Sort.Direction.ASC);
+
   @Test
   public void givenNoBoxersThenIsEmpty() {
-    when(boxerRepository.all()).thenReturn(new ArrayList<>());
+    when(boxerRepository.all(sort)).thenReturn(new ArrayList<>());
     RetrieveAllBoxers retrieveAllBoxers = new RetrieveAllBoxers(boxerRepository);
 
     retrieveAllBoxers.execute(primaryPort);
@@ -42,7 +46,7 @@ public class RetrieveAllBoxersTest extends UseCaseUnitTest<Collection<Boxer>> {
     Boxer aBoxer = BoxerMother.aBoxerWithId("Pacquiao");
     Collection<Boxer> existingBoxers = new ArrayList<>();
     existingBoxers.add(aBoxer);
-    when(boxerRepository.all()).thenReturn(existingBoxers);
+    when(boxerRepository.all(sort)).thenReturn(existingBoxers);
     RetrieveAllBoxers retrieveAllBoxers = new RetrieveAllBoxers(boxerRepository);
 
     retrieveAllBoxers.execute(primaryPort);

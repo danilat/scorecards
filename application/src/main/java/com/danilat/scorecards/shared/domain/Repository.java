@@ -11,5 +11,7 @@ public interface Repository<E extends Entity, I extends Id> {
 
   Collection<E> all();
 
+  Collection<E> all(Sort sort);
+
   void clear();
 }
