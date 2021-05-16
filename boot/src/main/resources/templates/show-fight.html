@@ -1,5 +1,10 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+  <title th:text="${'Fight: ' + fight.firstBoxerName + ' vs ' + fight.secondBoxerName}">Fight: Mohamed Ali vs George Foreman</title>
+  <link th:href="@{/styles/main.css}" rel="stylesheet" href="../static/styles/main.css" />
+</head>
 <body>
+<div layout:fragment="content">
 <h1>Fight detail</h1>
 Boxer 1: <p th:text=${fight.firstBoxerName}>Mohamed Ali</p>
 Boxer 2: <p th:text=${fight.secondBoxerName}>George Foreman</p>
@@ -58,6 +63,7 @@ Number of rounds:
 </div>
 <div th:unless="${accountId}">
   <a id="create-account" href="/accounts/login/">Login or create an account in ScoreCards</a>
+</div>
 </div>
 </body>
 </html>

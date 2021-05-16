@@ -1,5 +1,10 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+  <title th:text="${account.name() + 'scorecards'}">Dani Latorre scorecards</title>
+  <link th:href="@{/styles/main.css}" rel="stylesheet" href="../static/styles/main.css" />
+</head>
 <body>
+<div layout:fragment="content">
 <h1>Scores in the account <span th:text=${account.name()}>Dani Latorre</span></h1>
 <p th:text=${account.username()}>danilat</p>
 <img src="https://picsum.photos/200/300" th:src=${account.picture()}>
@@ -15,5 +20,6 @@
 
   </li>
 </ul>
+</div>
 </body>
 </html>

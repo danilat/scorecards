@@ -1,5 +1,9 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+  <title>Create your account</title>
+</head>
 <body>
+<div layout:fragment="content">
 <h1>Create a new account</h1>
 <ul style="border: 1px solid red;" th:if="${errors}">
   <li th:each="err : ${errors}">
@@ -16,5 +20,6 @@ Your email: <p th:text=${email}></p>
   <br>
   <input type="submit" value="Create!"/>
 </form>
+</div>
 </body>
 </html>
