@@ -1,22 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-    <meta charset="UTF-8">
-    <link th:href="@{/styles/main.css}" rel="stylesheet" href="../../static/styles/main.css"/>
-    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Editors Section</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{/editor/assets/css/foundation.css}" rel="stylesheet" href="../../static/editor/assets/css/foundation.css"/>
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">Editors Section</title>
 </head>
 <body>
-<nav>
-    <div>
-        <div>
-            <ul>
-                <li><a href="/editor/boxers">Boxers</a></li>
-                <li><a href="/editor/fights">Fights</a></li>
-            </ul>
-        </div>
+<nav class="top-bar">
+    <div class="top-bar-left">
+        <ul class="menu">
+            <li class="menu-text">Editors Section</li>
+            <li><a href="/editor/boxers">Boxers</a></li>
+            <li><a href="/editor/fights">Fights</a></li>
+        </ul>
+    </div>
+    <div class="top-bar-right">
+        <ul class="menu">
+            <li><a href="/" class="button">Go to public section</a></li>
+        </ul>
     </div>
 </nav>
-<div class="container">
+<div class="grid-container">
     <div layout:fragment="content">
         <!-- ============================================================================ -->
         <!-- This content is only used for static prototyping purposes (natural templates)-->
@@ -34,5 +40,7 @@
     </div>
     <div th:replace="fragments/footer :: footer">Some content for the footer</div>
 </div>
+<script th:src="@{/editor/assets/js/vendor.js}" src="../../static/editor/assets/js/vendor.js"></script>
+<script th:src="@{/editor/assets/js/foundation.js}" src="../../static/editor/assets/js/foundation.js"></script>
 </body>
 </html>

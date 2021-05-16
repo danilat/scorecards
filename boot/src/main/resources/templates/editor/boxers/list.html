@@ -6,14 +6,24 @@
 <div layout:fragment="content">
 <h1>Boxers</h1>
 
-<a th:href="@{/editor/boxers/new}">Create boxer</a>
-<ul th:if="${boxers}">
-  <li th:each="boxer : ${boxers}">
-    <span th:text=${boxer.name()}></span>.
-    <span th:text=${boxer.alias()}></span>. <a th:href="${boxer.boxrecUrl()}" target="_blank"><span th:text=${boxer.boxrecUrl()}></span></a> |
-    <a th:href="@{/editor/boxers/{id}(id=${boxer.id().value()})}">Go to the boxer</a>
-  </li>
-</ul>
+<a th:href="@{/editor/boxers/new}" class="button small secondary">Create boxer</a>
+<table th:if="${boxers}">
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Alias</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="boxer : ${boxers}">
+    <td th:text=${boxer.name()}></td>
+    <td th:text=${boxer.alias()}></td>
+    <td><a th:href="${boxer.boxrecUrl()}" target="_blank">Go to boxrec</a> |
+    <a th:href="@{/editor/boxers/{id}(id=${boxer.id().value()})}">Edit</a></td>
+  </tr>
+  </tbody>
+</table>
 </div>
 </body>
 </html>

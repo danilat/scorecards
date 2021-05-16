@@ -7,14 +7,27 @@
 
 <h1>Fights</h1>
 
-<a th:href="@{/editor/fights/new}">Create fight</a>
-<ul th:if="${fights}">
-  <li th:each="fight : ${fights}">
-    <span th:text=${fight.happenAt} />.
-    <a th:href="@{/fights/{id}(id=${fight.id().value()})}"><span th:text=${fight.firstBoxerName} /> vs <span th:text=${fight.secondBoxerName} />.</a>
-    In <span th:text=${fight.numberOfRounds} /> rounds, <span th:text=${fight.place} />
-  </li>
-</ul>
+<a th:href="@{/editor/fights/new}" class="button small secondary">Create fight</a>
+<table th:if="${fights}">
+  <thead>
+  <tr>
+    <th>Date</th>
+    <th>Fighters</th>
+    <th>Number of rounds</th>
+    <th>Place</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="fight : ${fights}">
+    <td th:text=${fight.happenAt}>1983-11-05</td>
+    <td><a th:href="@{/fights/{id}(id=${fight.id().value()})}"><span th:text=${fight.firstBoxerName}>Mohamed Ali</span> vs <span th:text=${fight.secondBoxerName}>George Forman</span></a></td>
+    <td><span th:text=${fight.numberOfRounds}>12</span> rounds</td>
+    <td><span th:text=${fight.place}>Zaire</span> </td>
+    <td><a th:href="@{/fights/{id}(id=${fight.id().value()})}">Go to de fight</a></td>
+  </tr>
+  </tbody>
+</table>
 </div>
 </body>
 </html>

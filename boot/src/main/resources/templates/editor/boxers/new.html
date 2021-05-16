@@ -1,27 +1,26 @@
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{editor/layout}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{editor/layout}">
 <head>
-  <title>Create boxer</title>
+    <title>Create boxer</title>
 </head>
 <body>
 <div layout:fragment="content">
-<form th:action="@{/editor/boxers}" method="post" th:object="${boxer}">
-  <ul style="border: 1px solid red;" th:if="${errors}">
-    <li th:each="err : ${errors}">
-      <p th:text="${err.fieldName}"></p>
-      <p th:text="${err.message}"></p>
-    </li>
-  </ul>
-
-  <h1>Create a boxer</h1>
-  Name <input type="text" name="name" th:value="*{name}"
-                          th:class="${errors?.hasError('name')}? fieldError"/>
-  <br>
-  Alias <input type="text" name="alias" th:value="*{alias}"/>
-  <br>
-  Boxrec URL <input type="url" name="boxrecUrl" th:value="*{boxrecUrl}"/>
-  <br>
-  <input type="submit" value="Create!">
-</form>
+    <form th:action="@{/editor/boxers}" method="post" th:object="${boxer}">
+        <h1>Create a boxer</h1>
+        <div class="callout alert small" th:if="${errors}">
+            <h5>There is some error creating a boxer:</h5>
+            <ul>
+                <li th:each="err : ${errors}">
+                    <span th:text="${err.message}"></span>
+                </li>
+            </ul>
+        </div>
+        <label>Name<input type="text" name="name" th:value="*{name}"
+                          th:class="${errors?.hasError('name')}? fieldError"/></label>
+        <label>Alias <input type="text" name="alias" th:value="*{alias}"/></label>
+        <label>Boxrec URL <input type="url" name="boxrecUrl" th:value="*{boxrecUrl}"/></label>
+        <input type="submit" value="Create!" class="button">
+    </form>
 </div>
 </body>
 </html>

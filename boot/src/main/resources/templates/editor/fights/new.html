@@ -1,42 +1,40 @@
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{editor/layout}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{editor/layout}">
 <head>
-  <title>Create fight</title>
+    <title>Create fight</title>
 </head>
 <body>
 <div layout:fragment="content">
-<form th:action="@{/editor/fights}" method="post" th:object="${fight}">
-  <ul style="border: 1px solid red;" th:if="${errors}">
-    <li th:each="err : ${errors}">
-      <p th:text="${err.fieldName}"></p>
-      <p th:text="${err.message}"></p>
-    </li>
-  </ul>
-
-  <h1>Create a new fight</h1>
-  First Boxer
-  <select th:field="*{firstBoxer}">
-    <option th:each="boxer : ${boxers}"
-            th:value="${boxer.id().value()}"
-            th:text="${boxer.name()}">Joana Pastrana
-    </option>
-  </select>
-  Second Boxer
-  <select th:field="*{secondBoxer}">
-    <option th:each="boxer : ${boxers}"
-            th:value="${boxer.id().value()}"
-            th:text="${boxer.name()}">Katy Diaz
-    </option>
-  </select>
-  <br>
-  Number of rounds <input type="number" name="numberOfRounds" th:value="*{numberOfRounds}"
-                          th:class="${errors?.hasError('numberOfRounds')}? fieldError"/>
-  <br>
-  Place <input type="text" name="place" th:value="*{place}"/>
-  <br>
-  Happen At <input type="date" name="happenAt" th:value="*{happenAt}"/>
-  <br>
-  <input type="submit" value="Create!">
-</form>
+    <form th:action="@{/editor/fights}" method="post" th:object="${fight}">
+        <h1>Create a new fight</h1>
+        <div class="callout alert small" th:if="${errors}">
+            <h5>There is some error creating a fight:</h5>
+            <ul>
+                <li th:each="err : ${errors}">
+                    <span th:text="${err.message}"></span>
+                </li>
+            </ul>
+        </div>
+        <label>First Boxer
+            <select th:field="*{firstBoxer}">
+                <option th:each="boxer : ${boxers}"
+                        th:value="${boxer.id().value()}"
+                        th:text="${boxer.name()}">Joana Pastrana
+                </option>
+            </select></label>
+        <label>Second Boxer
+            <select th:field="*{secondBoxer}">
+                <option th:each="boxer : ${boxers}"
+                        th:value="${boxer.id().value()}"
+                        th:text="${boxer.name()}">Katy Diaz
+                </option>
+            </select></label>
+        <label>Number of rounds <input type="number" name="numberOfRounds" th:value="*{numberOfRounds}"
+                                       th:class="${errors?.hasError('numberOfRounds')}? fieldError"/></label>
+        <label>Place <input type="text" name="place" th:value="*{place}"/></label>
+        <label>Happen At <input type="date" name="happenAt" th:value="*{happenAt}"/></label>
+        <input type="submit" value="Create!" class="button">
+    </form>
 </div>
 </body>
 </html>
