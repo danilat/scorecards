@@ -5,24 +5,24 @@
 </head>
 <body>
 <div layout:fragment="content">
-<h1>Fight detail</h1>
-Boxer 1: <p th:text=${fight.firstBoxerName}>Mohamed Ali</p>
-Boxer 2: <p th:text=${fight.secondBoxerName}>George Foreman</p>
-Event:
-<p th:text=${fight.place}></p>
-<p th:text=${fight.happenAt}>30-10-1974</p>
-Number of rounds:
-<p th:text=${fight.numberOfRounds}>12</p>
+  <h1><span th:text=${fight.firstBoxerName}>Mohamed Ali</span> vs <span th:text=${fight.secondBoxerName}>George Foreman</span></h1>
+  <p><span th:text=${fight.numberOfRounds}>12</span> rounds of fight</p>
+  <h2><span th:text=${fight.place}></span> <span th:text=${fight.happenAt}>30-10-1974</span></h2>
+
+
+
 
 <div th:if="${accountId}">
-  Score the fight:
+  <h3>Score the fight <span th:text=${fight.firstBoxerName}>Mohamed Ali</span> vs <span th:text=${fight.secondBoxerName}>George Foreman</span>:</h3>
 
-  <ul style="border: 1px solid red;" th:if="${errors}">
-    <li th:each="err : ${errors}">
-      <p th:text="${err.fieldName}">a field</p>
-      <p th:text="${err.message}">the error message</p>
-    </li>
-  </ul>
+  <div class="callout alert small" th:if="${errors}">
+    <h5>There is some error scoring the fight:</h5>
+    <ul>
+      <li th:each="err : ${errors}">
+        <span th:text="${err.message}"></span>
+      </li>
+    </ul>
+  </div>
   <table>
     <thead>
     <tr>
@@ -36,7 +36,7 @@ Number of rounds:
     <tr th:each="score: ${scores}">
       <form method="post" th:action="@{/fights/{id}/score(id=${fight.id})}" th:object="${score}">
         <td>
-          Score the round <span th:text="*{round}">1</span>
+          Round <span th:text="*{round}">1</span>
         </td>
         <td>
           <input type="hidden" name="firstBoxer" th:value="*{firstBoxer}"/>
@@ -48,7 +48,7 @@ Number of rounds:
         </td>
         <td>
           <input type="hidden" name="round" th:value="*{round}"/>
-          <input type="submit" value="Score!"/>
+          <input type="submit" value="Score!" class="button"/>
         </td>
       </form>
     </tr>
