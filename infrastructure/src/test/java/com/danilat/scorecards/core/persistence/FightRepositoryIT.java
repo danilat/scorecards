@@ -20,7 +20,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @SpringBootTest(classes = {JdbcConfig.class, JdbcFightRepository.class})
 @RunWith(SpringRunner.class)
-public class FightRepositoryTest {
+public class FightRepositoryIT {
 
   @Autowired
   private FightRepository fightRepository;

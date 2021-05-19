@@ -16,7 +16,7 @@ import java.time.LocalDate;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class HomeControllerTest extends BaseControllerTest {
+public class HomeControllerIT extends BaseControllerIT {
 
   @Autowired
   private FightRepository fightRepository;

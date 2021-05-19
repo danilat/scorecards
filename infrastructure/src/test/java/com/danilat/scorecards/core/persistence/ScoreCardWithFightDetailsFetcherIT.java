@@ -30,7 +30,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(classes = {JdbcConfig.class, FightRepository.class, BoxerRepository.class, ScoreCardRepository.class,
     JdbcScoreCardWithFightDetailsFetcher.class})
 @RunWith(SpringRunner.class)
-public class ScoreCardWithFightDetailsFetcherTest {
+public class ScoreCardWithFightDetailsFetcherIT {
 
   @Autowired
   private FightRepository fightRepository;

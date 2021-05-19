@@ -22,7 +22,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class FightControllerTest extends BaseControllerTest {
+public class FightControllerIT extends BaseControllerIT {
 
   @Autowired
   private FightRepository fightRepository;

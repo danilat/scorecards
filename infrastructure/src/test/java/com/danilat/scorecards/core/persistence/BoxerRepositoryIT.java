@@ -20,7 +20,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @SpringBootTest(classes = {JdbcBoxerRepository.class, JdbcConfig.class})
 @RunWith(SpringRunner.class)
-public class BoxerRepositoryTest {
+public class BoxerRepositoryIT {
 
   @Autowired
   private BoxerRepository boxerRepository;

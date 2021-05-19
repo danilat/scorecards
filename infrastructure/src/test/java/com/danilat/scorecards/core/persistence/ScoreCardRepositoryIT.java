@@ -26,7 +26,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @SpringBootTest(classes = {JdbcConfig.class, JdbcScoreCardRepository.class})
 @RunWith(SpringRunner.class)
-public class ScoreCardRepositoryTest {
+public class ScoreCardRepositoryIT {
 
   @Autowired
   private ScoreCardRepository scoreCardRepository;

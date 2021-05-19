@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import com.danilat.scorecards.controllers.BaseControllerTest;
+import com.danilat.scorecards.controllers.BaseControllerIT;
 import com.danilat.scorecards.core.domain.account.Account;
 import com.danilat.scorecards.core.domain.account.AccountRepository;
 import com.danilat.scorecards.core.domain.boxer.Boxer;
@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.Cookie;
 
-public class EditorBoxersControllerTest extends BaseControllerTest {
+public class EditorBoxersControllerIT extends BaseControllerIT {
 
     @Autowired
     private BoxerRepository boxerRepository;

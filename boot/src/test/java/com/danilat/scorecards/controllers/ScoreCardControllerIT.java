@@ -28,7 +28,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class ScoreCardControllerTest extends BaseControllerTest {
+public class ScoreCardControllerIT extends BaseControllerIT {
 
   @Autowired
   private ScoreCardRepository scoreCardRepository;

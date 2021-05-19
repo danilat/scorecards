@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(
     classes = {JdbcConfig.class})
 @RunWith(SpringRunner.class)
-public class DatabaseConnectionTest {
+public class DatabaseConnectionIT {
 
   @Autowired
   private DataSource dataSource;

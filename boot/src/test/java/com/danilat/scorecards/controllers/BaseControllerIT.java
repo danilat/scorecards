@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest(classes = ScorecardsApplication.class)
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
-public abstract class BaseControllerTest {
+public abstract class BaseControllerIT {
 
   @MockBean
   protected TokenValidator tokenValidator;

@@ -24,7 +24,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {FirebaseAuth.class, JdbcConfig.class, JdbcAccountRepository.class})
-public class AuthTest {
+public class AuthIT {
 
   @Autowired
   private Auth auth;

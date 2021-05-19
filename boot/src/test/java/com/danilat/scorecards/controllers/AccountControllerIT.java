@@ -16,7 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class AccountControllerTest extends BaseControllerTest {
+public class AccountControllerIT extends BaseControllerIT {
 
   @Autowired
   private AccountRepository accountRepository;
