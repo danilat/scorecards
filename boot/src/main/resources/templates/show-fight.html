@@ -6,15 +6,12 @@
 <body>
 <div layout:fragment="content">
   <h1><span th:text=${fight.firstBoxerName}>Mohamed Ali</span> vs <span th:text=${fight.secondBoxerName}>George Foreman</span></h1>
-  <p><span th:text=${fight.numberOfRounds}>12</span> rounds of fight</p>
-  <h2><span th:text=${fight.place}></span> <span th:text=${fight.happenAt}>30-10-1974</span></h2>
+  <p><span th:text=${fight.happenAt}>30-10-1974</span> | <span th:text=${fight.place}></span> | <span th:text=${fight.numberOfRounds}>12</span> rounds of fight</p>
 
 
 
-
-<div th:if="${currentAccount}">
   <h3>Score the fight <span th:text=${fight.firstBoxerName}>Mohamed Ali</span> vs <span th:text=${fight.secondBoxerName}>George Foreman</span>:</h3>
-
+<div th:if="${currentAccount}">
   <div class="callout alert small" th:if="${errors}">
     <h5>There is some error scoring the fight:</h5>
     <ul>
@@ -62,7 +59,7 @@
   </table>
 </div>
 <div th:unless="${currentAccount}">
-  <a id="create-account" href="/accounts/login/">Login or create an account in ScoreCards</a>
+  <a id="create-account" href="/accounts/login/">To score login or create an account in ScoreCards</a>
 </div>
 </div>
 </body>

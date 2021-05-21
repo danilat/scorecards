@@ -20,21 +20,19 @@
   <table th:if="${scorecards}">
     <thead>
     <tr>
-      <th>Scored at</th>
       <th>Date</th>
-      <th>Fighters</th>
-      <th>Number of rounds</th>
-      <th>Place</th>
-      <th>Actions</th>
+      <th>Boxer 1</th>
+      <th>Boxer 2</th>
+      <th>Scored at</th>
+      <th></th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="scorecard : ${scorecards}">
-      <td th:text=${scorecard.getScoredAt()}>1983-11-05</td>
       <td th:text=${scorecard.happenAt}>1983-11-05</td>
-      <td><span th:text=${scorecard.firstBoxerName}>Mohamed Ali</span> <span th:text=${scorecard.firstBoxerScore} class="label warning">118</span> vs  <span th:text=${scorecard.secondBoxerScore} class="label warning">112</span> <span th:text=${scorecard.secondBoxerName}>George Forman</span></td>
-      <td><span th:text=${scorecard.numberOfRounds}>12</span> rounds</td>
-      <td><span th:text=${scorecard.place}>Zaire</span> </td>
+      <td><span th:text=${scorecard.firstBoxerName}>Mohamed Ali</span> <span th:text=${scorecard.firstBoxerScore} class="label warning">118</span></td>
+      <td><span th:text=${scorecard.secondBoxerScore} class="label warning">112</span> <span th:text=${scorecard.secondBoxerName}>George Forman</span></td>
+      <td th:text="${#dates.format(scorecard.getScoredAt(), 'dd-MM-yyyy HH:mm')}">1983-11-05</td>
       <td><a th:href="@{/fights/{id}(id=${scorecard.fightId.value()})}" class="button">Go to the fight</a></td>
     </tr>
     </tbody>

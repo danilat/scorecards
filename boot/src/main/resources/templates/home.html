@@ -12,17 +12,17 @@
     <thead>
     <tr>
       <th>Date</th>
-      <th>Fighters</th>
-      <th>Number of rounds</th>
-      <th>Place</th>
+      <th>Boxer 1</th>
+      <th>Boxer 2</th>
+      <th></th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="fight : ${lastFights}">
-      <td th:text=${fight.happenAt}>1983-11-05</td>
-      <td><a th:href="@{/fights/{id}(id=${fight.id().value()})}"><span th:text=${fight.firstBoxerName}>Mohamed Ali</span> vs <span th:text=${fight.secondBoxerName}>George Forman</span></a></td>
-      <td><a th:href="@{/fights/{id}(id=${fight.id().value()})}"><span th:text=${fight.numberOfRounds}>12</span> rounds</a></td>
-      <td><a th:href="@{/fights/{id}(id=${fight.id().value()})}"><span th:text=${fight.place}>Zaire</span></a></td>
+      <td><span th:text=${fight.happenAt}>1983-11-05</span></td>
+      <td><span th:text=${fight.firstBoxerName}>Mohamed Ali</span></td>
+      <td><span th:text=${fight.secondBoxerName}>George Forman</span> </td>
+      <td><a th:href="@{/fights/{id}(id=${fight.id().value()})}" class="button">Go to the fight</a></td>
     </tr>
     </tbody>
   </table>
