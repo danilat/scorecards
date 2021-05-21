@@ -5,21 +5,40 @@
 </head>
 <body>
 <div layout:fragment="content">
-<h1>Scores in the account <span th:text=${account.name()}>Dani Latorre</span></h1>
-<p th:text=${account.username()}>danilat</p>
-<img src="https://picsum.photos/200/300" th:src=${account.picture()}>
-<ul th:if="${scorecards}">
-  <li th:each="scorecard : ${scorecards}">
-    <span th:text=${scorecard.getScoredAt()}></span> |
-    <span th:text=${scorecard.firstBoxerName}></span>: <span th:text=${scorecard.firstBoxerScore}></span>
-    <span th:text=${scorecard.secondBoxerName}></span>: <span th:text=${scorecard.secondBoxerScore}></span>. <span
-      th:text=${scorecard.place}></span>, <span th:text=${scorecard.happenAt}></span>
-    <br>
-    <a th:href="@{/fights/{id}(id=${scorecard.fightId.value()})}">Go to the fight</a>
-    <br>
+  <div class="grid-x">
+    <div class="cell small-10"><h1><span th:text=${account.name()}>Dani Latorre</span> scorecards</h1></div>
+    <div class="cell small-2"><img src="https://picsum.photos/200/300" th:src=${account.picture()}></div>
+  </div>
 
-  </li>
-</ul>
+  <div th:if="${scorecards}">
+    <h2>Dani Latorre has <span th:text=${scorecards.size()}>2</span> scorecards</h2>
+  </div>
+  <div th:unless="${scorecards}">
+    <h2><span th:text=${account.name()}>Dani Latorre</span> doesn't have yet any scorecard :(</h2>
+  </div>
+
+  <table th:if="${scorecards}">
+    <thead>
+    <tr>
+      <th>Scored at</th>
+      <th>Date</th>
+      <th>Fighters</th>
+      <th>Number of rounds</th>
+      <th>Place</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="scorecard : ${scorecards}">
+      <td th:text=${scorecard.getScoredAt()}>1983-11-05</td>
+      <td th:text=${scorecard.happenAt}>1983-11-05</td>
+      <td><span th:text=${scorecard.firstBoxerName}>Mohamed Ali</span> <span th:text=${scorecard.firstBoxerScore} class="label warning">118</span> vs  <span th:text=${scorecard.secondBoxerScore} class="label warning">112</span> <span th:text=${scorecard.secondBoxerName}>George Forman</span></td>
+      <td><span th:text=${scorecard.numberOfRounds}>12</span> rounds</td>
+      <td><span th:text=${scorecard.place}>Zaire</span> </td>
+      <td><a th:href="@{/fights/{id}(id=${scorecard.fightId.value()})}" class="button">Go to the fight</a></td>
+    </tr>
+    </tbody>
+  </table>
 </div>
 </body>
 </html>

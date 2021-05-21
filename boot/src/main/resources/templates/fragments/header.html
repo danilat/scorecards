@@ -12,8 +12,8 @@
     </div>
     <div class="top-bar-right">
         <ul class="menu">
-            <li th:if="${currentAccount}"><a href="#" th:href="@{/sc/{id}(id=${currentAccount.value()})}" class="button">Go to your profile</a></li>
-            <li th:unless="${currentAccount}"><a href="#" th:href="@{/accounts/login}" class="button">Enter or create your profile</a></li>
+            <li th:if="${currentAccount}"><a href="#" th:href="@{/sc/{id}(id=${currentAccount.value()})}" class="button">Go to your account</a></li>
+            <li th:unless="${currentAccount}"><a href="#" th:href="@{/accounts/login}" class="button">Enter or create your account</a></li>
         </ul>
     </div>
 </nav>

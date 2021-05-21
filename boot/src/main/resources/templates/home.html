@@ -8,15 +8,24 @@
 <div layout:fragment="content">
 <h1>Welcome to Scorecards</h1>
 <h2>Last fights</h2>
-<ul>
-  <li th:each="fight : ${lastFights}">
-    <a th:href="@{/fights/{id}(id=${fight.id().value()})}" href="show-fight.html"><span th:text=${fight.firstBoxerName}>Mohamed Ali</span> vs <span th:text=${fight.secondBoxerName}>George Foreman</span>. In <span th:text=${fight.numberOfRounds}>12</span> rounds
-    <p>
-      <span th:text=${fight.happenAt}>30-10-1974</span>, <span th:text=${fight.place}>Kinsasa, Zaire</span>
-    </p>
-    </a>
-  </li>
-</ul>
+  <table th:if="${lastFights}">
+    <thead>
+    <tr>
+      <th>Date</th>
+      <th>Fighters</th>
+      <th>Number of rounds</th>
+      <th>Place</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="fight : ${lastFights}">
+      <td th:text=${fight.happenAt}>1983-11-05</td>
+      <td><a th:href="@{/fights/{id}(id=${fight.id().value()})}"><span th:text=${fight.firstBoxerName}>Mohamed Ali</span> vs <span th:text=${fight.secondBoxerName}>George Forman</span></a></td>
+      <td><a th:href="@{/fights/{id}(id=${fight.id().value()})}"><span th:text=${fight.numberOfRounds}>12</span> rounds</a></td>
+      <td><a th:href="@{/fights/{id}(id=${fight.id().value()})}"><span th:text=${fight.place}>Zaire</span></a></td>
+    </tr>
+    </tbody>
+  </table>
 </div>
 </body>
 </html>

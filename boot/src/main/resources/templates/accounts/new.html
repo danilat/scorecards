@@ -4,22 +4,25 @@
 </head>
 <body>
 <div layout:fragment="content">
-<h1>Create a new account</h1>
-<ul style="border: 1px solid red;" th:if="${errors}">
-  <li th:each="err : ${errors}">
-    <p th:text="${err.fieldName}"></p>
-    <p th:text="${err.message}"></p>
-  </li>
-</ul>
-Your email: <p th:text=${email}></p>
-<img th:src=${picture}>
-<form method="post" th:action="@{/accounts/}" th:object="${account}">
-  Name: <input type="text" name="name" th:value="${name}"/>
-  <br>
-  Username: <input type="text" name="username"/>
-  <br>
-  <input type="submit" value="Create!"/>
-</form>
+<h1>Create your account</h1>
+
+  <form method="post" th:action="@{/accounts/}" th:object="${account}">
+    <div class="callout alert small" th:if="${errors}">
+      <h5>There is some error creating a boxer:</h5>
+      <ul>
+        <li th:each="err : ${errors}">
+          <span th:text="${err.message}"></span>
+        </li>
+      </ul>
+    </div>
+    Your email: <p th:text=${email}></p>
+    <img th:src=${picture}>
+    <label>Name<input type="text" name="name" th:value="${name}"
+                      th:class="${errors?.hasError('name')}? fieldError"/></label>
+    <label>Username<input type="text" name="username" th:value="${username}"
+                      th:class="${errors?.hasError('username')}? fieldError"/></label>
+    <input type="submit" value="Create!" class="button"/>
+  </form>
 </div>
 </body>
 </html>
