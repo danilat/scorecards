@@ -2,6 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link th:href="@{/backoffice/assets/css/foundation.css}" rel="stylesheet" href="../../static/editor/assets/css/foundation.css"/>
     <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Scorecards</title>
     <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-app.js"></script>
@@ -22,9 +24,6 @@
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     firebase.analytics();
-
-
-
     </script>
     <script src="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.js"></script>
     <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.css"/>
@@ -44,32 +43,10 @@
         firebase.auth().onAuthStateChanged(function(user) {
           if (user) {
             // User is signed in.
-            var displayName = user.displayName;
-            var email = user.email;
-            var emailVerified = user.emailVerified;
-            var photoURL = user.photoURL;
-            var uid = user.uid;
-            var phoneNumber = user.phoneNumber;
-            var providerData = user.providerData;
+            console.log(user)
             user.getIdToken().then(function(accessToken) {
-              document.getElementById('sign-in-status').textContent = 'Signed in';
-              document.getElementById('account-details').textContent = JSON.stringify({
-                displayName: displayName,
-                email: email,
-                emailVerified: emailVerified,
-                phoneNumber: phoneNumber,
-                photoURL: photoURL,
-                uid: uid,
-                accessToken: accessToken,
-                providerData: providerData
-              }, null, '  ');
-              document.getElementById('create-account').style.display = '';
               document.cookie = "access_token="+accessToken;
             });
-          } else {
-            // User is signed out.
-            document.getElementById('sign-in-status').textContent = 'Signed out';
-            document.getElementById('account-details').textContent = 'null';
           }
         }, function(error) {
           console.log(error);
@@ -78,8 +55,8 @@
 
       window.addEventListener('load', function() {
         initApp();
+        console.log("a")
       });
-
     </script>
 </head>
 <body>

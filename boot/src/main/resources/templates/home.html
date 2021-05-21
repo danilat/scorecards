@@ -7,13 +7,6 @@
 <body>
 <div layout:fragment="content">
 <h1>Welcome to Scorecards</h1>
-<div id="firebaseui-auth-container"></div>
-<div>
-  <a id="create-account" href="/accounts/login/" style="display:none">Login or create an account in ScoreCards</a>
-  <br><br><br>
-</div>
-<div id="sign-in-status"></div>
-<pre id="account-details"></pre>
 <h2>Last fights</h2>
 <ul>
   <li th:each="fight : ${lastFights}">

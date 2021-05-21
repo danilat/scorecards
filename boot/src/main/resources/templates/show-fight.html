@@ -12,7 +12,7 @@
 
 
 
-<div th:if="${accountId}">
+<div th:if="${currentAccount}">
   <h3>Score the fight <span th:text=${fight.firstBoxerName}>Mohamed Ali</span> vs <span th:text=${fight.secondBoxerName}>George Foreman</span>:</h3>
 
   <div class="callout alert small" th:if="${errors}">
@@ -61,7 +61,7 @@
     </tbody>
   </table>
 </div>
-<div th:unless="${accountId}">
+<div th:unless="${currentAccount}">
   <a id="create-account" href="/accounts/login/">Login or create an account in ScoreCards</a>
 </div>
 </div>

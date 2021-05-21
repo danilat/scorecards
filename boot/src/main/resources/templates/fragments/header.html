@@ -1,11 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link th:href="@{/styles/main.css}" rel="stylesheet" href="../../static/styles/main.css" />
+    <link th:href="@{/styles/main.css}" rel="stylesheet" href="../../static/styles/main.css"/>
 </head>
 <body>
-<nav th:fragment="header">
-    <a href="#" th:href="@{/}">Home</a>
+<nav th:fragment="header" class="top-bar">
+    <div class="top-bar-left">
+        <ul class="menu">
+            <li class="menu-text"><a href="#" th:href="@{/}">Home</a></li>
+        </ul>
+    </div>
+    <div class="top-bar-right">
+        <ul class="menu">
+            <li th:if="${currentAccount}"><a href="#" th:href="@{/sc/{id}(id=${currentAccount.value()})}" class="button">Go to your profile</a></li>
+            <li th:unless="${currentAccount}"><a href="#" th:href="@{/accounts/login}" class="button">Enter or create your profile</a></li>
+        </ul>
+    </div>
 </nav>
 </body>
 </html>
