@@ -57,4 +57,13 @@ public class AccountRepositoryIT {
 
         assertTrue(retrieved.isPresent());
     }
+
+    @Test
+    public void findByUsernameFromAnExistingAccounIgnoringTheCamelCase() {
+        accountRepository.save(anAccount);
+
+        Optional retrieved = accountRepository.findByUsername(anAccount.username().toUpperCase());
+
+        assertTrue(retrieved.isPresent());
+    }
 }

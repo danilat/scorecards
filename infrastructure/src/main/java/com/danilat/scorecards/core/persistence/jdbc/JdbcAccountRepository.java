@@ -26,8 +26,11 @@ public class JdbcAccountRepository extends JdbcBaseRepository<Account, AccountId
 
     @Override
     public Optional<Account> findByUsername(String username) {
-        SqlParameterSource params = new MapSqlParameterSource().addValue("username", username);
-        return queryOne("SELECT * FROM accounts WHERE username = :username", params);
+        if (username == null) {
+            return Optional.empty();
+        }
+        SqlParameterSource params = new MapSqlParameterSource().addValue("username", username.toLowerCase());
+        return queryOne("SELECT * FROM accounts WHERE username = lower(:username)", params);
     }
 
     @Override
