@@ -4,6 +4,18 @@
 </head>
 <body>
 <div layout:fragment="content">
+    <script type="text/javascript">
+      // FirebaseUI config.
+      var uiConfig = {
+        signInSuccessUrl: '/',
+        signInOptions: [
+          firebase.auth.GoogleAuthProvider.PROVIDER_ID
+        ],
+      };
+
+      var ui = new firebaseui.auth.AuthUI(firebase.auth());
+      ui.start('#firebaseui-auth-container', uiConfig);
+    </script>
     <h1>Login or Register to Scorecards</h1>
     <div id="firebaseui-auth-container"></div>
 </div>

@@ -28,23 +28,12 @@
     <script src="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.js"></script>
     <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.css"/>
     <script type="text/javascript">
-      // FirebaseUI config.
-      var uiConfig = {
-        signInSuccessUrl: '/',
-        signInOptions: [
-          firebase.auth.GoogleAuthProvider.PROVIDER_ID
-        ],
-      };
-
-      var ui = new firebaseui.auth.AuthUI(firebase.auth());
-      ui.start('#firebaseui-auth-container', uiConfig);
-
       initApp = function() {
         firebase.auth().onAuthStateChanged(function(user) {
           if (user) {
-            // User is signed in.
-            console.log(user)
-            user.getIdToken().then(function(accessToken) {
+            console.log(user);
+            user.getIdToken(true).then(function(accessToken) {
+              console.log(accessToken);
               document.cookie = "access_token="+accessToken;
             });
           }
@@ -55,7 +44,6 @@
 
       window.addEventListener('load', function() {
         initApp();
-        console.log("a")
       });
     </script>
 </head>
