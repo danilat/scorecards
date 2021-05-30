@@ -34,7 +34,7 @@
             console.log(user);
             user.getIdToken(true).then(function(accessToken) {
               console.log(accessToken);
-              document.cookie = "access_token="+accessToken;
+              document.cookie = "access_token=" + accessToken + ";path=/";
             });
           }
         }, function(error) {
