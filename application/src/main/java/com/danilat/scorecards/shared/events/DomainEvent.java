@@ -1,7 +1,12 @@
 package com.danilat.scorecards.shared.events;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import java.time.Instant;
 
+@ToString
+@EqualsAndHashCode
 public abstract class DomainEvent {
 
   private Instant happenedAt;

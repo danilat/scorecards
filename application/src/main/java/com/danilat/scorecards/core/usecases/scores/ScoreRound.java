@@ -17,6 +17,9 @@ import com.danilat.scorecards.shared.domain.errors.FieldErrors;
 import com.danilat.scorecards.shared.events.EventBus;
 import com.danilat.scorecards.shared.usecases.ValidatableParameters;
 import com.danilat.scorecards.shared.usecases.WriteUseCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -28,6 +31,7 @@ public class ScoreRound extends WriteUseCase<ScoreCard, ScoreFightParameters> {
   private final UniqueIdGenerator uniqueIdGenerator;
   private final Auth auth;
   private final Clock clock;
+  private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
   public ScoreRound(ScoreCardRepository scoreCardRepository, FightRepository fightRepository,
       UniqueIdGenerator uniqueIdGenerator, Auth auth, EventBus eventBus, Clock clock) {
@@ -44,6 +48,7 @@ public class ScoreRound extends WriteUseCase<ScoreCard, ScoreFightParameters> {
     ScoreCard scoreCard = getOrCreateScoreCard(params);
     scoreCard.scoreRound(params.getRound(), params.getFirstBoxerScore(), params.getSecondBoxerScore(), clock.now());
     this.scoreCardRepository.save(scoreCard);
+    logger.debug("Scorecard saved {}", scoreCard);
     return scoreCard;
   }
 

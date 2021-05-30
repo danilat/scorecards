@@ -10,12 +10,16 @@ import com.danilat.scorecards.shared.domain.errors.FieldErrors;
 import com.danilat.scorecards.shared.events.EventBus;
 import com.danilat.scorecards.shared.usecases.ValidatableParameters;
 import com.danilat.scorecards.shared.usecases.WriteUseCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.validation.constraints.NotEmpty;
 
 public class RegisterAccount extends WriteUseCase<Account, RegisterAccountParameters> {
 
   private final AccountRepository accountRepository;
   private final Clock clock;
+  private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
   public RegisterAccount(AccountRepository accountRepository, EventBus eventBus,
       Clock clock) {
@@ -31,6 +35,7 @@ public class RegisterAccount extends WriteUseCase<Account, RegisterAccountParame
         .create(new AccountId(username), username, params.getName(), params.getEmail(),
             params.getPictureUrl(), clock.now());
     accountRepository.save(account);
+    logger.debug("Account saved {}", account);
     return account;
   }
 

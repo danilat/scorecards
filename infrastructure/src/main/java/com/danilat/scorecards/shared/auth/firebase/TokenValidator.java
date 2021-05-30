@@ -7,6 +7,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Component;
 @Component()
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class TokenValidator {
+  private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
   public TokenValidator() {
     try {
@@ -31,9 +35,10 @@ public class TokenValidator {
   public UserFromToken validateToken(String idToken) {
     try {
       FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
+      logger.debug("The token {} is valid", decodedToken);
       return new UserFromToken(decodedToken.getName(), decodedToken.getEmail(), decodedToken.getPicture());
     } catch (FirebaseAuthException e) {
-      e.printStackTrace();
+      logger.error("Failing validating the token", e);
       return null;
     }
   }

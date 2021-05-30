@@ -10,6 +10,9 @@ import com.danilat.scorecards.shared.domain.errors.FieldErrors;
 import com.danilat.scorecards.shared.events.EventBus;
 import com.danilat.scorecards.shared.usecases.ValidatableParameters;
 import com.danilat.scorecards.shared.usecases.WriteUseCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.validation.constraints.NotEmpty;
 
 public class CreateBoxer extends WriteUseCase<Boxer, CreateBoxerParams> {
@@ -17,6 +20,7 @@ public class CreateBoxer extends WriteUseCase<Boxer, CreateBoxerParams> {
   private final UniqueIdGenerator uniqueIdGenerator;
   private final BoxerRepository boxerRepository;
   private final Clock clock;
+  private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
   public CreateBoxer(UniqueIdGenerator uniqueIdGenerator,
       BoxerRepository boxerRepository, EventBus eventBus, Clock clock) {
@@ -31,6 +35,7 @@ public class CreateBoxer extends WriteUseCase<Boxer, CreateBoxerParams> {
     BoxerId boxerId = new BoxerId(uniqueIdGenerator.next());
     Boxer boxer = Boxer.create(boxerId, params.getName(), params.getAlias(), params.getBoxrecUrl(), clock.now());
     boxerRepository.save(boxer);
+    logger.debug("Boxer saved {}", boxer);
     return boxer;
   }
 
