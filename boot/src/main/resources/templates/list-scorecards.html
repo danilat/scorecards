@@ -11,7 +11,7 @@
   </div>
 
   <div th:if="${scorecards}">
-    <h2>Dani Latorre has <span th:text=${scorecards.size()}>2</span> scorecards</h2>
+    <h2><span th:text=${account.name()}>Dani Latorre</span> has <span th:text=${scorecards.size()}>2</span> scorecards</h2>
   </div>
   <div th:unless="${scorecards}">
     <h2><span th:text=${account.name()}>Dani Latorre</span> doesn't have yet any scorecard :(</h2>
