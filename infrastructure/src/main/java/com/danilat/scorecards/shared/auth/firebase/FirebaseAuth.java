@@ -4,7 +4,6 @@ import com.danilat.scorecards.core.domain.account.Account;
 import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.account.AccountRepository;
 import com.danilat.scorecards.shared.Auth;
-import com.danilat.scorecards.shared.auth.firebase.TokenValidator.Token;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,10 +30,10 @@ public class FirebaseAuth implements Auth {
     if (accessToken == null || accessToken.equals("")) {
       return Optional.empty();
     }
-    Token token = tokenValidator.validateToken(accessToken);
-    if (token == null) {
+    TokenValidator.UserFromToken user = tokenValidator.validateToken(accessToken);
+    if (user == null) {
       return Optional.empty();
     }
-    return accountRepository.findByEmail(token.getEmail());
+    return accountRepository.findByEmail(user.getEmail());
   }
 }

@@ -28,23 +28,23 @@ public class TokenValidator {
     }
   }
 
-  public Token validateToken(String idToken) {
+  public UserFromToken validateToken(String idToken) {
     try {
       FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
-      return new Token(decodedToken.getName(), decodedToken.getEmail(), decodedToken.getPicture());
+      return new UserFromToken(decodedToken.getName(), decodedToken.getEmail(), decodedToken.getPicture());
     } catch (FirebaseAuthException e) {
       e.printStackTrace();
       return null;
     }
   }
 
-  public static class Token {
+  public static class UserFromToken {
 
     private String name;
     private String email;
     private String picture;
 
-    public Token(String name, String email, String picture) {
+    public UserFromToken(String name, String email, String picture) {
       this.name = name;
       this.email = email;
       this.picture = picture;

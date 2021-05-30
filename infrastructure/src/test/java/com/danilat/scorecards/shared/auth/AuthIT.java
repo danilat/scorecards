@@ -12,7 +12,6 @@ import com.danilat.scorecards.core.persistence.jdbc.JdbcConfig;
 import com.danilat.scorecards.shared.Auth;
 import com.danilat.scorecards.shared.auth.firebase.FirebaseAuth;
 import com.danilat.scorecards.shared.auth.firebase.TokenValidator;
-import com.danilat.scorecards.shared.auth.firebase.TokenValidator.Token;
 import com.google.firebase.auth.FirebaseAuthException;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,8 +40,8 @@ public class AuthIT {
   @Test
   public void givenATokenWithoutExistingEmailThenReturnsNothing() throws FirebaseAuthException {
     String theToken = "some_valid_token";
-    Token token = new Token("irrelevant", "irrelevant", "irrelevant");
-    when(tokenValidator.validateToken(theToken)).thenReturn(token);
+    TokenValidator.UserFromToken user = new TokenValidator.UserFromToken("irrelevant", "irrelevant", "irrelevant");
+    when(tokenValidator.validateToken(theToken)).thenReturn(user);
 
     assertNull(auth.currentAccountId(theToken));
   }
@@ -52,8 +51,8 @@ public class AuthIT {
     Account account = AccountMother.anAccountWithUsername("danilat");
     accountRepository.save(account);
     String theToken = "some_valid_token";
-    Token token = new Token(account.name(), account.email(), account.picture());
-    when(tokenValidator.validateToken(theToken)).thenReturn(token);
+    TokenValidator.UserFromToken user = new TokenValidator.UserFromToken(account.name(), account.email(), account.picture());
+    when(tokenValidator.validateToken(theToken)).thenReturn(user);
 
     assertEquals(account.id(), auth.currentAccountId(theToken));
   }

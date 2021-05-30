@@ -7,7 +7,6 @@ import com.danilat.scorecards.core.usecases.accounts.RegisterAccount.RegisterAcc
 import com.danilat.scorecards.shared.Auth;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.auth.firebase.TokenValidator;
-import com.danilat.scorecards.shared.auth.firebase.TokenValidator.Token;
 import com.danilat.scorecards.shared.domain.errors.Error;
 import com.google.firebase.auth.FirebaseAuthException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +36,8 @@ public class AccountController {
       if ("".equals(accessToken)) {
         return "accounts/login";
       }
-      Token token = tokenValidator.validateToken(accessToken);
-      if (token == null) {
+      TokenValidator.UserFromToken user = tokenValidator.validateToken(accessToken);
+      if (user == null) {
         return "accounts/login";
       }
       AccountId accountId = auth.currentAccountId(accessToken);
@@ -53,14 +52,14 @@ public class AccountController {
         if ("".equals(accessToken)) {
             return "redirect:/accounts/login";
         }
-        Token token = tokenValidator.validateToken(accessToken);
-        if (token == null) {
+        TokenValidator.UserFromToken user = tokenValidator.validateToken(accessToken);
+        if (user == null) {
             return "redirect:/accounts/login";
         }
         model.addAttribute("idToken", accessToken);
-        model.addAttribute("name", token.getName());
-        model.addAttribute("email", token.getEmail());
-        model.addAttribute("picture", token.getPicture());
+        model.addAttribute("name", user.getName());
+        model.addAttribute("email", user.getEmail());
+        model.addAttribute("picture", user.getPicture());
         return "accounts/new";
     }
 
@@ -87,10 +86,10 @@ public class AccountController {
                          @ModelAttribute AccountForm accountForm, Model model)
             throws FirebaseAuthException {
         this.accessToken = accessToken;
-        Token token = tokenValidator.validateToken(accessToken);
+        TokenValidator.UserFromToken user = tokenValidator.validateToken(accessToken);
         this.model = model;
         RegisterAccountParameters params = new RegisterAccountParameters(accountForm.getUsername(), accountForm.getName(),
-                token.getEmail(), token.getPicture());
+                user.getEmail(), user.getPicture());
         registerAccount.execute(registerAccountPrimaryPort, params);
         return createResult;
     }

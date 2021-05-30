@@ -31,8 +31,8 @@ public class EditorAuthFilter extends OncePerRequestFilter {
         Optional<Cookie> optionalAccessToken = getOptionalAccessToken(request);
         if (optionalAccessToken.isPresent()) {
             logger.info("There are an access token {}", optionalAccessToken);
-            TokenValidator.Token token = tokenValidator.validateToken(optionalAccessToken.get().getValue());
-            if (isAnEditor(token)) {
+            TokenValidator.UserFromToken user = tokenValidator.validateToken(optionalAccessToken.get().getValue());
+            if (isAnEditor(user)) {
                 logger.info("There current user is an editor");
                 filterChain.doFilter(request, response);
                 return;
@@ -51,11 +51,11 @@ public class EditorAuthFilter extends OncePerRequestFilter {
         return Arrays.stream(cookies).filter(cookie -> cookie.getName().equals("access_token")).findFirst();
     }
 
-    private boolean isAnEditor(TokenValidator.Token token) {
+    private boolean isAnEditor(TokenValidator.UserFromToken user) {
         AtomicBoolean isAnEditor = new AtomicBoolean(false);
-        if (token != null) {
-            logger.info("There are token validated {}", token);
-            accountRepository.findByEmail(token.getEmail()).ifPresent(account -> isAnEditor.set(account.isEditor()));
+        if (user != null) {
+            logger.info("There are an user in the token {}", user);
+            accountRepository.findByEmail(user.getEmail()).ifPresent(account -> isAnEditor.set(account.isEditor()));
         }
         return isAnEditor.get();
     }

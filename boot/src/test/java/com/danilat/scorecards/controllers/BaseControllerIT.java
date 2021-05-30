@@ -5,7 +5,6 @@ import static org.mockito.Mockito.when;
 import com.danilat.scorecards.ScorecardsApplication;
 import com.danilat.scorecards.core.domain.account.Account;
 import com.danilat.scorecards.shared.auth.firebase.TokenValidator;
-import com.danilat.scorecards.shared.auth.firebase.TokenValidator.Token;
 import javax.servlet.http.Cookie;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +24,8 @@ public abstract class BaseControllerIT {
 
   protected Cookie getCookieFor(Account account) {
     String theToken = "some_valid_token";
-    Token token = new Token(account.name(), account.email(), account.picture());
-    when(tokenValidator.validateToken(theToken)).thenReturn(token);
+    TokenValidator.UserFromToken user = new TokenValidator.UserFromToken(account.name(), account.email(), account.picture());
+    when(tokenValidator.validateToken(theToken)).thenReturn(user);
     Cookie cookie = new Cookie("access_token", theToken);
     return cookie;
   }

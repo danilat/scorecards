@@ -29,7 +29,7 @@ import com.danilat.scorecards.core.usecases.scores.RetrieveScoreCards;
 import com.danilat.scorecards.core.usecases.scores.ScoreRound;
 import com.danilat.scorecards.shared.Auth;
 import com.danilat.scorecards.shared.PrimaryPort;
-import com.danilat.scorecards.shared.auth.TokenMother;
+import com.danilat.scorecards.shared.auth.UserFromToken;
 import com.danilat.scorecards.shared.auth.firebase.TokenValidator;
 import com.danilat.scorecards.shared.domain.errors.Error;
 import io.cucumber.java.en.Given;
@@ -106,7 +106,7 @@ public class ScoreSteps {
   public void anAficionadoWithUsername(String username) {
     Account account = AccountMother.anAccountWithUsername(username);
     accountRepository.save(account);
-    when(tokenValidator.validateToken(AN_ACCESS_TOKEN)).thenReturn(TokenMother.forAccount(account));
+    when(tokenValidator.validateToken(AN_ACCESS_TOKEN)).thenReturn(UserFromToken.forAccount(account));
   }
 
   @When("the aficionado scores the round {int} for the existing fight with {int} and {int}")

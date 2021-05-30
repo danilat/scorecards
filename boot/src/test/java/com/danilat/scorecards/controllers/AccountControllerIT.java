@@ -10,8 +10,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.danilat.scorecards.core.domain.account.Account;
 import com.danilat.scorecards.core.domain.account.AccountRepository;
 import com.danilat.scorecards.core.mothers.AccountMother;
-import com.danilat.scorecards.shared.auth.firebase.TokenValidator.Token;
 import javax.servlet.http.Cookie;
+
+import com.danilat.scorecards.shared.auth.firebase.TokenValidator;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +38,8 @@ public class AccountControllerIT extends BaseControllerIT {
   @Test
   public void theValidAccessTokenIsNotPresentWhenLoginThenRedirectsToCreate() throws Exception {
     String theToken = "some_valid_token";
-    Token token = new Token("Dani", "dani@email.com", "a picture url");
-    when(tokenValidator.validateToken(theToken)).thenReturn(token);
+    TokenValidator.UserFromToken user = new TokenValidator.UserFromToken("Dani", "dani@email.com", "a picture url");
+    when(tokenValidator.validateToken(theToken)).thenReturn(user);
     Cookie cookie = new Cookie("access_token", theToken);
 
     this.mvc.perform(
@@ -52,8 +53,8 @@ public class AccountControllerIT extends BaseControllerIT {
     Account account = AccountMother.anAccountWithEmail("dani@email.com");
     accountRepository.save(account);
     String theToken = "some_valid_token";
-    Token token = new Token(account.name(), account.email(), "a picture url");
-    when(tokenValidator.validateToken(theToken)).thenReturn(token);
+    TokenValidator.UserFromToken user = new TokenValidator.UserFromToken(account.name(), account.email(), "a picture url");
+    when(tokenValidator.validateToken(theToken)).thenReturn(user);
     Cookie cookie = new Cookie("access_token", theToken);
 
     this.mvc.perform(
@@ -65,8 +66,8 @@ public class AccountControllerIT extends BaseControllerIT {
   @Test
   public void newAccountForm() throws Exception {
     String theToken = "some_valid_token";
-    Token token = new Token("Dani", "dani@email.com", "a picture url");
-    when(tokenValidator.validateToken(theToken)).thenReturn(token);
+    TokenValidator.UserFromToken user = new TokenValidator.UserFromToken("Dani", "dani@email.com", "a picture url");
+    when(tokenValidator.validateToken(theToken)).thenReturn(user);
     Cookie cookie = new Cookie("access_token", theToken);
 
     this.mvc.perform(
@@ -97,8 +98,8 @@ public class AccountControllerIT extends BaseControllerIT {
   @Test
   public void postANewAccountWithValidParameters() throws Exception {
     String theToken = "some_valid_token";
-    Token token = new Token("Dani", "dani@email.com", "a picture url");
-    when(tokenValidator.validateToken(theToken)).thenReturn(token);
+    TokenValidator.UserFromToken user = new TokenValidator.UserFromToken("Dani", "dani@email.com", "a picture url");
+    when(tokenValidator.validateToken(theToken)).thenReturn(user);
     Cookie cookie = new Cookie("access_token", theToken);
 
     this.mvc.perform(post("/accounts/").cookie(cookie)
@@ -111,8 +112,8 @@ public class AccountControllerIT extends BaseControllerIT {
   @Test
   public void postANewAccountWithInValidParameters() throws Exception {
     String theToken = "some_valid_token";
-    Token token = new Token("Dani", "dani@email.com", "a picture url");
-    when(tokenValidator.validateToken(theToken)).thenReturn(token);
+    TokenValidator.UserFromToken user = new TokenValidator.UserFromToken("Dani", "dani@email.com", "a picture url");
+    when(tokenValidator.validateToken(theToken)).thenReturn(user);
     Cookie cookie = new Cookie("access_token", theToken);
 
     this.mvc.perform(post("/accounts/").cookie(cookie)
