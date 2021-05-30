@@ -26,8 +26,9 @@ public class RegisterAccount extends WriteUseCase<Account, RegisterAccountParame
 
   @Override
   public Account executeWhenValid(RegisterAccountParameters params) {
+    String username = params.getUsername().toLowerCase();
     Account account = Account
-        .create(new AccountId(params.getUsername()), params.getUsername(), params.getName(), params.getEmail(),
+        .create(new AccountId(username), username, params.getName(), params.getEmail(),
             params.getPictureUrl(), clock.now());
     accountRepository.save(account);
     return account;

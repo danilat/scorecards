@@ -81,6 +81,17 @@ public class RegisterAccountTest extends UseCaseUnitTest<Account> {
   }
 
   @Test
+  public void givenUsernameWithUpperCasesThenTheUsernameIsLowercased() {
+    String userNameWithCapitals = "daNiLaT";
+    RegisterAccountParameters parameters = new RegisterAccountParameters(userNameWithCapitals, A_NAME, AN_EMAIL, A_PICTURE_URL);
+
+    registerAccount.execute(primaryPort, parameters);
+
+    Account account = getSuccessEntity();
+    assertEquals("danilat", account.id().value());
+  }
+
+  @Test
   public void givenUsernameNameEmailAndPictureThenTheIdIsPersisted() {
     RegisterAccountParameters parameters = new RegisterAccountParameters(AN_USERNAME, A_NAME, AN_EMAIL, A_PICTURE_URL);
 
