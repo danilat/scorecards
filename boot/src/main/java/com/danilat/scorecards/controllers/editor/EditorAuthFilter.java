@@ -2,6 +2,8 @@ package com.danilat.scorecards.controllers.editor;
 
 import com.danilat.scorecards.core.domain.account.AccountRepository;
 import com.danilat.scorecards.shared.auth.firebase.TokenValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.*;
@@ -17,6 +19,8 @@ public class EditorAuthFilter extends OncePerRequestFilter {
     private TokenValidator tokenValidator;
     private AccountRepository accountRepository;
 
+    Logger logger = LoggerFactory.getLogger(EditorAuthFilter.class);
+
     public EditorAuthFilter(TokenValidator tokenValidator, AccountRepository accountRepository) {
         this.tokenValidator = tokenValidator;
         this.accountRepository = accountRepository;
@@ -26,18 +30,22 @@ public class EditorAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         Optional<Cookie> optionalAccessToken = getOptionalAccessToken(request);
         if (optionalAccessToken.isPresent()) {
+            logger.info("There are an access token {}", optionalAccessToken);
             TokenValidator.Token token = tokenValidator.validateToken(optionalAccessToken.get().getValue());
             if (isAnEditor(token)) {
+                logger.info("There current user is an editor");
                 filterChain.doFilter(request, response);
                 return;
             }
         }
+        logger.info("There current user not is an editor");
         response.sendRedirect("/accounts/login");
     }
 
     private Optional<Cookie> getOptionalAccessToken(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
+            logger.info("The cookies are not present in the request");
             return Optional.empty();
         }
         return Arrays.stream(cookies).filter(cookie -> cookie.getName().equals("access_token")).findFirst();
@@ -46,6 +54,7 @@ public class EditorAuthFilter extends OncePerRequestFilter {
     private boolean isAnEditor(TokenValidator.Token token) {
         AtomicBoolean isAnEditor = new AtomicBoolean(false);
         if (token != null) {
+            logger.info("There are token validated {}", token);
             accountRepository.findByEmail(token.getEmail()).ifPresent(account -> isAnEditor.set(account.isEditor()));
         }
         return isAnEditor.get();
