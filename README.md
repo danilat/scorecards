@@ -15,11 +15,14 @@ You can see the source code [on github](https://github.com/danilat/scorecards)
 
 ## Dependencies
 
-Now we are starting to work with real persistence using PostgreSQL, you can use the configured in the docker-compose.yml running `docker-compose start`
+Now we are starting to work with real persistence using PostgreSQL, you can use the configured in the docker-compose.yml running:
+
+`docker-compose up -d db`
 
 ### Run the tests
 
 `mvn flyway:migrate`
+
 `mvn clean test`
 
 ### Run the app
@@ -32,4 +35,4 @@ Now we are starting to work with real persistence using PostgreSQL, you can use 
 
 You can also run the app with docker-compose creating a google-credentials.json file with:
 
-`docker-compose up`
+`docker-compose up scorecards`
