@@ -1,0 +1,93 @@
+# kubectl create secret generic secrets --from-file=google-credentials.json
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: db
+  labels:
+    app.kubernetes.io/name: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: db
+  template:
+    spec:
+      containers:
+      - name: db
+        image: postgres
+        env:
+          - name: "POSTGRES_USER"
+            value: "postgres"
+          - name: "POSTGRES_HOST_AUTH_METHOD"
+            value: "trust"
+    metadata:
+      labels:
+        app.kubernetes.io/name: db
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+  labels:
+    app.kubernetes.io/name: db
+spec:
+  ports:
+  - port: 5432
+    targetPort: 5432
+  selector:
+    app.kubernetes.io/name: db
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: scorecards
+  labels:
+    app.kubernetes.io/name: scorecards
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: scorecards
+  template:
+    spec:
+      containers:
+      - name: scorecards
+        image: nestorsalceda/scorecards:latest
+        env:
+          - name: DB_NAME
+            value: postgres
+          - name: DB_HOST
+            value: db
+          - name: DB_USER
+            value: postgres
+          - name: DB_PORT
+            value: "5432"
+          - name: DB_PASSWORD
+            value:
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: /scorecards/google-credentials.json
+        volumeMounts:
+          - mountPath: "/scorecards"
+            name: google-application-credentials
+            readOnly: true
+      volumes:
+       - name: google-application-credentials
+         secret:
+           secretName: secrets
+    metadata:
+      labels:
+        app.kubernetes.io/name: scorecards
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: scorecards
+  labels:
+    app.kubernetes.io/name: scorecards
+spec:
+  ports:
+  - port: 8080
+    targetPort: 8080
+  selector:
+    app.kubernetes.io/name: scorecards
