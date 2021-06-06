@@ -24,7 +24,7 @@
     <td><a th:href="@{/fights/{id}(id=${fight.id().value()})}"><span th:text=${fight.firstBoxerName}>Mohamed Ali</span> vs <span th:text=${fight.secondBoxerName}>George Forman</span></a></td>
     <td><span th:text=${fight.numberOfRounds}>12</span> rounds</td>
     <td><span th:text=${fight.place}>Zaire</span> </td>
-    <td><a th:href="@{/fights/{id}(id=${fight.id().value()})}">Go to de fight</a></td>
+    <td><a th:href="@{/editor/fights/{id}(id=${fight.id().value()})}">Edit the fight</a></td>
   </tr>
   </tbody>
 </table>

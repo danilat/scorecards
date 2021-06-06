@@ -3,10 +3,12 @@ package com.danilat.scorecards.controllers.editor;
 import com.danilat.scorecards.core.domain.boxer.Boxer;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.fight.Fight;
+import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxers;
 import com.danilat.scorecards.core.usecases.boxers.RetrieveAllBoxers;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
+import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAllFights;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.domain.errors.Error;
@@ -17,10 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(value = "/editor/fights")
@@ -32,6 +31,8 @@ public class EditorFightsController {
   private RegisterFight registerFight;
   @Autowired
   private RetrieveAllFights retrieveAllFights;
+  @Autowired
+  private RetrieveAFight retrieveAFight;
 
   private String createResult;
 
@@ -58,6 +59,19 @@ public class EditorFightsController {
       if (!model.containsAttribute("fight")) {
         model.addAttribute("fight", new FightForm());
       }
+    };
+  }
+
+  private PrimaryPort<FightWithBoxers> retrieveAFightPort(Model model) {
+    return fight -> {
+      FightForm fightForm = new FightForm();
+      fightForm.setId(fight.getId());
+      fightForm.setFirstBoxer(fight.getFirstBoxerId().value());
+      fightForm.setSecondBoxer(fight.getSecondBoxerId().value());
+      fightForm.setPlace(fight.getPlace());
+      fightForm.setHappenAt(fight.getHappenAt());
+      fightForm.setNumberOfRounds(fight.getNumberOfRounds());
+      model.addAttribute("fight", fightForm);
     };
   }
 
@@ -88,7 +102,7 @@ public class EditorFightsController {
   }
 
   private class FightForm {
-
+    private String id;
     private String firstBoxer;
     private String secondBoxer;
     private Integer numberOfRounds;
@@ -139,5 +153,23 @@ public class EditorFightsController {
     public void setHappenAt(LocalDate happenAt) {
       this.happenAt = happenAt;
     }
+
+    public String getId() {
+      return id;
+    }
+
+    public void setId(String id) {
+      this.id = id;
+    }
   }
+
+  @GetMapping("{id}")
+  public String edit(@PathVariable String id, Model model) {
+    retrieveAllBoxers.execute(retrieveAllBoxersPort(model));
+    retrieveAFight.execute(retrieveAFightPort(model), new FightId(id));
+
+    return "editor/fights/edit";
+  }
+
+
 }

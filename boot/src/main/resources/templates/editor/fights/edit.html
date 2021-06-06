@@ -1,0 +1,40 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{editor/layout}">
+<head>
+    <title>Update fight</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <form th:action="@{/editor/fights/{id}(id=${fight.id})}" method="post" th:object="${fight}">
+        <h1>Update fight</h1>
+        <div class="callout alert small" th:if="${errors}">
+            <h5>There is some error creating a fight:</h5>
+            <ul>
+                <li th:each="err : ${errors}">
+                    <span th:text="${err.message}"></span>
+                </li>
+            </ul>
+        </div>
+        <label>First Boxer
+            <select th:field="*{firstBoxer}">
+                <option th:each="boxer : ${boxers}"
+                        th:value="${boxer.id().value()}"
+                        th:text="${boxer.name()}">Joana Pastrana
+                </option>
+            </select></label>
+        <label>Second Boxer
+            <select th:field="*{secondBoxer}">
+                <option th:each="boxer : ${boxers}"
+                        th:value="${boxer.id().value()}"
+                        th:text="${boxer.name()}">Katy Diaz
+                </option>
+            </select></label>
+        <label>Number of rounds <input type="number" name="numberOfRounds" th:value="*{numberOfRounds}"
+                                       th:class="${errors?.hasError('numberOfRounds')}? fieldError"/></label>
+        <label>Place <input type="text" name="place" th:value="*{place}"/></label>
+        <label>Happen At <input type="date" name="happenAt" th:value="*{happenAt}"/></label>
+        <input type="submit" value="Update!" class="button">
+    </form>
+</div>
+</body>
+</html>
