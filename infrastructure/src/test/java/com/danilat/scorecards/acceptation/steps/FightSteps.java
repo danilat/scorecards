@@ -11,14 +11,12 @@ import com.danilat.scorecards.core.domain.boxer.BoxerRepository;
 import com.danilat.scorecards.core.domain.fight.Fight;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.FightRepository;
+import com.danilat.scorecards.core.domain.fight.events.FightUpdated;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxers;
 import com.danilat.scorecards.core.mothers.BoxerMother;
 import com.danilat.scorecards.core.mothers.FightMother;
-import com.danilat.scorecards.core.usecases.fights.RegisterFight;
+import com.danilat.scorecards.core.usecases.fights.*;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
-import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
-import com.danilat.scorecards.core.usecases.fights.RetrieveAllFights;
-import com.danilat.scorecards.core.usecases.fights.RetrieveLastPastFights;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.domain.errors.Error;
 import com.danilat.scorecards.shared.usecases.UseCase.Empty;
@@ -63,6 +61,23 @@ public class FightSteps {
       world.setErrors(errors);
     }
   };
+
+  private final PrimaryPort<Fight> updateFightPort = new PrimaryPort<Fight>() {
+    @Override
+    public void success(Fight fight) {
+      world.setFight(fight);
+      world.setErrors(null);
+    }
+
+    @Override
+    public void error(Error errors) {
+      world.setFight(null);
+      world.setErrors(errors);
+    }
+  };
+
+  @Autowired
+  private UpdateFight updateFight;
 
   private PrimaryPort<Fight> getRegisterFightPort() {
     return new PrimaryPort<Fight>() {
@@ -237,5 +252,38 @@ public class FightSteps {
     assertTrue(retrievedFights.stream()
         .anyMatch(fight -> fight.getFirstBoxerId().equals(new BoxerId(firstBoxerId)) && fight.getSecondBoxerId()
             .equals(new BoxerId(secondBoxerId))));
+  }
+
+  @When("I update the fight in the event for {string} and {string} for {int} rounds")
+  public void iUpdateTheFightInTheEventForAndForRounds(String firstBoxer, String secondBoxer, Integer numberOfRounds) {
+    BoxerId firstBoxerId = new BoxerId(firstBoxer);
+    BoxerId secondBoxerId = new BoxerId(secondBoxer);
+    UpdateFight.UpdateFightParams params = new UpdateFight.UpdateFightParams(world.getFight().id(), firstBoxerId, secondBoxerId,
+            aDate, aPlace, numberOfRounds);
+
+    updateFight.execute(updateFightPort, params);
+  }
+
+
+  @Then("the fight is successfully updated")
+  public void theFightIsSuccessfullyUpdated() {
+    assertNull(world.getErrors());
+    assertTrue(world.getFight().domainEvents().get(0) instanceof FightUpdated);
+  }
+
+  @When("I update the fight in the event for {string} and {string}")
+  public void iUpdateTheFightInTheEventForAnd(String firstBoxer, String secondBoxer) {
+    BoxerId firstBoxerId = new BoxerId(firstBoxer);
+    BoxerId secondBoxerId = new BoxerId(secondBoxer);
+    UpdateFight.UpdateFightParams params = new UpdateFight.UpdateFightParams(world.getFight().id(), firstBoxerId, secondBoxerId,
+            aDate, aPlace, null);
+
+    updateFight.execute(updateFightPort, params);
+  }
+
+  @Then("the fight is not updated")
+  public void theFightIsNotUpdated() {
+    assertNotNull(world.getErrors());
+    assertNull(world.getFight());
   }
 }
