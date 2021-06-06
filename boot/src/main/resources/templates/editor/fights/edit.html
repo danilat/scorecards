@@ -7,6 +7,7 @@
 <div layout:fragment="content">
     <form th:action="@{/editor/fights/{id}(id=${fight.id})}" method="post" th:object="${fight}">
         <h1>Update fight</h1>
+        <a th:href="@{/fights/{id}(id=${fight.id})}" class="button small secondary">Go to public fight page</a>
         <div class="callout alert small" th:if="${errors}">
             <h5>There is some error creating a fight:</h5>
             <ul>
