@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT $JAVA_OPTS -jar boot/target/*.jar
+web: java -Dserver.port=$PORT $JAVA_OPTS -javaagent:newrelic/newrelic.jar -jar boot/target/*.jar

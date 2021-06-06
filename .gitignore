@@ -27,3 +27,4 @@ target/
 .DS_Store
 
 google-credentials.json
+newrelic
