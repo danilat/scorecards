@@ -10,16 +10,21 @@ import com.danilat.scorecards.core.usecases.fights.RegisterFight;
 import com.danilat.scorecards.core.usecases.fights.RegisterFight.RegisterFightParameters;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAFight;
 import com.danilat.scorecards.core.usecases.fights.RetrieveAllFights;
+import com.danilat.scorecards.core.usecases.fights.UpdateFight;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.domain.errors.Error;
 import com.danilat.scorecards.shared.usecases.UseCase.Empty;
+
 import java.time.LocalDate;
 import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @Controller
 @RequestMapping(value = "/editor/fights")
@@ -33,8 +38,11 @@ public class EditorFightsController {
   private RetrieveAllFights retrieveAllFights;
   @Autowired
   private RetrieveAFight retrieveAFight;
+  @Autowired
+  private UpdateFight updateFight;
 
   private String createResult;
+  private String updateResult;
 
   @GetMapping("")
   public String list(Model model) {
@@ -63,24 +71,32 @@ public class EditorFightsController {
   }
 
   private PrimaryPort<FightWithBoxers> retrieveAFightPort(Model model) {
-    return fight -> {
-      FightForm fightForm = new FightForm();
-      fightForm.setId(fight.getId());
-      fightForm.setFirstBoxer(fight.getFirstBoxerId().value());
-      fightForm.setSecondBoxer(fight.getSecondBoxerId().value());
-      fightForm.setPlace(fight.getPlace());
-      fightForm.setHappenAt(fight.getHappenAt());
-      fightForm.setNumberOfRounds(fight.getNumberOfRounds());
-      model.addAttribute("fight", fightForm);
+    return new PrimaryPort<FightWithBoxers>() {
+      @Override
+      public void success(FightWithBoxers fight) {
+        FightForm fightForm = new FightForm();
+        fightForm.setId(fight.getId());
+        fightForm.setFirstBoxer(fight.getFirstBoxerId().value());
+        fightForm.setSecondBoxer(fight.getSecondBoxerId().value());
+        fightForm.setPlace(fight.getPlace());
+        fightForm.setHappenAt(fight.getHappenAt());
+        fightForm.setNumberOfRounds(fight.getNumberOfRounds());
+        model.addAttribute("fight", fightForm);
+      }
+
+      @Override
+      public void error(Error errors) {
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, errors.getMessage());
+      }
     };
   }
 
   @PostMapping("")
   public String create(Model model, @ModelAttribute FightForm fightForm) {
     RegisterFightParameters parameters = new RegisterFightParameters(
-        new BoxerId(fightForm.getFirstBoxer()),
-        new BoxerId(fightForm.getSecondBoxer()), fightForm.getHappenAt(), fightForm.getPlace(),
-        fightForm.getNumberOfRounds());
+            new BoxerId(fightForm.getFirstBoxer()),
+            new BoxerId(fightForm.getSecondBoxer()), fightForm.getHappenAt(), fightForm.getPlace(),
+            fightForm.getNumberOfRounds());
     registerFight.execute(registerFightPort(model, fightForm), parameters);
     return createResult;
   }
@@ -89,7 +105,7 @@ public class EditorFightsController {
     return new PrimaryPort<Fight>() {
       @Override
       public void success(Fight fight) {
-        createResult = "redirect:/fights/" + fight.id().value();
+        createResult = "redirect:/editor/fights/" + fight.id().value();
       }
 
       @Override
@@ -171,5 +187,29 @@ public class EditorFightsController {
     return "editor/fights/edit";
   }
 
+  @PostMapping("{id}")
+  public String update(@PathVariable String id, Model model, @ModelAttribute FightForm fightForm) {
+    UpdateFight.UpdateFightParams params = new UpdateFight.UpdateFightParams(new FightId(id),
+            new BoxerId(fightForm.getFirstBoxer()),
+            new BoxerId(fightForm.getSecondBoxer()), fightForm.getHappenAt(), fightForm.getPlace(),
+            fightForm.getNumberOfRounds());
+    updateFight.execute(updateFightPort(model, fightForm), params);
+    return updateResult;
+  }
 
+  private PrimaryPort<Fight> updateFightPort(Model model, FightForm fightForm) {
+    return new PrimaryPort<Fight>() {
+      @Override
+      public void success(Fight fight) {
+        updateResult = "redirect:/editor/fights/" + fight.id().value();
+      }
+
+      @Override
+      public void error(Error errors) {
+        model.addAttribute("errors", errors);
+        model.addAttribute("fight", fightForm);
+        updateResult = edit(fightForm.getId(), model);
+      }
+    };
+  }
 }

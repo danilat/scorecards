@@ -1,10 +1,8 @@
 package com.danilat.scorecards.controllers.editor;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -86,7 +84,7 @@ public class EditorFightsControllerIT extends BaseControllerIT {
             .param("place", "MGM Grand Garden Arena")
             .param("happenAt", LocalDate.now().toString()))
             .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrlPattern("/fights/{id}"));
+            .andExpect(redirectedUrlPattern("/editor/fights/{id}"));
   }
 
   @Test
@@ -111,5 +109,41 @@ public class EditorFightsControllerIT extends BaseControllerIT {
             .andExpect(model().attribute("boxers", hasItems(firstBoxer)))
             .andExpect(model().attribute("fight", notNullValue()));
 
+  }
+
+  @Test
+  public void getsTheFormToEditAFightWhenNotExist() throws Exception {
+    this.mvc.perform(get("/editor/fights/foobar").cookie(cookie))
+            .andExpect(status().isNotFound());
+  }
+
+  @Test
+  public void postAnExistingFightWithValidParameters() throws Exception {
+    Fight existingFight = FightMother.aFightWithId("a-fight");
+    fightRepository.save(existingFight);
+
+    this.mvc.perform(post("/editor/fights/" + existingFight.id().value()).cookie(cookie)
+            .param("firstBoxer", firstBoxer.id().value())
+            .param("secondBoxer", secondBoxer.id().value())
+            .param("numberOfRounds", "12")
+            .param("place", "MGM Grand Garden Arena")
+            .param("happenAt", LocalDate.now().toString()))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrlPattern("/editor/fights/{id}"));
+  }
+
+  @Test
+  public void postAnExistingFightWithInValidParameters() throws Exception {
+    Fight existingFight = FightMother.aFightWithId("a-fight");
+    fightRepository.save(existingFight);
+
+    this.mvc.perform(post("/editor/fights/" + existingFight.id().value()).cookie(cookie)
+            .param("firstBoxer", firstBoxer.id().value())
+            .param("secondBoxer", "foobar")
+            .param("numberOfRounds", "0")
+            .param("place", "MGM Grand Garden Arena")
+            .param("happenAt", LocalDate.now().toString()))
+            .andExpect(status().isOk())
+            .andExpect(view().name("editor/fights/edit"));
   }
 }
