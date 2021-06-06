@@ -17,7 +17,7 @@ public abstract class WriteUseCase<OUTPUT extends Entity, INPUT> implements UseC
   }
 
   @Override
-  public void execute(PrimaryPort<OUTPUT> primaryPort, INPUT parameters) {
+  public final void execute(PrimaryPort<OUTPUT> primaryPort, INPUT parameters) {
     FieldErrors errors = validate(parameters);
     if (errors.hasErrors()) {
       logger.debug("There are validation errors {}", errors);

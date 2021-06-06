@@ -2,8 +2,11 @@ package com.danilat.scorecards.core.domain.fight;
 
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.fight.events.FightCreated;
+import com.danilat.scorecards.core.domain.fight.events.FightUpdated;
 import com.danilat.scorecards.shared.domain.Entity;
+
 import java.time.Instant;
+
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -12,8 +15,8 @@ import lombok.ToString;
 public class Fight extends Entity<FightId> {
 
   public static final int MIN_NUMBER_OF_ROUNDS_IN_A_FIGHT = 1;
-  private final BoxerId firstBoxer;
-  private final BoxerId secondBoxer;
+  private BoxerId firstBoxer;
+  private BoxerId secondBoxer;
   private Event event;
   private Integer numberOfRounds;
 
@@ -58,9 +61,17 @@ public class Fight extends Entity<FightId> {
   }
 
   public static Fight create(FightId id, BoxerId firstBoxer, BoxerId secondBoxer, Event event, Integer numberOfRounds,
-      Instant happenedAt) {
+                             Instant happenedAt) {
     Fight fight = new Fight(id, firstBoxer, secondBoxer, event, numberOfRounds);
     fight.addDomainEvent(FightCreated.create(fight, happenedAt));
     return fight;
+  }
+
+  public void update(BoxerId firstBoxerId, BoxerId secondBoxerId, Integer numberOfRounds, Event event, Instant happenedAt) {
+    this.firstBoxer = firstBoxerId;
+    this.secondBoxer = secondBoxerId;
+    this.numberOfRounds = numberOfRounds;
+    this.event = event;
+    this.addDomainEvent(FightUpdated.create(this, happenedAt));
   }
 }

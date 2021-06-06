@@ -9,7 +9,7 @@ import lombok.ToString;
 public class Event {
 
   private final LocalDate happenAt;
-  private String place;
+  private final String place;
 
   public Event(LocalDate happenAt, String place) {
     this.happenAt = happenAt;
