@@ -40,11 +40,6 @@
       <version>1.6.6</version>
     </dependency>
     <dependency>
-      <groupId>io.micrometer</groupId>
-      <artifactId>micrometer-registry-datadog</artifactId>
-      <version>1.6.6</version>
-    </dependency>
-    <dependency>
       <groupId>com.newrelic.agent.java</groupId>
       <artifactId>newrelic-java</artifactId>
       <version>6.5.0</version>
