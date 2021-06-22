@@ -20,6 +20,8 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +30,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @SpringBootTest(classes = {JdbcConfig.class, FightRepository.class, BoxerRepository.class, ScoreCardRepository.class,
-    JdbcScoreCardWithFightDetailsFetcher.class})
+    JdbcScoreCardWithFightDetailsFetcher.class, SimpleMeterRegistry.class})
 @RunWith(SpringRunner.class)
 public class ScoreCardWithFightDetailsFetcherIT {
 

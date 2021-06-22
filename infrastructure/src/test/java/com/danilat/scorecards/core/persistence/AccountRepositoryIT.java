@@ -11,6 +11,7 @@ import com.danilat.scorecards.core.persistence.jdbc.JdbcConfig;
 
 import java.util.Optional;
 
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-@SpringBootTest(classes = {JdbcConfig.class, JdbcAccountRepository.class})
+@SpringBootTest(classes = {JdbcConfig.class, JdbcAccountRepository.class, SimpleMeterRegistry.class})
 @RunWith(SpringRunner.class)
 public class AccountRepositoryIT {
 
@@ -59,7 +60,7 @@ public class AccountRepositoryIT {
     }
 
     @Test
-    public void findByUsernameFromAnExistingAccounIgnoringTheCamelCase() {
+    public void findByUsernameFromAnExistingAccountIgnoringTheCamelCase() {
         accountRepository.save(anAccount);
 
         Optional retrieved = accountRepository.findByUsername(anAccount.username().toUpperCase());

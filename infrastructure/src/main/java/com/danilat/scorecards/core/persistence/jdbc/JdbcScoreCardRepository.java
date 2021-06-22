@@ -11,6 +11,7 @@ import com.danilat.scorecards.core.persistence.mappers.RawToScores;
 import com.danilat.scorecards.shared.domain.Sort;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -19,6 +20,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import javax.sql.DataSource;
+
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -28,20 +33,25 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class JdbcScoreCardRepository extends JdbcBaseRepository<ScoreCard, ScoreCardId> implements ScoreCardRepository {
 
-  public JdbcScoreCardRepository(DataSource dataSource) {
+  private final MeterRegistry registry;
+  private Timer.Builder timerBuilder;
+
+  public JdbcScoreCardRepository(DataSource dataSource, @Autowired MeterRegistry registry) {
     super(dataSource);
+    timerBuilder = Timer.builder("repositories.storing").description("Repository storing time");
+    this.registry = registry;
   }
 
   @Override
   protected ScoreCard mapRow(ResultSet resultSet) throws SQLException {
     BoxerScores firstBoxerScores = RawToScores
-        .map(resultSet.getString("first_boxer_scores"), new BoxerId(resultSet.getString("first_boxer_id")));
+            .map(resultSet.getString("first_boxer_scores"), new BoxerId(resultSet.getString("first_boxer_id")));
     BoxerScores secondBoxerScores = RawToScores
-        .map(resultSet.getString("second_boxer_scores"), new BoxerId(resultSet.getString("second_boxer_id")));
+            .map(resultSet.getString("second_boxer_scores"), new BoxerId(resultSet.getString("second_boxer_id")));
     Instant scoredAt = resultSet.getTimestamp("scored_at").toInstant();
 
     return new ScoreCard(new ScoreCardId(resultSet.getString("id")), new AccountId(resultSet.getString("account_id")),
-        new FightId(resultSet.getString("fight_id")), firstBoxerScores, secondBoxerScores, scoredAt);
+            new FightId(resultSet.getString("fight_id")), firstBoxerScores, secondBoxerScores, scoredAt);
   }
 
   @Override
@@ -52,7 +62,7 @@ public class JdbcScoreCardRepository extends JdbcBaseRepository<ScoreCard, Score
   @Override
   public Optional<ScoreCard> findByFightIdAndAccountId(FightId fightId, AccountId accountId) {
     SqlParameterSource params = new MapSqlParameterSource().addValue("fight_id", fightId.value())
-        .addValue("account_id", accountId.value());
+            .addValue("account_id", accountId.value());
     return queryOne("SELECT * FROM scorecards WHERE fight_id = :fight_id AND account_id = :account_id", params);
   }
 
@@ -60,39 +70,42 @@ public class JdbcScoreCardRepository extends JdbcBaseRepository<ScoreCard, Score
   public Collection<ScoreCard> findAllByAccountId(AccountId accountId, Sort sort) {
     SqlParameterSource params = new MapSqlParameterSource().addValue("account_id", accountId.value());
     List<ScoreCard> scorecards = namedParameterJdbcTemplate
-        .query(
-            "SELECT * FROM scorecards WHERE account_id = :account_id ORDER BY " + toSnakeCase(sort.field()) + " " + sort
-                .direction().value(),
-            params,
-            (resultSet, rowNum) -> mapRow(resultSet));
+            .query(
+                    "SELECT * FROM scorecards WHERE account_id = :account_id ORDER BY " + toSnakeCase(sort.field()) + " " + sort
+                            .direction().value(),
+                    params,
+                    (resultSet, rowNum) -> mapRow(resultSet));
     return scorecards;
   }
 
   @Override
   public void save(ScoreCard scoreCard) {
-    ObjectMapper objectMapper = new ObjectMapper();
-    SqlParameterSource params;
-    try {
-      params = new MapSqlParameterSource().addValue("id", scoreCard.id().value())
-          .addValue("fight_id", scoreCard.fightId().value())
-          .addValue("account_id", scoreCard.accountId().value())
-          .addValue("first_boxer_id", scoreCard.firstBoxerId().value())
-          .addValue("second_boxer_id", scoreCard.secondBoxerId().value())
-          .addValue("first_boxer_scores", objectMapper.writeValueAsString(scoreCard.firstBoxerScores().values()))
-          .addValue("second_boxer_scores", objectMapper.writeValueAsString(scoreCard.secondBoxerScores().values()))
-          .addValue("scored_at", Timestamp.from(scoreCard.scoredAt()));
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException(e);
-    }
+    Timer timer = timerBuilder.tag("repository", tableName()).register(registry);
+    timer.record(() -> {
+      ObjectMapper objectMapper = new ObjectMapper();
+      SqlParameterSource params;
+      try {
+        params = new MapSqlParameterSource().addValue("id", scoreCard.id().value())
+                .addValue("fight_id", scoreCard.fightId().value())
+                .addValue("account_id", scoreCard.accountId().value())
+                .addValue("first_boxer_id", scoreCard.firstBoxerId().value())
+                .addValue("second_boxer_id", scoreCard.secondBoxerId().value())
+                .addValue("first_boxer_scores", objectMapper.writeValueAsString(scoreCard.firstBoxerScores().values()))
+                .addValue("second_boxer_scores", objectMapper.writeValueAsString(scoreCard.secondBoxerScores().values()))
+                .addValue("scored_at", Timestamp.from(scoreCard.scoredAt()));
+      } catch (JsonProcessingException e) {
+        throw new RuntimeException(e);
+      }
 
-    if (get(scoreCard.id()).isPresent()) {
-      namedParameterJdbcTemplate.update(
-          "UPDATE scorecards SET fight_id = :fight_id, account_id = :account_id, first_boxer_id = :first_boxer_id, second_boxer_id = :second_boxer_id, first_boxer_scores = cast(:first_boxer_scores AS JSON), second_boxer_scores = cast(:second_boxer_scores AS JSON), scored_at = :scored_at WHERE id = :id",
-          params);
-    } else {
-      namedParameterJdbcTemplate.update(
-          "INSERT INTO scorecards (id, fight_id, account_id, first_boxer_id, second_boxer_id, first_boxer_scores, second_boxer_scores, scored_at) VALUES (:id, :fight_id, :account_id, :first_boxer_id, :second_boxer_id, cast(:first_boxer_scores AS JSON), cast(:second_boxer_scores AS JSON), :scored_at)",
-          params);
-    }
+      if (get(scoreCard.id()).isPresent()) {
+        namedParameterJdbcTemplate.update(
+                "UPDATE scorecards SET fight_id = :fight_id, account_id = :account_id, first_boxer_id = :first_boxer_id, second_boxer_id = :second_boxer_id, first_boxer_scores = cast(:first_boxer_scores AS JSON), second_boxer_scores = cast(:second_boxer_scores AS JSON), scored_at = :scored_at WHERE id = :id",
+                params);
+      } else {
+        namedParameterJdbcTemplate.update(
+                "INSERT INTO scorecards (id, fight_id, account_id, first_boxer_id, second_boxer_id, first_boxer_scores, second_boxer_scores, scored_at) VALUES (:id, :fight_id, :account_id, :first_boxer_id, :second_boxer_id, cast(:first_boxer_scores AS JSON), cast(:second_boxer_scores AS JSON), :scored_at)",
+                params);
+      }
+    });
   }
 }

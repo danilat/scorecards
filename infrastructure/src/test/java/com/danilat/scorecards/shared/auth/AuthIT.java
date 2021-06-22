@@ -13,6 +13,7 @@ import com.danilat.scorecards.shared.Auth;
 import com.danilat.scorecards.shared.auth.firebase.FirebaseAuth;
 import com.danilat.scorecards.shared.auth.firebase.TokenValidator;
 import com.google.firebase.auth.FirebaseAuthException;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +23,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {FirebaseAuth.class, JdbcConfig.class, JdbcAccountRepository.class})
+@SpringBootTest(classes = {FirebaseAuth.class, JdbcConfig.class, JdbcAccountRepository.class, SimpleMeterRegistry.class})
 public class AuthIT {
 
   @Autowired

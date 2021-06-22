@@ -12,11 +12,14 @@ import com.danilat.scorecards.core.persistence.jdbc.JdbcConfig;
 import com.danilat.scorecards.core.persistence.jdbc.JdbcScoreCardRepository;
 import com.danilat.scorecards.shared.domain.Sort;
 import com.danilat.scorecards.shared.domain.Sort.Direction;
+
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-@SpringBootTest(classes = {JdbcConfig.class, JdbcScoreCardRepository.class})
+@SpringBootTest(classes = {JdbcConfig.class, JdbcScoreCardRepository.class, SimpleMeterRegistry.class})
 @RunWith(SpringRunner.class)
 public class ScoreCardRepositoryIT {
 
@@ -62,7 +65,7 @@ public class ScoreCardRepositoryIT {
   public void findAllScoreCardsByAccountFilter() {
     AccountId firstAccountId = new AccountId("firstAccountId");
     ScoreCard firstAccountScoreCard = ScoreCardMother
-        .aScoreCardWithIdAndAccount(ScoreCardMother.nextId(), firstAccountId);
+            .aScoreCardWithIdAndAccount(ScoreCardMother.nextId(), firstAccountId);
     scoreCardRepository.save(firstAccountScoreCard);
     AccountId secondAccountId = new AccountId("secondAccountId");
     scoreCardRepository.save(ScoreCardMother.aScoreCardWithIdAndAccount(ScoreCardMother.nextId(), secondAccountId));
