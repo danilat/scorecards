@@ -17,6 +17,7 @@ services:
       - DB_USER=postgres
       - DB_PASSWORD=
       - GOOGLE_APPLICATION_CREDENTIALS=/tmp/keys/google-credentials.json
+      - CONFIG_CAT_KEY=foobar
     volumes:
       - ".:/tmp/keys"
   db:

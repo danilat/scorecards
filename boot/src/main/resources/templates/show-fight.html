@@ -30,6 +30,12 @@
     </tr>
     </thead>
     <tbody>
+    <tr th:if="${showTotalScoresOnTop}">
+      <td>Total score</td>
+      <td th:text=${scores.firstBoxerScore}>10</td>
+      <td th:text=${scores.secondBoxerScore}>9</td>
+      <td></td>
+    </tr>
     <tr th:each="score: ${scores}">
       <form method="post" th:action="@{/fights/{id}/score(id=${fight.id})}" th:object="${score}">
         <td>

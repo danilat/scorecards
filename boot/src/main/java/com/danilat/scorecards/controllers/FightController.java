@@ -1,6 +1,6 @@
 package com.danilat.scorecards.controllers;
 
-import com.danilat.scorecards.core.domain.account.AccountId;
+import com.danilat.scorecards.core.domain.account.Account;
 import com.danilat.scorecards.core.domain.boxer.BoxerId;
 import com.danilat.scorecards.core.domain.fight.FightId;
 import com.danilat.scorecards.core.domain.fight.projections.FightWithBoxers;
@@ -10,6 +10,7 @@ import com.danilat.scorecards.core.usecases.scores.RetrieveAScoreCard;
 import com.danilat.scorecards.core.usecases.scores.RetrieveAScoreCard.RetrieveAScoreCardParameters;
 import com.danilat.scorecards.core.usecases.scores.ScoreRound;
 import com.danilat.scorecards.core.usecases.scores.ScoreRound.ScoreFightParameters;
+import com.danilat.scorecards.flags.FeatureFlagsClient;
 import com.danilat.scorecards.shared.Auth;
 import com.danilat.scorecards.shared.PrimaryPort;
 import com.danilat.scorecards.shared.domain.errors.Error;
@@ -42,6 +43,8 @@ public class FightController {
 
   @Autowired
   private Auth auth;
+  @Autowired
+  private FeatureFlagsClient featureFlagsClient;
 
   private Model model;
   private String id;
@@ -53,7 +56,7 @@ public class FightController {
     public void success(FightWithBoxers fight) {
       model.addAttribute("fight", fight);
       ScoreCardForm scoreCardForm = new ScoreCardForm(fight.getFirstBoxerId().value(),
-          fight.getSecondBoxerId().value());
+              fight.getSecondBoxerId().value());
       model.addAttribute("scores", scoreCardForm);
       findByIdResult = "show-fight";
     }
@@ -64,7 +67,7 @@ public class FightController {
     }
   };
 
-  private PrimaryPort<ScoreCard> retrieveScoreCardPort = new PrimaryPort<ScoreCard>() {
+  private final PrimaryPort<ScoreCard> retrieveScoreCardPort = new PrimaryPort<ScoreCard>() {
     @Override
     public void success(ScoreCard scoreCard) {
       populateScoreCardForm(scoreCard);
@@ -101,18 +104,19 @@ public class FightController {
       @CookieValue(defaultValue = "", name = "access_token") String accessToken) {
     this.model = model;
     retrieveAFight.execute(fightWithBoxersPort, new FightId(id));
-    AccountId accountId = auth.currentAccountId(accessToken);
-    this.model.addAttribute("currentAccount", accountId);
-    if (accountId != null) {
+    Account account = auth.currentAccount(accessToken);
+    if (account != null) {
+      this.model.addAttribute("currentAccount", account.id());
       RetrieveAScoreCardParameters parameters = new RetrieveAScoreCardParameters(new FightId(id),
-          accountId);
+              account.id());
       retrieveAScoreCard.execute(retrieveScoreCardPort, parameters);
+      model.addAttribute("showTotalScoresOnTop", featureFlagsClient.showTotalScoresTopOfFightScoreSection(account));
     }
     return findByIdResult;
   }
 
   private String scoreResult;
-  private PrimaryPort<ScoreCard> scoreRoundPort = new PrimaryPort<ScoreCard>() {
+  private final PrimaryPort<ScoreCard> scoreRoundPort = new PrimaryPort<ScoreCard>() {
     @Override
     public void success(ScoreCard scoreCard) {
       String fightId = scoreCard.fightId().value();
@@ -139,7 +143,7 @@ public class FightController {
     return scoreResult;
   }
 
-  protected class ScoreForm {
+  protected static class ScoreForm {
 
     private String firstBoxer;
     private String secondBoxer;
@@ -191,7 +195,7 @@ public class FightController {
     }
   }
 
-  public class ScoreCardForm extends ArrayList<ScoreForm> {
+  public static class ScoreCardForm extends ArrayList<ScoreForm> {
 
     public ScoreCardForm(String firstBoxer, String secondBoxer) {
       super();

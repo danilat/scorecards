@@ -4,6 +4,7 @@ import com.danilat.scorecards.core.domain.account.Account;
 import com.danilat.scorecards.core.domain.account.AccountId;
 import com.danilat.scorecards.core.domain.account.AccountRepository;
 import com.danilat.scorecards.shared.Auth;
+
 import java.util.Optional;
 
 import com.danilat.scorecards.shared.domain.Entity;
@@ -23,12 +24,12 @@ public class FirebaseAuth implements Auth {
 
   @Override
   public AccountId currentAccountId(String accessToken) {
-    Optional<Account> optionalAccount = currentAccount(accessToken);
+    Optional<Account> optionalAccount = currentOptionalAccount(accessToken);
     return optionalAccount.map(Entity::id).orElse(null);
   }
 
   @Override
-  public Optional<Account> currentAccount(String accessToken) {
+  public Optional<Account> currentOptionalAccount(String accessToken) {
     if (accessToken == null || accessToken.equals("")) {
       return Optional.empty();
     }

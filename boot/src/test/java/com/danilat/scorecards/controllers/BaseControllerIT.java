@@ -4,6 +4,7 @@ import static org.mockito.Mockito.when;
 
 import com.danilat.scorecards.ScorecardsApplication;
 import com.danilat.scorecards.core.domain.account.Account;
+import com.danilat.scorecards.flags.FeatureFlagsClient;
 import com.danilat.scorecards.shared.auth.firebase.TokenValidator;
 import javax.servlet.http.Cookie;
 import org.junit.runner.RunWith;
@@ -21,6 +22,9 @@ public abstract class BaseControllerIT {
 
   @MockBean
   protected TokenValidator tokenValidator;
+
+  @MockBean
+  private FeatureFlagsClient featureFlagsClient;
 
   protected Cookie getCookieFor(Account account) {
     String theToken = "some_valid_token";
